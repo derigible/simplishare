@@ -1,0 +1,61 @@
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema.define(version: 20160216231221) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "accounts_transaction_events", force: :cascade do |t|
+    t.integer  "account_id"
+    t.integer  "transaction_event_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "accounts_transaction_events", ["account_id"], name: "index_accounts_transaction_events_on_account_id", using: :btree
+  add_index "accounts_transaction_events", ["transaction_event_id"], name: "index_accounts_transaction_events_on_transaction_event_id", using: :btree
+
+  create_table "categories", force: :cascade do |t|
+    t.string "title", null: false
+  end
+
+  create_table "categories_transaction_events", force: :cascade do |t|
+    t.integer "category_id"
+    t.integer "transaction_event_id"
+  end
+
+  add_index "categories_transaction_events", ["transaction_event_id"], name: "index_categories_transaction_events_on_transaction_event_id", using: :btree
+
+  create_table "transaction_events", force: :cascade do |t|
+    t.integer  "account_id"
+    t.text     "description"
+    t.float    "amount"
+    t.boolean  "is_debit"
+    t.text     "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "transaction_events", ["account_id"], name: "index_transaction_events_on_account_id", using: :btree
+
+  add_foreign_key "accounts_transaction_events", "accounts"
+  add_foreign_key "accounts_transaction_events", "transaction_events"
+  add_foreign_key "categories_transaction_events", "categories"
+  add_foreign_key "categories_transaction_events", "transaction_events"
+  add_foreign_key "transaction_events", "accounts"
+end

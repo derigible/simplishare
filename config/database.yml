@@ -1,0 +1,38 @@
+default: &default
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+  pool: <%= ENV.fetch("DB_POOL_SIZE", 10) %>
+  username: <%= ENV.fetch("DB_USERNAME", "mphillips") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "budgetr") %>
+  host: <%= ENV.fetch("DB_ADDRESS", "localhost") %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME", "budgetr_dev") %>
+
+demos:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME", "budgetr_demos") %>
+
+development_server:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME", "budgetr_development_server") %>
+
+staging:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME", "budgetr_staging") %>
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: "budgetr_test"
+
+# Database credentials should never be hard coded and Elastic Beanstalk
+# makes managing environment variables quite simple.
+production:
+  <<: *default
+  pool: <%= ENV.fetch("DB_POOL_SIZE", 30) %>
+  database: <%= ENV.fetch("DB_NAME", "budgetr_production") %>

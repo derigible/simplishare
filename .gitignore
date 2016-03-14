@@ -1,11 +1,10 @@
 # Ignore bundler config.
 /.bundle
 
-
 # Ignore all logfiles and tempfiles.
-/log/*
-!/log/.keep
+/log/*.log
 /tmp
+/log
 
 # Ignore application configuration
 /config/application.yml
@@ -13,3 +12,9 @@
 
 /doc
 /coverage
+
+docker-compose.override.yml
+.slacker
+
+# Swagger UI (built by task)
+/public/docs

@@ -19,7 +19,23 @@ Budgetr::Application.routes.draw do
       only: [:destroy]
     )
 
-    resources :events
+    resources(
+      :category_event_link,
+      path: 'categories/:category_id/events/:event_id',
+      only: [:create]
+    )
+
+    resources(
+      :category_event_link,
+      path: 'categories/:category_id/events',
+      only: [:destroy]
+    )
+
+    resources :categories
+
+    resources :events do
+      resources :categories, only: [:index, :create], controller: 'events/categories'
+    end
   end
 
   api_version(

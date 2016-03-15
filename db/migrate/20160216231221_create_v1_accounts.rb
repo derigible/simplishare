@@ -24,7 +24,7 @@ class CreateV1Accounts < ActiveRecord::Migration
     end
 
     create_table :categories_events do |t|
-      t.references :category, indext: true, foreign_key: true
+      t.references :category, index: true, foreign_key: true
       t.references :event, index: true, foreign_key: true
     end
   end

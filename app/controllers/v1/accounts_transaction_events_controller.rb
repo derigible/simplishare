@@ -8,7 +8,7 @@ module V1
 
     def create
       @transaction_event = @account_trans.create(transaction_event_params)
-      respond_with @transaction_event, serializer: V1::TransactionEventSerializer, status: :created
+      respond_with @transaction_event, status: :created, serializer: V1::TransactionEventSerializer
     end
 
     private

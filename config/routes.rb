@@ -4,22 +4,22 @@ Budgetr::Application.routes.draw do
     post 'account/revoke' => "custom_tokens#revoke"
 
     resources :accounts do
-      resources :transaction_events, only: [:index, :create], controller: 'accounts_transaction_events'
+      resources :events, only: [:index, :create], controller: 'accounts_events'
     end
 
     resources(
-      :account_transaction_event_link,
-      path: 'accounts/:account_id/transaction_events/:transaction_event_id',
+      :account_event_link,
+      path: 'accounts/:account_id/events/:event_id',
       only: [:create]
     )
 
     resources(
-      :account_transaction_event_link,
-      path: 'accounts/:account_id/transaction_events',
+      :account_event_link,
+      path: 'accounts/:account_id/events',
       only: [:destroy]
     )
 
-    resources :transaction_events
+    resources :events
   end
 
   api_version(

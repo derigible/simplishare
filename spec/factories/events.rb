@@ -1,7 +1,7 @@
 rand = Random.new
 
 FactoryGirl.define do
-  factory :transaction_event do
+  factory :event do
     description { Faker::Hipster.sentence }
     amount { rand.rand(1...500) }
     is_debit { rand.rand(2) ? true : false }

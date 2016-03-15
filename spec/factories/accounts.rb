@@ -2,24 +2,24 @@ FactoryGirl.define do
   factory :account do
     name { Faker::StarWars.droid }
 
-    factory :account_with_transaction_event do
+    factory :account_with_event do
       transient do
-        transaction_events_count 1
+        events_count 1
       end
 
       after(:create) do |account, evaluator|
-        create_list(:transaction_event, evaluator.transaction_events_count, accounts: [account])
+        create_list(:event, evaluator.events_count, accounts: [account])
       end
     end
 
-    factory :account_with_transaction_events do
+    factory :account_with_events do
       transient do
-        transaction_events_count 5
+        events_count 5
         Time.zone.now
       end
 
       after(:create) do |account, evaluator|
-        create_list(:transaction_event, evaluator.transaction_events_count, accounts: [account])
+        create_list(:event, evaluator.events_count, accounts: [account])
       end
     end
   end

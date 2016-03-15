@@ -20,28 +20,28 @@ ActiveRecord::Schema.define(version: 20160216231221) do
     t.string "name", null: false
   end
 
-  create_table "accounts_transaction_events", force: :cascade do |t|
+  create_table "accounts_events", force: :cascade do |t|
     t.integer  "account_id"
-    t.integer  "transaction_event_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  add_index "accounts_transaction_events", ["account_id"], name: "index_accounts_transaction_events_on_account_id", using: :btree
-  add_index "accounts_transaction_events", ["transaction_event_id"], name: "index_accounts_transaction_events_on_transaction_event_id", using: :btree
+  add_index "accounts_events", ["account_id"], name: "index_accounts_events_on_account_id", using: :btree
+  add_index "accounts_events", ["event_id"], name: "index_accounts_events_on_event_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string "title", null: false
   end
 
-  create_table "categories_transaction_events", force: :cascade do |t|
+  create_table "categories_events", force: :cascade do |t|
     t.integer "category_id"
-    t.integer "transaction_event_id"
+    t.integer "event_id"
   end
 
-  add_index "categories_transaction_events", ["transaction_event_id"], name: "index_categories_transaction_events_on_transaction_event_id", using: :btree
+  add_index "categories_events", ["event_id"], name: "index_categories_events_on_event_id", using: :btree
 
-  create_table "transaction_events", force: :cascade do |t|
+  create_table "events", force: :cascade do |t|
     t.integer  "account_id"
     t.text     "description"
     t.float    "amount"
@@ -51,11 +51,11 @@ ActiveRecord::Schema.define(version: 20160216231221) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "transaction_events", ["account_id"], name: "index_transaction_events_on_account_id", using: :btree
+  add_index "events", ["account_id"], name: "index_events_on_account_id", using: :btree
 
-  add_foreign_key "accounts_transaction_events", "accounts"
-  add_foreign_key "accounts_transaction_events", "transaction_events"
-  add_foreign_key "categories_transaction_events", "categories"
-  add_foreign_key "categories_transaction_events", "transaction_events"
-  add_foreign_key "transaction_events", "accounts"
+  add_foreign_key "accounts_events", "accounts"
+  add_foreign_key "accounts_events", "events"
+  add_foreign_key "categories_events", "categories"
+  add_foreign_key "categories_events", "events"
+  add_foreign_key "events", "accounts"
 end

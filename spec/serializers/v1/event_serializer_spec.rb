@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 module V1
-  describe V1::TransactionEventSerializer do
+  describe V1::EventSerializer do
 
     describe 'serializer structure' do
-      subject { TransactionEventSerializer.new(create(:transaction_event)).attributes }
+      subject { EventSerializer.new(create(:event)).attributes }
 
       it { is_expected.to have_key(:id) }
       it { is_expected.to have_key(:account_id) }

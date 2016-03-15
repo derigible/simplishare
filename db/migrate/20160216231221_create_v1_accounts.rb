@@ -4,7 +4,7 @@ class CreateV1Accounts < ActiveRecord::Migration
       t.string :name, null: false, unique: true
     end
 
-    create_table :transaction_events do |t|
+    create_table :events do |t|
       t.references :account, index: true, foreign_key: true
       t.text :description
       t.float :amount
@@ -13,9 +13,9 @@ class CreateV1Accounts < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    create_table :accounts_transaction_events do |t|
+    create_table :accounts_events do |t|
       t.references :account, index: true, foreign_key: true
-      t.references :transaction_event, index: true, foreign_key: true
+      t.references :event, index: true, foreign_key: true
       t.timestamps null: false
     end
 
@@ -23,9 +23,9 @@ class CreateV1Accounts < ActiveRecord::Migration
       t.string :title, null: false, unique: true
     end
 
-    create_table :categories_transaction_events do |t|
+    create_table :categories_events do |t|
       t.references :category, indext: true, foreign_key: true
-      t.references :transaction_event, index: true, foreign_key: true
+      t.references :event, index: true, foreign_key: true
     end
   end
 end

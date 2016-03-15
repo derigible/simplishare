@@ -14,7 +14,7 @@ if ENV['COVERAGE'] == "1"
       add_group 'Serializers', 'app/serializers'
     end
 
-    unless ENV.has_key?('TEST_ENV_NUMBER') || ENV['DISABLE_MINIMUM_COVERAGE']
+    unless ENV.key?('TEST_ENV_NUMBER') || ENV['DISABLE_MINIMUM_COVERAGE']
       # SimpleCov supports merging coverage results from parallel test runs,
       # but it doesn't support a global minimum coverage check when running in
       # parallel, so builds fail because subsets of the tests return < min%.
@@ -32,6 +32,7 @@ end
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }
 Dir[Rails.root.join('spec/models/shared_examples/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/controllers/v1/shared_examples/*.rb')].each { |f| require f }
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
@@ -74,4 +75,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.filter_rails_from_backtrace!
+
+  config.include SerializerExampleGroup::Helper, type: :controller
+  config.include ActiveRecordHelper
 end

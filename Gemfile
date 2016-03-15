@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'active_model_serializers', '~> 0.9.3'
+gem 'active_model_serializers', '~> 0.10.0.rc4'
 gem 'api-pagination', '~> 3.1.0'
 gem 'devise', '~> 3.5.2'
 gem 'doorkeeper', '~> 3.0.1'  # OAuth

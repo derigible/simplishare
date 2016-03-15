@@ -32,7 +32,7 @@ module V1
           expected_trans = AccountsTransactionEvent.new
           response_body = JSON.parse(response.body)
           expected_trans.id = response_body['id']
-          expect(response.body).to eq AccountsTransactionEventSerializer.new(expected_trans).to_json
+          expect(response.body).to eq V1::AccountsTransactionEventSerializer.new(expected_trans).to_json
         end
       end
 

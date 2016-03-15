@@ -2,24 +2,24 @@ module V1
   class AccountsController < ApiController
     def index
       @accounts = Account.all
-      respond_with @accounts
+      respond_with @accounts, each_serializer: V1::AccountSerializer
     end
 
     def update
       @account = Account.find(params[:id])
       @account.update(account_params)
-      respond_with @account, status: :ok
+      respond_with @account, status: :ok, serializer: V1::AccountSerializer
     end
 
     def create
       @account = Account.new(account_params)
       @account.save
-      respond_with @account, status: :created
+      respond_with @account, status: :created, serializer: V1::AccountSerializer
     end
 
     def show
       @account = Account.find(params[:id])
-      respond_with @account
+      respond_with @account, serializer: V1::AccountSerializer
     end
 
     def destroy

@@ -51,7 +51,7 @@ module V1
           expected_trans = TransactionEvent.new(@params)
           response_body = JSON.parse(response.body)
           expected_trans.id = response_body['id']
-          expect(response.body).to eq TransactionEventSerializer.new(expected_trans).to_json
+          expect(response.body).to eq V1::TransactionEventSerializer.new(expected_trans).to_json
         end
 
         it 'creates an accounts_transaction_event' do

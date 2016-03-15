@@ -1,5 +1,5 @@
 module V1
-  class AccountSerializer < BaseSerializer
+  class AccountSerializer < ActiveModel::Serializer
     attributes :id, :name
   end
 end

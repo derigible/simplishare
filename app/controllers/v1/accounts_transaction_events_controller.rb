@@ -3,12 +3,12 @@ module V1
     before_action :account_transaction_events
 
     def index
-      respond_with @account_trans, each_serializer: TransactionEventSerializer
+      respond_with @account_trans, each_serializer: V1::TransactionEventSerializer
     end
 
     def create
       @transaction_event = @account_trans.create(transaction_event_params)
-      respond_with @transaction_event, serializer: TransactionEventSerializer, status: :created
+      respond_with @transaction_event, serializer: V1::TransactionEventSerializer, status: :created
     end
 
     private

@@ -1,5 +1,5 @@
 module V1
-  class AccountsTransactionEventSerializer < BaseSerializer
+  class AccountsTransactionEventSerializer < ActiveModel::Serializer
     attributes :id
   end
 end

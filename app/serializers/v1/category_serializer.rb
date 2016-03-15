@@ -1,5 +1,5 @@
 module V1
-  class CategorySerializer < BaseSerializer
+  class CategorySerializer < ActiveModel::Serializer
     attributes :id
   end
 end

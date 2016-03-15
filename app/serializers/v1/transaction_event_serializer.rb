@@ -1,5 +1,5 @@
 module V1
-  class TransactionEventSerializer < BaseSerializer
+  class TransactionEventSerializer < ActiveModel::Serializer
 
     # TODO: add back in the date fields
 

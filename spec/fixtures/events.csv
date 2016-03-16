@@ -1,0 +1,6 @@
+description,amount,is_debit,notes
+"first day of school",0.05,true,
+"second day of school",0.10,true,
+"third day of school",0.20,true,
+"fourth day of school",0.40,true,
+"fifth day of school",0.80,true,

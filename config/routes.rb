@@ -20,13 +20,13 @@ Budgetr::Application.routes.draw do
     )
 
     resources(
-      :category_event_link,
-      path: 'categories/:category_id/events/:event_id',
+      :event_category_link,
+      path: 'events/:event_id/categories/:category_id',
       only: [:create]
     )
 
     resources(
-      :category_event_link,
+      :event_category_link,
       path: 'categories/:category_id/events',
       only: [:destroy]
     )

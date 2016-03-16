@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :categories_event do
+  factory :events_category do
     association :category
     association :event
   end

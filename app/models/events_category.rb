@@ -1,4 +1,4 @@
-class CategoriesEvent < ActiveRecord::Base
+class EventsCategory < ActiveRecord::Base
   belongs_to :category
   belongs_to :event
 end

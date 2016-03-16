@@ -7,6 +7,6 @@ module V1
     let(:other_model_name) { 'event' }
     let(:serializer) { V1::CategorySerializer }
 
-    it_behaves_like 'a resource controller', [:index, :show, :update, :create, :destroy], CategoriesEvent
+    it_behaves_like 'a resource controller', [:index, :show, :update, :create, :destroy], EventsCategory
   end
 end

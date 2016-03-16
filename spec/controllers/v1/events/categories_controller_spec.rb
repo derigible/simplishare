@@ -10,7 +10,7 @@ module V1
 
     context '#index' do
       include_examples "a nested resource controller", :index
-      let(:factory) { :categories_event }
+      let(:factory) { :events_category }
       let(:associated_name) { 'event' }
     end
 
@@ -29,14 +29,14 @@ module V1
         it 'creates a quizzes_items' do
           expect {
             post :create, event_id: @quiz, category: @params
-          }.to change { CategoriesEvent.count }.by 1
+          }.to change { EventsCategory.count }.by 1
         end
 
         it 'creates quizzes_quiz_item to correct quiz and item' do
           post :create, event_id: @quiz, category: @params
 
           response_body = JSON.parse(response.body)
-          ce = CategoriesEvent.where(
+          ce = EventsCategory.where(
             event_id: @quiz.id,
             category_id: response_body['id']
           )

@@ -3,19 +3,15 @@ Budgetr::Application.routes.draw do
     post 'account/token' => "custom_tokens#create"
     post 'account/revoke' => "custom_tokens#revoke"
 
-    resources :accounts do
-      resources :events, only: [:index, :create], controller: 'accounts_events'
-    end
-
     resources(
-      :account_event_link,
-      path: 'accounts/:account_id/events/:event_id',
+      :event_account_link,
+      path: 'events/:event_id/accounts/:account_id',
       only: [:create]
     )
 
     resources(
-      :account_event_link,
-      path: 'accounts/:account_id/events',
+      :event_account_link,
+      path: 'events/:event_id/accounts',
       only: [:destroy]
     )
 
@@ -27,13 +23,15 @@ Budgetr::Application.routes.draw do
 
     resources(
       :event_category_link,
-      path: 'categories/:category_id/events',
+      path: 'events/:event_id/categories',
       only: [:destroy]
     )
 
     resources :categories
+    resources :accounts
 
     resources :events do
+      resources :accounts, only: [:index, :create], controller: 'events/accounts'
       resources :categories, only: [:index, :create], controller: 'events/categories'
     end
   end

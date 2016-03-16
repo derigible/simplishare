@@ -20,16 +20,6 @@ ActiveRecord::Schema.define(version: 20160216231221) do
     t.string "name", null: false
   end
 
-  create_table "accounts_events", force: :cascade do |t|
-    t.integer  "account_id"
-    t.integer  "event_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "accounts_events", ["account_id"], name: "index_accounts_events_on_account_id", using: :btree
-  add_index "accounts_events", ["event_id"], name: "index_accounts_events_on_event_id", using: :btree
-
   create_table "categories", force: :cascade do |t|
     t.string "title", null: false
   end
@@ -46,6 +36,16 @@ ActiveRecord::Schema.define(version: 20160216231221) do
 
   add_index "events", ["account_id"], name: "index_events_on_account_id", using: :btree
 
+  create_table "events_accounts", force: :cascade do |t|
+    t.integer  "account_id"
+    t.integer  "event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "events_accounts", ["account_id"], name: "index_events_accounts_on_account_id", using: :btree
+  add_index "events_accounts", ["event_id"], name: "index_events_accounts_on_event_id", using: :btree
+
   create_table "events_categories", force: :cascade do |t|
     t.integer "category_id"
     t.integer "event_id"
@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 20160216231221) do
   add_index "events_categories", ["category_id"], name: "index_events_categories_on_category_id", using: :btree
   add_index "events_categories", ["event_id"], name: "index_events_categories_on_event_id", using: :btree
 
-  add_foreign_key "accounts_events", "accounts"
-  add_foreign_key "accounts_events", "events"
   add_foreign_key "events", "accounts"
+  add_foreign_key "events_accounts", "accounts"
+  add_foreign_key "events_accounts", "events"
   add_foreign_key "events_categories", "categories"
   add_foreign_key "events_categories", "events"
 end

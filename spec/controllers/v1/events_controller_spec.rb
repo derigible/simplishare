@@ -7,6 +7,6 @@ module V1
     let(:other_model_name) { 'account' }
     let(:serializer) { V1::EventSerializer }
 
-    it_behaves_like 'a resource controller', [:index, :show, :update, :create, :destroy], AccountsEvent
+    it_behaves_like 'a resource controller', [:index, :show, :update, :create, :destroy], EventsAccount
   end
 end

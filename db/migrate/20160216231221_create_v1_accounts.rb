@@ -13,7 +13,7 @@ class CreateV1Accounts < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    create_table :accounts_events do |t|
+    create_table :events_accounts do |t|
       t.references :account, index: true, foreign_key: true
       t.references :event, index: true, foreign_key: true
       t.timestamps null: false

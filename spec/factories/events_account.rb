@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :accounts_event do
+  factory :events_account do
     association :account
     association :event
   end

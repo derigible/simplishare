@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 module V1
-  describe V1::AccountsEventSerializer do
+  describe V1::EventsAccountSerializer do
 
     describe 'serializer structure' do
-      subject { AccountsEventSerializer.new(create(:accounts_event)).attributes }
+      subject { EventsAccountSerializer.new(create(:events_account)).attributes }
 
       it { is_expected.to have_key(:id) }
     end

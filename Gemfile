@@ -29,8 +29,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'database_cleaner'
   gem 'rubocop', require: false
   gem 'simplecov', require: false
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 group :doc do

@@ -6,19 +6,14 @@ module V1
     before(:each) { request.headers['Content-Type'] = Mime::JSON.to_s }
     let(:serializer) { V1::AccountSerializer }
 
-    it_behaves_like 'a resource controller'
-
-    context '#index' do
-      include_examples "a nested resource controller", :index
-      let(:factory) { :events_account }
-      let(:associated_name) { 'event' }
+    let(:nested_resource_hash) do
+      events_account = create :events_account
+      { event_id: events_account.event.id }
     end
 
-    context '#create' do
-      include_examples "a nested resource controller", :create
-      let(:factory) { :event }
-      let(:nested_attrs) { 'account' }
+    it_behaves_like 'a resource controller', [:index, :create]
 
+    context '#create' do
       context 'on success' do
         before :all do
           @event = create(:event)
@@ -40,7 +35,7 @@ module V1
             account_id: response_body['id']
           )
 
-          expect(at).to be_truthy
+          expect(at).not_to be_empty
         end
       end
     end

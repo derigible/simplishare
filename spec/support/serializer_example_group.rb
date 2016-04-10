@@ -7,6 +7,9 @@ module SerializerExampleGroup
       let(:serializer) { described_class }
 
       let(:serializable_resource) do
+        unless serializer <= ActiveModel::Serializer
+          raise 'serializer must be defined for the resource being tested'
+        end
         ActiveModel::SerializableResource.new(
           to_serialize, serializer: serializer
         )

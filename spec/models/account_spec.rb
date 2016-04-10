@@ -1,5 +1,11 @@
 require 'spec_helper'
 
-RSpec.describe Account do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Account do
+  describe 'associations' do
+    it do
+      is_expected.to have_many(:events_accounts).dependent(:delete_all)
+        .autosave(true).inverse_of(:account)
+    end
+    it { is_expected.to have_many(:events) }
+  end
 end

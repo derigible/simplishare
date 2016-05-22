@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 gem 'active_model_serializers', '~> 0.10.0.rc4'
 gem 'api-pagination', '~> 3.1.0'
 gem 'devise', '~> 3.5.2'
-gem 'doorkeeper', '~> 3.0.1'  # OAuth
+gem 'doorkeeper', '~> 3.0.1' # OAuth
+
+gem 'doorkeeper-jwt', '~> 0.1.6' # JWT support for doorkeeper
 gem 'figaro', '~> 1.0.0'
 gem 'gon', '~> 6.0.1'
 gem 'kaminari', '~> 0.16.1' # Paging
@@ -11,7 +13,8 @@ gem 'pg', '~> 0.17.1'
 gem 'rails', '4.2.4'
 gem 'rails_admin'
 gem 'responders' # Dry up controller responses
-gem 'rolify', '~> 5.0.0'  # Roles
+gem 'rolify', '~> 5.0.0' # Roles
+gem 'sanitize', '~> 4.0.1'
 gem 'sass-rails', '~> 4.0.2' # Use SCSS for stylesheets
 gem 'seedbank', '~> 0.3.0' # Used for seeding different environments
 gem 'swagger-blocks', '~> 1.3.0' # API Documentation

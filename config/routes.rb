@@ -1,7 +1,13 @@
 Budgetr::Application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :authorized_applications, :token_info, :authorizations, :tokens
+  end
+  devise_for :users
+
   concern :api_routes do
-    post 'account/token' => "custom_tokens#create"
-    post 'account/revoke' => "custom_tokens#revoke"
+    get 'account/token/info' => 'token_info#show'
+    post 'account/token' => 'custom_tokens#create'
+    post 'account/revoke' => 'custom_tokens#revoke'
 
     resources(
       :event_account_link,

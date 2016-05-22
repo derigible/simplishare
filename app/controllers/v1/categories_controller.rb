@@ -2,24 +2,24 @@ module V1
   class CategoriesController < ApiController
     def index
       @categories = Category.all
-      respond_with @categories, each_serializer: V1::CategorySerializer
+      respond_with @categories, each_serializer: CategorySerializer
     end
 
     def update
       @category = Category.find(params[:id])
       @category.update(account_params)
-      respond_with @category, status: :ok, serializer: V1::CategorySerializer
+      respond_with @category, status: :ok, serializer: CategorySerializer
     end
 
     def create
       @category = Category.new(account_params)
       @category.save
-      respond_with @category, status: :created, serializer: V1::CategorySerializer
+      respond_with @category, status: :created, serializer: CategorySerializer
     end
 
     def show
       @category = Category.find(params[:id])
-      respond_with @category, serializer: V1::CategorySerializer
+      respond_with @category, serializer: CategorySerializer
     end
 
     def destroy

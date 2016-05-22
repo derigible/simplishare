@@ -36,6 +36,7 @@ Budgetr::Application.routes.draw do
     resources :categories
     resources :accounts
 
+    post 'events/bulk_create' => 'events#bulk_create'
     resources :events do
       resources :accounts, only: [:index, :create], controller: 'events/accounts'
       resources :categories, only: [:index, :create], controller: 'events/categories'

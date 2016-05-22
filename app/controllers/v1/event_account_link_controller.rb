@@ -5,7 +5,7 @@ module V1
       @trans_event = Event.find(params[:event_id])
       @event = EventsAccount.create(account: @account,
                                     event: @trans_event)
-      respond_with @event, serializer: V1::EventsAccountSerializer, status: :created
+      respond_with @event, serializer: EventsAccountSerializer, status: :created
     end
 
     def destroy

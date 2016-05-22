@@ -5,7 +5,7 @@ module V1
       @event = Event.find(params[:event_id])
       @event_cat = EventsCategory.create(category: @category,
                                          event: @event)
-      respond_with @event_cat, serializer: V1::EventsCategorySerializer, status: :created
+      respond_with @event_cat, serializer: EventsCategorySerializer, status: :created
     end
 
     def destroy

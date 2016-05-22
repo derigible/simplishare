@@ -68,13 +68,13 @@ ActiveRecord::Schema.define(version: 20160521101533) do
   add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
 
   create_table "oauth_access_tokens", force: :cascade do |t|
-    t.integer  "resource_owner_id",           null: false
-    t.integer  "application_id",    limit: 8
-    t.text     "token",                       null: false
+    t.integer  "resource_owner_id", null: false
+    t.integer  "application_id"
+    t.text     "token",             null: false
     t.string   "refresh_token"
     t.integer  "expires_in"
     t.datetime "revoked_at"
-    t.datetime "created_at",                  null: false
+    t.datetime "created_at",        null: false
     t.string   "scopes"
   end
 

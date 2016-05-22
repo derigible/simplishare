@@ -27,7 +27,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
 
     create_table :oauth_access_tokens do |t|
       t.references :resource_owner, references: :users, null: false
-      t.integer  :application_id, limit: 8
+      t.integer  :application_id
 
       # If you use a custom token generator you may need to change this column
       # from string to text, so that it accepts tokens larger than 255

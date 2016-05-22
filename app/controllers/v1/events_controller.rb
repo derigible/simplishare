@@ -28,7 +28,7 @@ module V1
       head :no_content
     end
 
-    # upload a csv of events (currently only support mint transaction csvs)
+    # upload a csv of events (currently only supports mint transaction csvs)
     def bulk_create
       @events = Event.import_csv(upload.read)
       respond_with @events, each_serializer: EventSerializer

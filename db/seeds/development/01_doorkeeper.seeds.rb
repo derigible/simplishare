@@ -1,6 +1,6 @@
 Doorkeeper::Application.create!(
   name: 'budgetr-development',
-  uid: 'b74af67b3a8b4145bb3d71971eaef44792eb98072b0f49b9a581fe7238e9bf34',
-  secret: 'ba575a2ddede4eac908e73e6d7df553eacb840fcba144438a200f4107650dbb9',
+  uid: '14c414cdb2b0b9ee739cf20f46d15d1a666cab6a678a821009b1b8f9b7c3aa33',
+  secret: '05a4f0cae8c1c4be3788cc232d63d3ece7f5b8afc5ad8f6a45262b0d8763a216',
   redirect_uri: 'http://localhost:3000'
 )

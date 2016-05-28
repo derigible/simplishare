@@ -9,7 +9,7 @@ Prerequisites:
 ### Getting a new JWT with POST
 1. Open postman
 2. Set the request type to POST
-3. Set the url (field next to POST) to `http://api.quiz.docker/api/account/token`
+3. Set the url (field next to POST) to `http://<hostname>/api/account/token`
   *if you're not using docker, it might looks something like
  localhost:<some_port>/api/account/token*
 4. Click headers and add a header called `Accept` with the value `application/json`
@@ -24,7 +24,7 @@ Prerequisites:
 ### Getting JWT information with GET
 1. Open postman
 2. Set the request type to GET
-3. Set the url (field next to GET) to `http://quiz.docker/api/account/token/info`
+3. Set the url (field next to GET) to `http://<hostname>/api/account/token/info`
   *if you're not using docker, it might looks something like localhost:<some_port>/api/account/token/info*
 4. Click headers and add the following headers
     - key: `Accept` value: `application/json`
@@ -34,7 +34,7 @@ Prerequisites:
 ### Refreshing a JWT with POST
 1. Open postman
 2. Set the request type to POST
-3. Set the url (field next to POST) to `http://api.quiz.docker/api/account/token`
+3. Set the url (field next to POST) to `http://<hostname>/api/account/token`
   *if you're not using docker, it might looks something like localhost:<some_port>/api/account/token*
 4. Click headers and add a header called `Accept` with the value `application/json`
 5. Then, click `Body -> from-data` and enter the following data fields (the following is listed <field> then <value>

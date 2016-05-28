@@ -16,16 +16,11 @@ module V1
 
         it 'has http code 200 success' do
           post :bulk_create, upload: upload
-          expect(response).to have_http_status :ok
+          expect(response).to have_http_status :created
         end
 
         it 'creates events for each row in csv' do
           expect { post :bulk_create, upload: upload }.to change { Event.count }.by 10
-        end
-
-        it 'returns the newly created events' do
-          post :bulk_create, upload: upload
-          expect(json.size).to eq 10
         end
       end
 

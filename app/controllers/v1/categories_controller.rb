@@ -19,7 +19,7 @@ module V1
 
     def show
       @category = Category.find(params[:id])
-      respond_with @category, serializer: CategorySerializer
+      respond_with @category, serializer: V1::Detailed::CategorySerializer
     end
 
     def destroy

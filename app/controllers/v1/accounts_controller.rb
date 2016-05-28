@@ -19,7 +19,7 @@ module V1
 
     def show
       @account = Account.find(params[:id])
-      respond_with @account, serializer: AccountSerializer
+      respond_with @account, serializer: V1::Detailed::AccountSerializer
     end
 
     def destroy

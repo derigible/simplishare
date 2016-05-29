@@ -33,8 +33,12 @@ Budgetr::Application.routes.draw do
       only: [:destroy]
     )
 
-    resources :categories
-    resources :accounts
+    resources :categories do
+      resources :events, only: [:index], controller: 'categories/events'
+    end
+    resources :accounts do
+      resources :events, only: [:index], controller: 'accounts/events'
+    end
 
     post 'events/bulk_create' => 'events#bulk_create'
     resources :events do

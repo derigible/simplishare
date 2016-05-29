@@ -4,10 +4,9 @@ module V1
   describe V1::Detailed::EventSerializer do
 
     describe 'serializer structure' do
-      subject { EventSerializer.new(create(:event)).attributes }
+      let(:to_serialize) { create(:event) }
 
       it { is_expected.to have_key(:id) }
-      it { is_expected.to have_key(:account_id) }
       it { is_expected.to have_key(:description) }
       it { is_expected.to have_key(:amount) }
       it { is_expected.to have_key(:is_debit) }

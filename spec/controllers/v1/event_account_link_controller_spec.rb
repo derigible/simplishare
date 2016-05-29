@@ -2,9 +2,6 @@ require 'spec_helper'
 
 module V1
   describe V1::EventAccountLinkController do
-    before(:each) { request.headers['Accept'] = "application/vnd.instructure.v1, #{Mime::JSON}" }
-    before(:each) { request.headers['Content-Type'] = Mime::JSON.to_s }
-
     it "is a protected api resource" do
       expect(V1::EventAccountLinkController <= V1::ApiController).to be(true)
     end
@@ -22,9 +19,9 @@ module V1
         end
 
         it 'creates an events_account' do
-          expect {
+          expect do
             post :create, event_id: @event.id, account_id: @account.id
-          }.to change { EventsAccount.count }.by 1
+          end.to change { EventsAccount.count }.by 1
         end
 
         it 'renders events_account json' do

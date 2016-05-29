@@ -5,13 +5,14 @@ shared_examples_for 'a resource controller' do |actions = []|
   let(:model) { create(model_sym, *traits_for_factory) }
   let(:model_class) { model_sym.to_s.classify.constantize }
   # this is a hash (such as {quiz_id: <id>}) that corresponds to the path params for a nested resource
-  let(:nested_lookup) { respond_to?('nested_resource_hash') ? nested_resource_hash : {} }
+  let(:nested_lookup) { {} }
   # set if nested is a through model
-  let(:not_a_through_model) { respond_to?('is_through_model') ? is_through_model : true }
+  let(:not_a_through_model) { true }
   # will only be called if nested_lookup is defined
   let(:associated_model_class) { nested_lookup.keys.first.to_s.chomp('_id').classify.constantize }
   # an array of traits defined on the factory to be used
-  let(:traits_for_factory) { respond_to?('factory_traits') ? factory_traits : [] }
+  let(:traits_for_factory) { [] }
+  let(:serializer_override_hash) { {} }
 
   it 'is a protected api resource' do
     expect(described_class <= V1::ApiController).to be(true)
@@ -28,6 +29,8 @@ shared_examples_for 'a resource controller' do |actions = []|
         end
       end
       let(:to_serialize) { assigns(model_sym) }
+      let(:action) { :create }
+
       context 'with valid parameters' do
         it 'returns status :created' do
           post :create, **nested_lookup, model_sym => params
@@ -64,6 +67,7 @@ shared_examples_for 'a resource controller' do |actions = []|
   if actions.include?(:update)
     describe '#update' do
       let(:params) { attributes_for(model_sym, *traits_for_factory) }
+      let(:action) { :update }
 
       context 'with valid parameters' do
         let(:to_serialize) { model.reload }
@@ -110,6 +114,8 @@ shared_examples_for 'a resource controller' do |actions = []|
 
   if actions.include?(:destroy)
     describe '#destroy' do
+      let(:action) { :destroy }
+
       context 'with valid id' do
         before do
           delete :destroy, id: model.id
@@ -138,6 +144,8 @@ shared_examples_for 'a resource controller' do |actions = []|
 
   if actions.include?(:index)
     describe '#index' do
+      let(:action) { :index }
+
       before do
         get :index, **nested_lookup
       end
@@ -164,10 +172,13 @@ shared_examples_for 'a resource controller' do |actions = []|
 
   if actions.include?(:show)
     describe '#show' do
+      let(:action) { :show }
+
       context 'with valid id' do
         let(:to_serialize) { model }
 
         before do
+          @serializer = serializer_override_hash if serializer_override_hash.key?(:show)
           get :show, id: model.id
         end
 

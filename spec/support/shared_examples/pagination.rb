@@ -1,39 +1,43 @@
-shared_examples 'a paginated resource' do |factory, relations = []|
+shared_examples 'a paginated resource' do
+  let(:params) { {} }
+
   before(:all) do
-    @related_data = {}
-    relations.each do |model|
-      record = create model
-      @related_data["#{model.to_s}_id"] = record.id
-    end
-    create_list factory, 5, @related_data
+    @old_per_page = Kaminari.config.default_per_page
+    @old_max_per_page = Kaminari.config.max_per_page
   end
 
-  let(:json) { JSON.parse(response.body) }
+  before do
+    Kaminari.config.default_per_page = 1
+    Kaminari.config.max_per_page = 3
+
+    create_entity_list
+  end
+
+  after(:all) do
+    Kaminari.config.default_per_page = @old_per_page
+    Kaminari.config.max_per_page = @old_max_per_page
+  end
 
   it 'paginates the response' do
-    skip 'pagination needs to be configured'
-    get :index, @related_data
+    get :index, params
     resource_ids = json.map { |resource| resource['id'] }
     expect(resource_ids.count).to eq(1)
   end
 
   it 'allows a client to override per_page' do
-    skip 'pagination needs to be configured'
-    get :index, @related_data, per_page: 2
+    get :index, params.merge(per_page: 2)
     resource_ids = json.map { |resource| resource['id'] }
     expect(resource_ids.count).to eq(2)
   end
 
   it 'enforces a max per_page' do
-    skip 'pagination needs to be configured'
-    get :index, @related_data, per_page: 5
+    get :index, params.merge(per_page: 5)
     resource_ids = json.map { |resource| resource['id'] }
     expect(resource_ids.count).to eq(3)
   end
 
   it 'includes a Link header' do
-    skip 'pagination needs to be configured'
-    get :index, @related_data, page: 3
+    get :index, params.merge(page: 3)
     link_header = response.headers['Link']
 
     expect(link_header).not_to be_nil

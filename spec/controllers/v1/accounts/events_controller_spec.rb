@@ -10,5 +10,13 @@ module V1
         { account_id: events_account.account.id }
       end
     end
+
+    it_behaves_like 'a paginated resource' do
+      let(:account) { create(:account) }
+      let(:params) { { account_id: account.id } }
+      let(:create_entity_list) do
+        create_list :event_with_account, 5, account: account
+      end
+    end
   end
 end

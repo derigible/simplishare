@@ -65,6 +65,10 @@ RSpec.configure do |config|
   # i.e. we don't need to add type: :controller to controller specs, etc.
   config.infer_spec_type_from_file_location!
 
+  config.before(:suite) do
+    DatabaseCleaner.clean_with :truncation
+  end
+
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.

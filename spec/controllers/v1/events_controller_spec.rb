@@ -35,5 +35,11 @@ module V1
         end
       end
     end
+
+    it_behaves_like 'a paginated resource' do
+      let(:create_entity_list) do
+        create_list :event, 5
+      end
+    end
   end
 end

@@ -1,13 +1,12 @@
 module V1::Events
   class AccountsController < V1::ApiController
-    before_action :require_accounts
-
     def index
+      @accounts = paginate nested_scope
       respond_with @accounts, each_serializer: V1::AccountSerializer
     end
 
     def create
-      @account = @accounts.create(account_params)
+      @account = nested_scope.create(account_params)
       respond_with @account, status: :created, serializer: V1::AccountSerializer
     end
 
@@ -17,8 +16,8 @@ module V1::Events
       params.require(:account).permit(:name)
     end
 
-    def require_accounts
-      @accounts = Event.find(params.require(:event_id)).accounts
+    def nested_scope
+      Event.find(params.require(:event_id)).accounts
     end
   end
 end

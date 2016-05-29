@@ -10,5 +10,13 @@ module V1
         { category_id: events_category.category.id }
       end
     end
+
+    it_behaves_like 'a paginated resource' do
+      let(:category) { create(:category) }
+      let(:params) { { category_id: category.id } }
+      let(:create_entity_list) do
+        create_list :event_with_category, 5, category: category
+      end
+    end
   end
 end

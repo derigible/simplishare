@@ -37,5 +37,15 @@ module V1
         end
       end
     end
+
+    it_behaves_like 'a paginated resource' do
+      let(:event) do
+        event = create :event
+        5.times { event.accounts << create(:account) }
+        event
+      end
+      let(:params) { { event_id: event.id } }
+      let(:create_entity_list) {} # noop
+    end
   end
 end

@@ -1,7 +1,7 @@
 module V1
   class AccountsController < ApiController
     def index
-      @accounts = Account.all
+      @accounts = paginate Account.all
       respond_with @accounts, each_serializer: AccountSerializer
     end
 

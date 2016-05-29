@@ -1,7 +1,7 @@
 module V1
   class CategoriesController < ApiController
     def index
-      @categories = Category.all
+      @categories = paginate Category.all
       respond_with @categories, each_serializer: CategorySerializer
     end
 

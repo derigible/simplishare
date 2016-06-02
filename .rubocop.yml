@@ -35,3 +35,6 @@ Style/SpaceAroundEqualsInParameterDefault:
 
 Style/StringLiterals:
   Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false

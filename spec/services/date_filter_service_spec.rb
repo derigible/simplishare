@@ -134,8 +134,8 @@ describe DateFilterService do
         context 'raises InvalidLookupParamError' do
           # TODO: make this spec work anytime of the year (just being lazy)
           it 'with future month' do
-            month = (Time.zone.now + 1).month
-            if month == 1
+            month = Time.zone.now.month + 1
+            if month == 13
               skip('December testing. Cannot test this until January')
             end
             params[:lookup_param] = month

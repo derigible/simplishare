@@ -1,3 +1,5 @@
+require 'date'
+
 module EventImportService
   MINT_KEYS = ["Date", "Description", "Original Description", "Amount",
                "Transaction Type", "Category", "Account Name", "Labels", "Notes"].freeze
@@ -33,10 +35,14 @@ module EventImportService
                             amount: row['Amount'],
                             is_debit: row['Transaction Type'] == 'debit',
                             notes: "#{row['Notes']} | Labels: #{row['Labels']}",
-                            created_at: row['Date'])
+                            date: get_date(row))
       EventsAccount.create!(account: account, event: event)
       EventsCategory.create!(category: category, event: event)
       event
+    end
+
+    def get_date(row)
+      Date.strptime(row['Date'], '%m/%d/%Y')
     end
 
     def get_or_create_account(name, accounts_hash)

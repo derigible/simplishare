@@ -10,6 +10,7 @@ class CreateV1Accounts < ActiveRecord::Migration
       t.float :amount
       t.boolean :is_debit
       t.text :notes
+      t.datetime :date, null: false
       t.timestamps null: false
     end
 

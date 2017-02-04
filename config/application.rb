@@ -24,5 +24,11 @@ module Budgetr
     config.active_record.raise_in_transactional_callbacks = true
 
     config.autoload_paths << Rails.root.join('lib')
+
+    config.action_dispatch.default_headers.merge!(
+      'Access-Control-Allow-Origin' => '*',
+      'Access-Control-Request-Method' => '*',
+      'X-Frame-Options' => 'ALLOWALL'
+    )
   end
 end

@@ -1,7 +1,7 @@
 module V1
   class EventsController < ApiController
     def index
-      @events = paginate Event.all.includes(:accounts, :categories)
+      @events = paginate Event.all.includes(:accounts, :categories).order(date: :desc)
       respond_with @events, each_serializer: V1::Detailed::EventSerializer
     end
 

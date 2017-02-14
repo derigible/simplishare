@@ -10,9 +10,9 @@ class DateFilterService
     end
   end
 
-  def initialize(params, model)
+  def initialize(params, scope)
     @params = params
-    @model = model
+    @scope = scope
   end
 
   # Method that takes the params and attempts to filter by the specified key.
@@ -48,6 +48,8 @@ class DateFilterService
 
   private
 
+  attr_reader :scope
+
   def now
     @_now ||= Time.zone.now
   end
@@ -63,20 +65,20 @@ class DateFilterService
   # Lookups
 
   def default_lookup
-    @model.all
+    scope.all
   end
 
   def day_lookup
-    @model.where('created_at >= ?', Time.zone.today)
+    scope.where('date >= ?', Time.zone.today)
   end
 
   def week_lookup
-    @model.where('created_at >= ?', 7.days.ago)
+    scope.where('date >= ?', 7.days.ago)
   end
 
   def month_lookup
     month = @params.fetch(:lookup_param, now.month).to_i
     raise InvalidLookupParamError.new(month) if month > now.month || month <= 0
-    @model.where('created_at >= ? and created_at <= ?', beginning_of_month(month), end_of_month(month))
+    scope.where('date >= ? and date <= ?', beginning_of_month(month), end_of_month(month))
   end
 end

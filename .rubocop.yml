@@ -15,6 +15,12 @@ AllCops:
 Metrics/LineLength:
   Max: 120
 
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'config/routes.rb'
+
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 

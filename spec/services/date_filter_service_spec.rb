@@ -25,19 +25,19 @@ describe DateFilterService do
       let(:params) { { lookup_term: 'day' } }
 
       before do
-        create(:event, created_at: 7.days.ago)
-        create(:event, created_at: 5.days.ago)
-        create(:event, created_at: 4.days.ago)
-        create(:event, created_at: 2.days.ago)
+        create(:event, date: 7.days.ago)
+        create(:event, date: 5.days.ago)
+        create(:event, date: 4.days.ago)
+        create(:event, date: 2.days.ago)
       end
 
       it 'returns all items created today' do
         expect(service.filter.count).to eq 5
-        expect(service.filter.all { |item| item.created_at.to_date == Time.zone.today }.count).to eq 5
+        expect(service.filter.all { |item| item.date.to_date == Time.zone.today }.count).to eq 5
       end
 
       it 'does not return items created on other days' do
-        expect(service.filter.any? { |item| item.created_at.to_date != Time.zone.today }).to be false
+        expect(service.filter.any? { |item| item.date.to_date != Time.zone.today }).to be false
       end
 
       it 'is unaffected by lookup_param' do
@@ -54,18 +54,18 @@ describe DateFilterService do
       let(:params) { { lookup_term: 'week' } }
 
       before do
-        create(:event, created_at: 8.days.ago)
-        create(:event, created_at: 6.days.ago)
-        create(:event, created_at: 4.days.ago)
+        create(:event, date: 8.days.ago)
+        create(:event, date: 6.days.ago)
+        create(:event, date: 4.days.ago)
       end
 
       it 'returns all items created within last seven days' do
         expect(service.filter.count).to eq 7
-        expect(service.filter.all { |item| item.created_at.to_date >= 7.days.ago }.count).to eq 7
+        expect(service.filter.all { |item| item.date.to_date >= 7.days.ago }.count).to eq 7
       end
 
       it 'does not return items created before seven days ago' do
-        expect(service.filter.any? { |item| item.created_at.to_date < 7.days.ago }).to be false
+        expect(service.filter.any? { |item| item.date.to_date < 7.days.ago }).to be false
       end
 
       it 'is unaffected by lookup_param' do

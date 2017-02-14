@@ -1,7 +1,9 @@
 module V1
   class EventsController < ApiController
     def index
-      @events = paginate Event.all.includes(:accounts, :categories).order(date: :desc)
+      events_scope = paginate Event.all.includes(:accounts, :categories).order(date: :desc)
+      @events = DateFilterService.new(params, events_scope).filter
+      @events = events_scope unless @events.exists?
       respond_with @events, each_serializer: V1::Detailed::EventSerializer
     end
 

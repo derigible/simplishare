@@ -24,7 +24,7 @@ Doorkeeper.configure do
 
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
-  access_token_expires_in 1.hour
+  access_token_expires_in ENV.fetch('AUTH_TOKEN_EXPIRE_TIME', 1.hour).to_i
 
   # Assign a custom TTL for implicit grants.
   # custom_access_token_expires_in do |oauth_client|

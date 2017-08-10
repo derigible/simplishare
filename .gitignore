@@ -21,3 +21,4 @@ docker-compose.override.yml
 
 #byebug
 .byebug_history
+seeded_access_tokens

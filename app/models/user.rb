@@ -16,6 +16,6 @@ class User < ActiveRecord::Base
   private
 
   def run_sanitizers
-    html_sanitize([:email, :full_name, :given_name])
+    html_sanitize(%i[email full_name given_name])
   end
 end

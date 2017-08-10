@@ -125,6 +125,7 @@ GEM
     pg (0.17.1)
     powerpack (0.1.1)
     rack (1.6.4)
+    rack-cors (1.0.1)
     rack-pjax (0.8.0)
       nokogiri (~> 1.5)
       rack (~> 1.1)
@@ -171,6 +172,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     rake (10.5.0)
+    rb-readline (0.5.5)
     rdoc (4.2.2)
       json (~> 1.4)
     remotipart (1.2.1)
@@ -268,9 +270,11 @@ DEPENDENCIES
   health_check
   kaminari (~> 0.16.3)
   pg (~> 0.17.1)
+  rack-cors
   railroady (~> 1.2.0)
   rails (= 4.2.4)
   rails_admin
+  rb-readline
   responders
   rolify (~> 5.0.0)
   rspec-rails
@@ -286,4 +290,4 @@ DEPENDENCIES
   versionist (~> 1.4.1)
 
 BUNDLED WITH
-   1.11.2
+   1.14.6

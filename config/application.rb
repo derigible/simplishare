@@ -25,10 +25,14 @@ module Budgetr
 
     config.autoload_paths << Rails.root.join('lib')
 
-    config.action_dispatch.default_headers.merge!(
-      'Access-Control-Allow-Origin' => '*',
-      'Access-Control-Request-Method' => '*',
-      'X-Frame-Options' => 'ALLOWALL'
-    )
+    config.middleware.insert_before 0, 'Rack::Cors' do
+      allow do
+        origins '*'
+        resource '*',
+          headers: :any,
+          expose: %w[total per-page X-Last-Evaluated-Hash-Key X-Last-Evaluated-Range-Key],
+          methods: %i[get post put patch delete options]
+      end
+    end
   end
 end

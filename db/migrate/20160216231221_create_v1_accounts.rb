@@ -1,4 +1,4 @@
-class CreateV1Accounts < ActiveRecord::Migration
+class CreateV1Accounts < ActiveRecord::Migration[5.1]
   def change
     create_table :accounts do |t|
       t.string :name, null: false, unique: true

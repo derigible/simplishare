@@ -1,34 +1,39 @@
 module V1
   class AccountsController < ApiController
+    before_action :load_account
+
     def index
-      @accounts = paginate Account.all
+      @accounts = paginate policy_scope(Account)
       respond_with @accounts, each_serializer: AccountSerializer
     end
 
     def update
-      @account = Account.find(params[:id])
       @account.update(account_params)
       respond_with @account, status: :ok, serializer: AccountSerializer
     end
 
     def create
       @account = Account.new(account_params)
+      authorize @account
       @account.save
       respond_with @account, status: :created, serializer: AccountSerializer
     end
 
     def show
-      @account = Account.find(params[:id])
       respond_with @account, serializer: V1::Detailed::AccountSerializer
     end
 
     def destroy
-      @account = Account.find(params[:id])
       @account.destroy
       head :no_content
     end
 
     private
+
+    def load_account
+      @account = Account.find params[:id]
+      authorize @account
+    end
 
     def account_params
       params.require(:account).permit(:name)

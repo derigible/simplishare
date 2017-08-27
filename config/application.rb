@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Budgetr
   class Application < Rails::Application
+    config.load_defaults 5.1
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -20,17 +22,14 @@ module Budgetr
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.autoload_paths << Rails.root.join('lib')
 
-    config.middleware.insert_before 0, 'Rack::Cors' do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
         resource '*',
           headers: :any,
-          expose: %w[total per-page X-Last-Evaluated-Hash-Key X-Last-Evaluated-Range-Key],
+          expose: %w[total per-page],
           methods: %i[get post put patch delete options]
       end
     end

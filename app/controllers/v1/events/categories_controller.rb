@@ -1,12 +1,13 @@
 module V1::Events
   class CategoriesController < V1::ApiController
     def index
-      @categories = paginate nested_scope
+      @categories = paginate policy_scope(default_scope)
       respond_with @categories, each_serializer: V1::CategorySerializer
     end
 
     def create
-      @category = nested_scope.create(category_params)
+      @category = default_scope.create(category_params)
+      authorize @category
       respond_with @category, serializer: V1::CategorySerializer, status: :created
     end
 
@@ -16,7 +17,7 @@ module V1::Events
       params.require(:category).permit(:title)
     end
 
-    def nested_scope
+    def default_scope
       Event.find(params.require(:event_id)).categories
     end
   end

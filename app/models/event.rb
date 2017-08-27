@@ -1,4 +1,4 @@
-class Event < ActiveRecord::Base
+class Event < ApplicationRecord
   has_many :events_accounts, dependent: :delete_all, autosave: true, inverse_of: :event
   has_many :accounts, through: :events_accounts
 

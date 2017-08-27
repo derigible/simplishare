@@ -1,5 +1,7 @@
 module V1
   class ApiController < ::ApplicationController
+    include Pundit
+
     self.responder = ::Responder
     respond_to :json
 
@@ -19,12 +21,34 @@ module V1
       error_render(e, :unauthorized)
     end
 
+    rescue_from Pundit::NotAuthorizedError do |e|
+      # Override the error message to something we can return to the client
+      policy_name = e.policy.class.to_s.underscore
+      error = Exception.new message: "Unauthorized access for #{policy_name}.#{e.query}"
+      error_render(error, :forbidden)
+    end
+
+    rescue_from DateFilterService::InvalidLookupTermError do |e|
+      error_render(e, :bad_request)
+    end
+
+    rescue_from DateFilterService::InvalidLookupParamError do |e|
+      error_render(e, :bad_request)
+    end
+
+    after_action :verify_authorized, except: :index
+    after_action :verify_policy_scoped, only: :index
+
     # Turn off CSRF token authentication - because that's what this API is designed for
     skip_before_action :verify_authenticity_token
     prepend_before_action -> { doorkeeper_authorize! :api }
 
     def current_resource_owner
       @_current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id)
+    end
+
+    def pundit_user
+      current_resource_owner
     end
 
     protected

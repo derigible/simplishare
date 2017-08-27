@@ -3,7 +3,7 @@ module V1
     before_action :load_account
 
     def index
-      @accounts = paginate policy_scope(Account)
+      @accounts = ApiPagination.paginate policy_scope(Account)
       respond_with @accounts, each_serializer: AccountSerializer
     end
 

@@ -1,10 +1,10 @@
 module V1
   class EventsController < ApiController
-    before_action :load_event, except: [:index]
+    before_action :load_event, except: %i[index bulk_create]
 
     def index
-      @events = DateFilterService.new(params, policy_scope(default_scope)).filter
-      respond_with paginate @events, each_serializer: V1::Detailed::EventSerializer
+      @events = ApiPagination.paginate DateFilterService.new(params, policy_scope(default_scope)).filter
+      respond_with @events, each_serializer: V1::Detailed::EventSerializer
     end
 
     def update
@@ -31,7 +31,7 @@ module V1
     # upload a csv of events (currently only supports mint transaction csvs)
     def bulk_create
       authorize Event
-      @events = EventImportService.import_csv(current_user, upload.read)
+      @events = EventImportService.import_csv(current_resource_owner, upload.read)
       head status: :created
     rescue EventImportService::MissingCsvKeysError => e
       respond_with({ error: e }, status: :bad_request)

@@ -1,7 +1,7 @@
 module V1::Events
   class AccountsController < V1::ApiController
     def index
-      @accounts = paginate policy_scope(default_scope)
+      @accounts = ApiPagination.paginate policy_scope(default_scope)
       respond_with @accounts, each_serializer: V1::AccountSerializer
     end
 

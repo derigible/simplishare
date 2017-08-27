@@ -4,7 +4,7 @@ module Importers
   class BaseImporter
     attr_reader :user, :data, :accounts_hash, :categories_hash
 
-    def intialize(user, data)
+    def initialize(user, data)
       @user = user
       @data = data
       @accounts_hash = {}
@@ -24,8 +24,8 @@ module Importers
     private
 
     def accounts_and_categories
-      AccountPolicy::Scope.new(user, Account).map { |account| @accounts_hash[account.name] = account }
-      CategoryPolicy::Scope.new(user, Category).map { |category| @categories_hash[category.title] = category }
+      AccountPolicy::Scope.new(user, Account).resolve.map { |account| @accounts_hash[account.name] = account }
+      CategoryPolicy::Scope.new(user, Category).resolve.map { |category| @categories_hash[category.title] = category }
     end
 
     def create_event_and_associations(accounts_hash, categories_hash, record_data)

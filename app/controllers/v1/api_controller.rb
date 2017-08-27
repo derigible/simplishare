@@ -1,6 +1,7 @@
 module V1
   class ApiController < ::ApplicationController
     include Pundit
+    include ApiPagination
 
     self.responder = ::Responder
     respond_to :json

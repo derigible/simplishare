@@ -1,7 +1,7 @@
 module V1::Events
   class CategoriesController < V1::ApiController
     def index
-      @categories = paginate policy_scope(default_scope)
+      @categories = ApiPagination.paginate policy_scope(default_scope)
       respond_with @categories, each_serializer: V1::CategorySerializer
     end
 

@@ -3,7 +3,7 @@ module V1
     before_action :load_category
 
     def index
-      @categories = paginate policy_scope(Category)
+      @categories = ApiPagination.paginate policy_scope(Category)
       respond_with @categories, each_serializer: CategorySerializer
     end
 

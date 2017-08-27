@@ -1,3 +1,5 @@
+require 'csv'
+
 module Importers
   class CsvImporter < BaseImporter
     MINT_KEYS = ["Date", "Description", "Original Description", "Amount",

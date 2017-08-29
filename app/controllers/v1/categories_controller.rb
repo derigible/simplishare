@@ -1,6 +1,6 @@
 module V1
   class CategoriesController < ApiController
-    before_action :load_category
+    before_action :load_category, except: [:index]
 
     def index
       @categories = ApiPagination.paginate policy_scope(Category)

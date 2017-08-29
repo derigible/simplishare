@@ -1,8 +1,12 @@
 module V1
   module Detailed
     class EventSerializer < V1::EventSerializer
-      has_many :categories, serializer: V1::CategorySerializer
-      has_many :accounts, serializer: V1::AccountSerializer
+      attribute :accounts do
+        object.events_accounts.map(&:account_id)
+      end
+      attribute :categories do
+        object.events_categories.map(&:category_id)
+      end
     end
   end
 end

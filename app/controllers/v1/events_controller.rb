@@ -53,7 +53,7 @@ module V1
     end
 
     def default_scope
-      Event.all.includes(:accounts, :categories).order(date: :desc)
+      Event.joins(:events_accounts, :events_categories)
     end
   end
 end

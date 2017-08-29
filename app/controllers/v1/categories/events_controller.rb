@@ -3,7 +3,7 @@ module V1
     class EventsController < ApiController
       def index
         @events = ApiPagination.paginate policy_scope(default_scope)
-        respond_with @events, each_serializer: EventSerializer
+        respond_with @events, each_serializer: V1::Detailed::EventSerializer
       end
 
       private

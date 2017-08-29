@@ -65,6 +65,7 @@ module Importers
                             notes: "#{record_data['Notes']} | Labels: #{record_data['Labels']}",
                             date: get_date(record_data),
                             user: user)
+      # This may not be necessary - maybe can move into the create function?
       EventsAccount.create!(account: account, event: event)
       EventsCategory.create!(category: category, event: event)
       event

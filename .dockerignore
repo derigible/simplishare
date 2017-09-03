@@ -1,0 +1,15 @@
+docker/
+.dockerignore
+docker-compose.*
+
+.DS_Store
+.editorconfig
+.git
+.gitignore
+.rspec_status
+.idea
+
+log/
+README.md
+seeded_access_tokens.yml
+tmp/

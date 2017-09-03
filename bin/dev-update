@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "-- building docker stuff"
+docker-compose build --pull
+
+echo "-- bundling"
+docker-compose run --rm api bundle
+
+echo "-- migrating"
+docker-compose run --rm api bundle exec rake db:migrate
+docker-compose run --rm -e RAILS_ENV=test -u root api bundle exec rake db:migrate

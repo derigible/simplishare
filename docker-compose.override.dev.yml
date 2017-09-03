@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  API: &API
+    environment: &API_ENV
+      # Enable these for profiling mode:
+      #RAILS_ENV: production
+      #RAILS_SECRET_KEY_BASE: 4d21aed0f6bd34b6744b5f8736832a0afb6cd
+      #RUBY_PROF_ENABLED: 1
+      AUTH_TOKEN_EXPIRE_TIME: 315576000
+    volumes:
+      - .:/usr/src/app
+      - bundled-gems:/home/docker/.gem/ruby
+
+  postgres:
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  bundled-gems: {}
+  logs: {}
+  node-modules: {}
+  pg-data: {}
+  tmp: {}

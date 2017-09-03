@@ -42,10 +42,14 @@ module V1
 
     # Turn off CSRF token authentication - because that's what this API is designed for
     skip_before_action :verify_authenticity_token
-    prepend_before_action -> { doorkeeper_authorize! :api }
+    prepend_before_action -> { doorkeeper_authorize! :api unless skip_authorization }
+
+    def skip_authorization
+      params[:controller] == 'v1/users' && params[:action] == 'create'
+    end
 
     def current_resource_owner
-      @_current_resource_owner ||= User.find(doorkeeper_token.resource_owner_id)
+      @_current_resource_owner ||= User.find(doorkeeper_token&.resource_owner_id) unless skip_authorization
     end
 
     def pundit_user

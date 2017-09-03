@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+RAILS_ENV="${RAILS_ENV:-development}"
+
+function docker_rake () {
+  docker-compose run --rm -e RAILS_ENV=$RAILS_ENV api bundle exec rake $*
+}
+
+echo "Taking down the docker containers"
+docker-compose down
+
+set -e
+echo "Resetting the local db"
+docker_rake db:drop
+docker_rake db:create
+docker_rake db:migrate
+docker_rake db:seed
+
+echo "All done, run 'docker-compose up' to start it back up"

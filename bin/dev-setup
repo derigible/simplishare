@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+echo "Let's get you all set up for local development!!"
+
+override_file='docker-compose.override.yml'
+dev_override_file='docker-compose.override.dev.yml'
+if [ -f ${override_file} ] && ! cmp ${override_file} ${dev_override_file} --silent; then
+  echo "We found an existing ${override_file}"
+  echo ""
+  echo "You'll want to merge that file with the version controlled
+docker-compose.override.dev.yml file to make sure you've got
+the most recent changes"
+  echo ""
+else
+  echo "we are copying the development example override file to docker-compose.override.yml for you"
+  cp ${dev_override_file} ${override_file}
+fi
+
+echo "Great, now let's get your docker stuff setup!"
+
+set -e
+
+docker-compose build --pull
+docker-compose run --rm api bundle install
+docker-compose run --rm api bundle exec rake db:drop
+docker-compose run --rm api bundle exec rake db:create
+docker-compose run --rm api bundle exec rake db:migrate
+docker-compose run --rm api bundle exec rake db:seed
+
+docker-compose run --rm -e RAILS_ENV=test api bundle exec rake db:drop
+docker-compose run --rm -e RAILS_ENV=test api bundle exec rake db:create
+docker-compose run --rm -e RAILS_ENV=test -u root api bundle exec rake db:migrate
+docker-compose run --rm -e RAILS_ENV=test api bundle exec rake db:seed
+
+echo "All set! Now run docker-compose up to start the server."

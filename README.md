@@ -45,3 +45,16 @@ Prerequisites:
     - key: `grant_type` value: `refresh_token`
     - key: `refresh_token` value: `<refresh token recieved when creating a token with post>`
 6. Click send and you should get a request back with the new token in the body
+
+## Debugging
+
+A useful trick for debugging the application within the docker container is to
+bypass the Nginx and Passenger service by running Rails directly like so:
+
+```sh
+docker-compose run -e VIRTUAL_PORT=8080 -p 8080 --rm api bundle exec rails s -p 8080 -b 0.0.0.0
+```
+
+Unlike requests through Passenger, your requests will be processed within the
+context of an interactive shell, so `debugger` calls now work. You should also
+be able to spin up a [Pry REPL](http://pryrepl.org/) with `binding.pry` calls.

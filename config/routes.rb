@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     skip_controllers :authorized_applications, :token_info, :authorizations, :tokens
   end
 
+  health_check_routes
+
   concern :api_routes do
     get 'account/token/info' => 'token_info#show'
     post 'account/token' => 'custom_tokens#create'

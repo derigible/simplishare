@@ -22,3 +22,8 @@ docker-compose.override.yml
 #byebug
 .byebug_history
 seeded_access_tokens
+
+# Other things we ignore for now
+config/secrets.yml.enc
+config/secrets.yml.key
+public/*

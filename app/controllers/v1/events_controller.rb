@@ -32,7 +32,7 @@ module V1
     def bulk_create
       authorize Event
       @events = EventImportService.import_csv(current_resource_owner, upload.read)
-      head status: :created
+      head :created
     rescue EventImportService::MissingCsvKeysError => e
       respond_with({ error: e }, status: :bad_request)
     end

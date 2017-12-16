@@ -21,21 +21,13 @@ class DateFilterService
   # The `lookup_param` parameter should pass in query values as described below
   # Current lookup_terms available are:
   #
-  #   day - all transactions on the given day in the current month and year
-  #   week - all transaction for all days over the last seven days
-  #   *NOTE: only for the current
-  #
   #   month - all days in the given month in the current year
   #   quater - all days in the given quarter in the current year
   #   year - all days in the given year
-  #   yearoveryear - all days of given month and all days of given month in previous year
-  #   allmonths - all days of any year of the given month
   #   *NOTE: if the lookup_param parameter does not specify a value, then the
   #          call for the params above use the current value (day, month, or year)
   #   *NOTE: the lookup_param expects integer values for the above lookup_terms
-
-  #   after_date - all transactions after the given date
-  #   before_date - all transactions before the given date
+  #
   #   on_date - all transactions on the given date
   #   between_dates - all transactions between the given dates
   #                  * separate dates by a comma in the lookup_param parameter
@@ -81,6 +73,22 @@ class DateFilterService
     @_quarter ||= now.month / 3
   end
 
+  def beginning_of_year(year = now.year)
+    @_boym ||= begin
+      Date.new(year, 1, 1)
+    end
+  end
+
+  def end_of_year(year = now.year)
+    @_eoym ||= begin
+      Date.new(year, 12, 31)
+    end
+  end
+
+  def current_year
+    @_year ||= now.year
+  end
+
   # Lookups
 
   def default_lookup
@@ -105,5 +113,11 @@ class DateFilterService
     quarter = @params.fetch(:lookup_param, current_quarter).to_i
     raise InvalidLookupParamError.new(quarter) if current_quarter < quarter || quarter <= 0
     scope.where('date >= ? and date <= ?', beginning_of_quarter(quarter), end_of_quarter(quarter))
+  end
+
+  def year_lookup
+    year = @params.fetch(:lookup_param, current_year).to_i
+    raise InvalidLookupParamError.new(year) if current_year < year
+    scope.where('date >= ? and date <= ?', beginning_of_year(year), end_of_year(year))
   end
 end

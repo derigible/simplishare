@@ -26,6 +26,7 @@ class DateFilterService
   #   *NOTE: only for the current
   #
   #   month - all days in the given month in the current year
+  #   quater - all days in the given quarter in the current year
   #   year - all days in the given year
   #   yearoveryear - all days of given month and all days of given month in previous year
   #   allmonths - all days of any year of the given month
@@ -62,6 +63,24 @@ class DateFilterService
     @_eom ||= Date.new(year, month, -1)
   end
 
+  def beginning_of_quarter(quarter, year = now.year)
+    @_boqm ||= begin
+      start_of_quarter_month = quarter == 1 ? 1 : ((quarter - 1) * 3) + 1
+      Date.new(year, start_of_quarter_month, 1)
+    end
+  end
+
+  def end_of_quarter(quarter, year = now.year)
+    @_eoqm ||= begin
+      end_of_quarter_month = quarter == 1 ? 3 : ((quarter - 1) * 3) + 3
+      Date.new(year, end_of_quarter_month, -1)
+    end
+  end
+
+  def current_quarter
+    @_quarter ||= now.month / 3
+  end
+
   # Lookups
 
   def default_lookup
@@ -80,5 +99,11 @@ class DateFilterService
     month = @params.fetch(:lookup_param, now.month).to_i
     raise InvalidLookupParamError.new(month) if month > now.month || month <= 0
     scope.where('date >= ? and date <= ?', beginning_of_month(month), end_of_month(month))
+  end
+
+  def quarter_lookup
+    quarter = @params.fetch(:lookup_param, current_quarter).to_i
+    raise InvalidLookupParamError.new(quarter) if current_quarter < quarter || quarter <= 0
+    scope.where('date >= ? and date <= ?', beginning_of_quarter(quarter), end_of_quarter(quarter))
   end
 end

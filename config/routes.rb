@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       resources :accounts, only: [:index, :create], controller: 'events/accounts'
       resources :categories, only: [:index, :create], controller: 'events/categories'
     end
+
+    resources :todos
   end
 
   api_version(

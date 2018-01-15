@@ -3,17 +3,17 @@ module V1
     before_action :load_category, except: [:index]
 
     def index
-      @categories = ApiPagination.paginate policy_scope(Category)
+      @categories = paginate policy_scope(Category)
       respond_with @categories, each_serializer: CategorySerializer
     end
 
     def update
-      @category.update(account_params)
+      @category.update(category_params)
       respond_with @category, status: :ok, serializer: CategorySerializer
     end
 
     def create
-      @category = Category.new(account_params)
+      @category = Category.new(category_params)
       authorize @category
       @category.save
       respond_with @category, status: :created, serializer: CategorySerializer
@@ -34,7 +34,7 @@ module V1
       @category = Category.find(params[:id])
     end
 
-    def account_params
+    def category_params
       params.require(:category).permit(:title)
     end
   end

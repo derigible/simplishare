@@ -6,13 +6,15 @@ default: &default
   password: <%= ENV.fetch("DB_PASSWORD", "budgetr_password") %>
   host: <%= ENV.fetch("DB_ADDRESS", "postgres") %>
 
-development:
+development: &development
   <<: *default
+  password: <%= ENV.fetch("DB_PASSWORD", "derigible-password") %>
   database: <%= ENV.fetch("DB_NAME", "budgetr_dev") %>
 
-local-development:
+local_development:
   <<: *default
-  username: <%= ENV.fetch("DB_USERNAME", "mphillips") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "derigible-password") %>
+  username: <%= ENV.fetch("DB_USERNAME", "derigible") %>
   database: <%= ENV.fetch("DB_NAME", "budgetr_dev") %>
   host: <%= ENV.fetch("DB_ADDRESS", "localhost") %>
 
@@ -32,7 +34,7 @@ staging:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
+  <<: *development
   database: "budgetr_test"
 
 # Database credentials should never be hard coded and Elastic Beanstalk

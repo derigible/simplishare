@@ -33,7 +33,18 @@ describe EventImportService do
       context 'with same file upload' do
         it 'does not recreate events if duplicate' do
           EventImportService.import_csv(user, @csv_data)
-          expect { EventImportService.import_csv(user, @csv_data) }.to change { EventsCategory.count }.by 0
+          expect { EventImportService.import_csv(user, @csv_data) }.to change { Event.count }.by 0
+        end
+      end
+
+      context 'with duplicates in csv data' do
+        before :all do
+          csv_file = open(Rails.root.join('spec', 'fixtures', 'events_mint_duplicates.csv'))
+          @csv_data = csv_file.read
+        end
+
+        it 'dedupes data' do
+          expect { EventImportService.import_csv(user, @csv_data) }.to change { Event.count }.by 8
         end
       end
     end

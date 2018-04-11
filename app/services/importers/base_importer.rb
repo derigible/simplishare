@@ -25,6 +25,12 @@ module Importers
 
     private
 
+    def dedupe_data(data)
+      data.each_with_object({}) do |datum, hash|
+        hash[datum.hash] = datum
+      end.values
+    end
+
     def create_record_hash(row)
       {
         description: row['Original Description'],
@@ -38,7 +44,7 @@ module Importers
     def accounts_and_categories_and_events
       AccountPolicy::Scope.new(user, Account).resolve.map { |account| @accounts_hash[account.name] = account }
       CategoryPolicy::Scope.new(user, Category).resolve.map { |category| @categories_hash[category.title] = category }
-      EventPolicy::Scope.new(user, Event).resolve.map do |event|
+      EventPolicy::Scope.new(user, Event).resolve.includes(:accounts, :categories).map do |event|
         @events_hash[event_hash_key(event)] = event
       end
     end

@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :category do
     title { Faker::StarWars.droid }
+    user { create :user }
 
     factory :category_with_event do
       transient do

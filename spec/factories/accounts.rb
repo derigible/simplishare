@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :account do
     name { Faker::StarWars.droid }
+    user { create :user }
 
     factory :account_with_event do
       transient do

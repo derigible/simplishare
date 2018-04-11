@@ -2,43 +2,68 @@ require 'date'
 
 module Importers
   class BaseImporter
-    attr_reader :user, :data, :accounts_hash, :categories_hash
+    attr_reader :user, :data, :accounts_hash, :categories_hash, :events_hash
 
     def initialize(user, data)
       @user = user
       @data = data
       @accounts_hash = {}
       @categories_hash = {}
+      @events_hash = {}
     end
 
     def import_data(data)
-      accounts_and_categories
+      accounts_and_categories_and_events
       # fail all create if error with creation
       ActiveRecord::Base.transaction do
         data.map do |row|
-          create_event_and_associations(accounts_hash, categories_hash, row)
+          record = create_record_hash(row)
+          create_event_and_associations(record, row['Account Name'], row['Category'])
         end
       end
     end
 
     private
 
-    def accounts_and_categories
+    def create_record_hash(row)
+      {
+        description: row['Original Description'],
+        amount: row['Amount'],
+        is_debit: row['Transaction Type'] == 'debit',
+        notes: "#{row['Notes']} | Labels: #{row['Labels']}",
+        date: get_date(row)
+      }
+    end
+
+    def accounts_and_categories_and_events
       AccountPolicy::Scope.new(user, Account).resolve.map { |account| @accounts_hash[account.name] = account }
       CategoryPolicy::Scope.new(user, Category).resolve.map { |category| @categories_hash[category.title] = category }
+      EventPolicy::Scope.new(user, Event).resolve.map do |event|
+        @events_hash[event_hash_key(event)] = event
+      end
     end
 
-    def create_event_and_associations(accounts_hash, categories_hash, record_data)
-      account = get_or_create_account(record_data['Account Name'], accounts_hash)
-      category = get_or_create_category(record_data['Category'], categories_hash)
-      create_linked_event(record_data, account, category)
+    def event_hash_key(event)
+      "#{event.date.year}#{event.date.month}#{event.date.day}#{event.amount}" \
+        "#{event.is_debit}#{event.description.slice(0, 5)}"
     end
 
-    def get_date(record_data)
-      Date.strptime(record_data['Date'], '%m/%d/%Y')
+    def record_hash_key(record)
+      "#{record[:date].year}#{record[:date].month}#{record[:date].day}#{record[:amount]}" \
+        "#{record[:is_debit]}#{record[:description].slice(0, 5)}"
     end
 
-    def get_or_create_account(name, accounts_hash)
+    def create_event_and_associations(record, account_name, category)
+      account = get_or_create_account(account_name)
+      category = get_or_create_category(category)
+      create_linked_event(record, account, category)
+    end
+
+    def get_date(record)
+      Date.strptime(record['Date'], '%m/%d/%Y')
+    end
+
+    def get_or_create_account(name)
       if accounts_hash.include?(name)
         accounts_hash[name]
       else
@@ -48,7 +73,7 @@ module Importers
       end
     end
 
-    def get_or_create_category(title, categories_hash)
+    def get_or_create_category(title)
       if categories_hash.include?(title)
         categories_hash[title]
       else
@@ -58,17 +83,23 @@ module Importers
       end
     end
 
-    def create_linked_event(record_data, account, category)
-      event = Event.create!(description: record_data['Original Description'],
-                            amount: record_data['Amount'],
-                            is_debit: record_data['Transaction Type'] == 'debit',
-                            notes: "#{record_data['Notes']} | Labels: #{record_data['Labels']}",
-                            date: get_date(record_data),
-                            user: user)
-      # This may not be necessary - maybe can move into the create function?
-      EventsAccount.create!(account: account, event: event)
-      EventsCategory.create!(category: category, event: event)
+    def create_linked_event(record, account, category)
+      return if event_exists?(record, account, category)
+      event = Event.create!(user: user, **record)
+      create_account_and_category_link(event, account, category)
+    end
+
+    def create_account_and_category_link(event, account, category)
+      EventsAccount.create!(event: event, account: account)
+      EventsCategory.create!(event: event, category: category)
       event
+    end
+
+    def event_exists?(record, account, category)
+      event = events_hash[record_hash_key(record)] || Event.find_by(user: user, **record)
+
+      return false if event.nil?
+      return true if event.accounts.include?(account) && event.categories.include?(category)
     end
   end
 end

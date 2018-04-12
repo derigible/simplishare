@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 20180115214930) do
 
   create_table "todos", force: :cascade do |t|
     t.bigint "user_id"
-    t.jsonb "todo"
+    t.jsonb "todo", default: {}
     t.bigint "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

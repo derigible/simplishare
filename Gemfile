@@ -9,6 +9,7 @@ gem 'doorkeeper-jwt', '~> 0.1.6' # JWT support for doorkeeper
 gem 'figaro', '~> 1.0.0'
 gem 'gon', '~> 6.0.1'
 gem 'health_check'
+gem 'inst-jobs'
 gem 'kaminari', '~> 1.0.1' # Paging
 gem 'pg', '~> 0.21.0'
 gem 'pundit'

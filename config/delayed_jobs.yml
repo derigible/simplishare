@@ -1,0 +1,8 @@
+development:
+  workers:
+  - workers: 1
+
+production:
+  work_queue: parent_process
+  workers:
+  - workers: 10

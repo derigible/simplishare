@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180115214930) do
+ActiveRecord::Schema.define(version: 20180413194724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,32 @@ ActiveRecord::Schema.define(version: 20180115214930) do
     t.string "title", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "delayed_jobs", id: :serial, force: :cascade do |t|
+    t.integer "priority", default: 0
+    t.integer "attempts", default: 0
+    t.text "handler"
+    t.text "last_error"
+    t.string "queue", limit: 255
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by", limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "tag", limit: 255
+    t.integer "max_attempts"
+    t.string "strand", limit: 255
+    t.boolean "next_in_strand", default: true, null: false
+    t.string "source", limit: 255
+    t.integer "max_concurrent", default: 1, null: false
+    t.datetime "expires_at"
+    t.index ["locked_by"], name: "index_delayed_jobs_on_locked_by", where: "(locked_by IS NOT NULL)"
+    t.index ["priority", "run_at", "queue"], name: "get_delayed_jobs_index", where: "((locked_at IS NULL) AND (next_in_strand = true))"
+    t.index ["run_at", "tag"], name: "index_delayed_jobs_on_run_at_and_tag"
+    t.index ["strand", "id"], name: "index_delayed_jobs_on_strand"
+    t.index ["tag"], name: "index_delayed_jobs_on_tag"
   end
 
   create_table "events", force: :cascade do |t|
@@ -55,6 +81,26 @@ ActiveRecord::Schema.define(version: 20180115214930) do
     t.bigint "event_id"
     t.index ["category_id"], name: "index_events_categories_on_category_id"
     t.index ["event_id"], name: "index_events_categories_on_event_id"
+  end
+
+  create_table "failed_jobs", id: :serial, force: :cascade do |t|
+    t.integer "priority", default: 0
+    t.integer "attempts", default: 0
+    t.string "handler", limit: 512000
+    t.text "last_error"
+    t.string "queue", limit: 255
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by", limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "tag", limit: 255
+    t.integer "max_attempts"
+    t.string "strand", limit: 255
+    t.bigint "original_job_id"
+    t.string "source", limit: 255
+    t.datetime "expires_at"
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|

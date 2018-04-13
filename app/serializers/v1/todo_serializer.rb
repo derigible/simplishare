@@ -3,7 +3,7 @@ module V1
   # Consumers should act like the top level todo is a first class
   # citizen in this datamodel.
   class TodoSerializer < ActiveModel::Serializer
-    attributes :id do
+    attribute :id do
       object.id.to_s
     end
     attribute :description do

@@ -43,9 +43,18 @@ module V1
     end
 
     def destroy
-      todo = Todo.find params[:id]
-      authorize(todo)
-      todo.destroy
+      todo = Todo.find_by(id: params[:id])
+      if todo.present?
+        authorize(todo)
+        todo.destroy
+      else
+        todo = find_db_record_from_parent_chain
+        authorize(todo)
+        todo_child = nth_child_from_end_of_parent_chain(todo.todo, -2)
+        deleted = todo_child['todos'].reject! { |todo| todo['id'] == params[:parent_chain].last }
+        raise ActiveRecord::RecordNotFound if deleted.nil? # means nothing happened and the parent_chain was wrong
+        todo.save!
+      end
       head :no_content
     end
 
@@ -58,10 +67,10 @@ module V1
     end
 
     # the passed in value MUST be the AR record's todo
-    def find_last_in_parent_chain(todo)
+    def nth_child_from_end_of_parent_chain(todo, n = -1)
       todo_child = todo
       todos = todo['todos']
-      params[:parent_chain].slice(1..-1).each_with_index do |t_id, i|
+      params[:parent_chain].slice(1..n).each_with_index do |t_id, i|
         todo_child = todos.find { |t| t['id'] == t_id }
         # raise not found if todo_child is nil because the parentChain always ends on the desired todo,
         # and so if nil means the id does not exist
@@ -74,7 +83,7 @@ module V1
 
     def create_sub_task
       todo = find_db_record_from_parent_chain
-      todo_child = find_last_in_parent_chain(todo.todo)
+      todo_child = nth_child_from_end_of_parent_chain(todo.todo)
       todo_child['todos'].push({
         id: SecureRandom.uuid,
         created_at: Time.zone.now,
@@ -85,7 +94,7 @@ module V1
 
     def update_sub_task
       todo = find_db_record_from_parent_chain
-      todo_child = find_last_in_parent_chain(todo.todo)
+      todo_child = nth_child_from_end_of_parent_chain(todo.todo)
       if todo_child['id'] == params[:id]
         todo_child.merge!(updated_at: Time.zone.now).merge!(todo_update_child_params)
       else

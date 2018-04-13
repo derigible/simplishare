@@ -3,24 +3,26 @@ module V1
   # Consumers should act like the top level todo is a first class
   # citizen in this datamodel.
   class TodoSerializer < ActiveModel::Serializer
-    attributes :id
+    attributes :id do
+      object.id.to_s
+    end
     attribute :description do
-      object.todo[:description]
+      object.todo['description']
     end
     attribute :priority do
-      object.todo[:priority]
+      object.todo['priority']
     end
     attribute :todos do
-      object.todo[:todos]
+      object.todo['todos']
     end
     attribute :title do
-      object.todo[:title]
+      object.todo['title']
     end
     attribute :updated_at do
-      object.todo[:updated_at]
+      object.updated_at
     end
     attribute :created_at do
-      object.todo[:created_at]
+      object.created_at
     end
   end
 end

@@ -1,7 +1,5 @@
 module V1
   class TodosController < ApiController
-    before_action :load_todo, only: %i[show destroy update]
-
     def index
       todos = paginate policy_scope(Todo)
       respond_with todos, each_serializer: TodoSerializer
@@ -19,57 +17,88 @@ module V1
     #   - If the parentChain is not valid, throws a RecordNotFound
     # If id in the path does not equal one of those three, RecordNotFound is thrown
     def update
-      if params[:parent_chain].empty?
-        @todo.todo.merge! **todo_update_params
+      todo = if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+        update_task
+      elsif params[:id] == 'new-sub-task'
+        create_sub_task
       else
-        todos = @todo.todo.todos
-        todo_child = nil
-        params[:parent_chain].slice(1, -1).each_with_index do |t_id, i|
-          todo_child = todos.find { |t| t.id == t_id }
-          # raise not found if todo_child is nil because the parentChain always ends on the desired todo,
-          # and so if nil means the id does not exist
-          raise ActiveRecord::RecordNotFound if todo_child.nil?
-          # only change the todos if not at the end of the todos
-          todos = todo_child.todos
-        end
-        if todo_child[:id] == params[:id]
-          todo_child.merge! updated_at: Time.zone.now, **todo_update_child_params
-        elsif params[:id] == 'new-sub-task'
-          todos.push({
-            id: SecureRandom.uuid,
-            created_at: Time.zone.now,
-            updated_at: Time.zone.now,
-            **todo_update_child_params
-          })
-        else
-          raise ActiveRecord::RecordNotFound
-        end
-        @todo.save
+        update_sub_task
       end
+      todo.save
 
-      respond_with @todo, status: :ok, serializer: Todo
+      respond_with todo, status: :ok, serializer: TodoSerializer
     end
 
     def create
-      todo = Todo.new(user: current_resource_owner, todo: todo_create_params)
+      todo = Todo.new(user: current_resource_owner, todo: {todos: []}.merge!(todo_create_params))
       authorize todo
       todo.save
-      respond_with todo, status: :created, serializer: Todo
+      respond_with todo, status: :created, serializer: TodoSerializer
     end
 
     def show
-      respond_with @todo, serializer: Todo
+      todo = Todo.find params[:id]
+      authorize(todo)
+      respond_with todo, serializer: Todo
     end
 
     def destroy
-      @todo.destroy
+      todo = Todo.find params[:id]
+      authorize(todo)
+      todo.destroy
       head :no_content
     end
 
     private
 
-    def load_todo
-      @todo = Todo.find params[:id]
+    def find_db_record_from_parent_chain
+      todo = Todo.find params[:parent_chain].first
+      authorize(todo)
+      todo
+    end
+
+    # the passed in value MUST be the AR record's todo
+    def find_last_in_parent_chain(todo)
+      todo_child = todo
+      todos = todo['todos']
+      params[:parent_chain].slice(1..-1).each_with_index do |t_id, i|
+        todo_child = todos.find { |t| t['id'] == t_id }
+        # raise not found if todo_child is nil because the parentChain always ends on the desired todo,
+        # and so if nil means the id does not exist
+        raise ActiveRecord::RecordNotFound if todo_child.nil?
+        # only change the todos if not at the end of the todos
+        todos = todo_child['todos']
+      end
+      todo_child
+    end
+
+    def create_sub_task
+      todo = find_db_record_from_parent_chain
+      todo_child = find_last_in_parent_chain(todo.todo)
+      todo_child['todos'].push({
+        id: SecureRandom.uuid,
+        created_at: Time.zone.now,
+        updated_at: Time.zone.now
+      }.merge!(todo_update_child_params))
+      todo
+    end
+
+    def update_sub_task
+      todo = find_db_record_from_parent_chain
+      todo_child = find_last_in_parent_chain(todo.todo)
+      if todo_child['id'] == params[:id]
+        todo_child.merge!(updated_at: Time.zone.now).merge!(todo_update_child_params)
+      else
+        raise ActiveRecord::RecordNotFound
+      end
+      todo
+    end
+
+    def update_task
+      todo = Todo.find params[:id]
+      authorize(todo)
+      todo.todo.merge! todo_update_params
+      todo
     end
 
     def todo_create_params

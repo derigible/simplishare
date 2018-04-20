@@ -31,10 +31,14 @@ module V1
     # upload a csv of events (currently only supports mint transaction csvs)
     def bulk_create
       authorize Event
-      @events = EventImportService.import_csv(current_resource_owner, upload.read)
-      head :created
-    rescue EventImportService::MissingCsvKeysError => e
-      respond_with({ error: e }, status: :bad_request)
+      current_resource_owner.csv_uploads.attach(upload)
+      current_resource_owner.save
+      if current_resource_owner.valid?
+        user.send_later(:upload_events)
+        head :created
+      else
+        respond_with({ error: e }, status: :bad_request)
+      end
     end
 
     private
@@ -49,7 +53,7 @@ module V1
     end
 
     def upload
-      params.require(:upload)
+      params.require(:csv_uploads)
     end
 
     def default_scope

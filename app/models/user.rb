@@ -11,7 +11,13 @@ class User < ApplicationRecord
                            dependent: :delete_all,
                            foreign_key: :resource_owner_id
 
+  has_one_attached :csv_uploads
+
   before_save :run_sanitizers
+
+  def upload_events
+    EventImportService.import_csv(self, csv_uploads.read)
+  end
 
   private
 

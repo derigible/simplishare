@@ -119,13 +119,13 @@ module V1
     def todo_update_params
       params
         .require(:todo)
-        .permit(:description, :priority, :title)
+        .permit(:description, :priority, :completed, :title)
     end
 
     def todo_update_child_params
       params
         .require(:todo)
-        .permit(:description, :priority, :title, parent_chain: [])
+        .permit(:description, :priority, :completed, :title, parent_chain: [])
     end
   end
 end

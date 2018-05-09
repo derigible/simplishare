@@ -18,6 +18,9 @@ module V1
     attribute :title do
       object.todo['title']
     end
+    attribute :completed do
+      object.todo['completed']
+    end
     attribute :updated_at do
       object.updated_at
     end

@@ -1,7 +1,7 @@
 class CreateV1Accounts < ActiveRecord::Migration[5.1]
   def change
     create_table :accounts do |t|
-      t.string :name, null: false, unique: true
+      t.string :name, null: false
     end
 
     create_table :events do |t|
@@ -21,7 +21,7 @@ class CreateV1Accounts < ActiveRecord::Migration[5.1]
     end
 
     create_table :categories do |t|
-      t.string :title, null: false, unique: true
+      t.string :title, null: false
     end
 
     create_table :events_categories do |t|

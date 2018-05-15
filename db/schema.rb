@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_13_210641) do
+ActiveRecord::Schema.define(version: 2018_05_14_210641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,9 +161,29 @@ ActiveRecord::Schema.define(version: 2018_04_13_210641) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_tags_on_user_id"
+  end
+
+  create_table "tags_events", force: :cascade do |t|
+    t.bigint "tags_id"
+    t.bigint "todos_id"
+    t.index ["tags_id"], name: "index_tags_events_on_tags_id"
+    t.index ["todos_id"], name: "index_tags_events_on_todos_id"
+  end
+
+  create_table "tags_todos", force: :cascade do |t|
+    t.bigint "tags_id"
+    t.bigint "todos_id"
+    t.index ["tags_id"], name: "index_tags_todos_on_tags_id"
+    t.index ["todos_id"], name: "index_tags_todos_on_todos_id"
+  end
+
   create_table "todos", force: :cascade do |t|
     t.bigint "user_id"
-    t.jsonb "todo"
+    t.jsonb "todo", default: {}
     t.bigint "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -200,6 +220,11 @@ ActiveRecord::Schema.define(version: 2018_04_13_210641) do
   add_foreign_key "events_categories", "events"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "tags", "users"
+  add_foreign_key "tags_events", "tags", column: "tags_id"
+  add_foreign_key "tags_events", "todos", column: "todos_id"
+  add_foreign_key "tags_todos", "tags", column: "tags_id"
+  add_foreign_key "tags_todos", "todos", column: "todos_id"
   add_foreign_key "todos", "events"
   add_foreign_key "todos", "users"
 end

@@ -10,7 +10,7 @@ module EventImportService
 
   class << self
     def import_csv(user, csv_data)
-      Importers::CsvImporter.new(user, csv_data).import
+      CsvImporter.new(user, csv_data).import
     end
   end
 end

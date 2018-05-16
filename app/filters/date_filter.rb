@@ -1,24 +1,5 @@
-class DateFilterService
-  class InvalidLookupTermError < StandardError
-    def initialize(lookup_term)
-      super("Invalid lookup_term provided: #{lookup_term} not found")
-    end
-  end
-  class InvalidLookupParamError < StandardError
-    def initialize(lookup_param)
-      super("Invalid lookup_param provided: #{lookup_param} not valid")
-    end
-  end
-
-  def initialize(params, scope)
-    @params = params
-    @scope = scope
-  end
-
-  # Method that takes the params and attempts to filter by the specified key.
-  # If lookup is found and does not match a query method, an error will be
-  # raised. If not found, the default will be used (currently model.all).
-  # The `lookup_param` parameter should pass in query values as described below
+class DateFilter < BaseFilter
+  # The `lookup_term` parameter should pass in query values as described below
   # Current lookup_terms available are:
   #
   #   month - all days in the given month in the current year
@@ -33,15 +14,8 @@ class DateFilterService
   #                  * separate dates by a comma in the lookup_param parameter
   #   *NOTE: if the lookup_param is not specified, then an error is raised for
   #          the *_date(s) lookups
-  def filter
-    send("#{@params.fetch(:lookup_term, 'default')}_lookup")
-  rescue NoMethodError, KeyError
-    raise InvalidLookupTermError.new(@params[:lookup_term])
-  end
 
   private
-
-  attr_reader :scope
 
   def now
     @_now ||= Time.zone.now
@@ -91,10 +65,6 @@ class DateFilterService
 
   # Lookups
 
-  def default_lookup
-    scope.all
-  end
-
   def day_lookup
     scope.where('date >= ?', Time.zone.today)
   end
@@ -105,19 +75,19 @@ class DateFilterService
 
   def month_lookup
     month = @params.fetch(:lookup_param, now.month).to_i
-    raise InvalidLookupParamError.new(month) if month > now.month || month <= 0
+    raise BaseFilter::InvalidLookupParamError.new(month) if month > now.month || month <= 0
     scope.where('date >= ? and date <= ?', beginning_of_month(month), end_of_month(month))
   end
 
   def quarter_lookup
     quarter = @params.fetch(:lookup_param, current_quarter).to_i
-    raise InvalidLookupParamError.new(quarter) if current_quarter < quarter || quarter <= 0
+    raise BaseFilter::InvalidLookupParamError.new(quarter) if current_quarter < quarter || quarter <= 0
     scope.where('date >= ? and date <= ?', beginning_of_quarter(quarter), end_of_quarter(quarter))
   end
 
   def year_lookup
     year = @params.fetch(:lookup_param, current_year).to_i
-    raise InvalidLookupParamError.new(year) if current_year < year
+    raise BaseFilter::InvalidLookupParamError.new(year) if current_year < year
     scope.where('date >= ? and date <= ?', beginning_of_year(year), end_of_year(year))
   end
 end

@@ -3,7 +3,7 @@ module V1
     before_action :load_event, except: %i[index bulk_create]
 
     def index
-      @events = paginate DateFilterService.new(params, policy_scope(default_scope)).filter
+      @events = paginate DateFilter.new(params, policy_scope(default_scope)).filter
       respond_with @events, each_serializer: V1::Detailed::EventSerializer
     end
 

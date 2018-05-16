@@ -2,7 +2,7 @@ module V1
   module Categories
     class EventsController < ApiController
       def index
-        @events = paginate DateFilterService.new(params, policy_scope(default_scope)).filter
+        @events = paginate DateFilter.new(params, policy_scope(default_scope)).filter
         respond_with @events, each_serializer: V1::Detailed::EventSerializer
       end
 

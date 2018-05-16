@@ -5,6 +5,10 @@ module V1
     self.responder = ::Responder
     respond_to :json
 
+    rescue_from ActionController::BadRequest do |e|
+      error_render(e, :bad_request)
+    end
+
     rescue_from ActionController::ParameterMissing do |e|
       error_render(e, :bad_request)
     end
@@ -28,11 +32,11 @@ module V1
       error_render(error, :forbidden)
     end
 
-    rescue_from DateFilterService::InvalidLookupTermError do |e|
+    rescue_from BaseFilter::InvalidLookupTermError do |e|
       error_render(e, :bad_request)
     end
 
-    rescue_from DateFilterService::InvalidLookupParamError do |e|
+    rescue_from BaseFilter::InvalidLookupParamError do |e|
       error_render(e, :bad_request)
     end
 

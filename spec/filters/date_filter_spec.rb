@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DateFilterService do
+describe DateFilter do
   describe '#filter' do
     before do
       create_list(:event, 5)
@@ -139,17 +139,17 @@ describe DateFilterService do
               skip('December testing. Cannot test this until January')
             end
             params[:lookup_param] = month
-            expect { service.filter }.to raise_error(DateFilterService::InvalidLookupParamError)
+            expect { service.filter }.to raise_error(BaseFilter::InvalidLookupParamError)
           end
 
           it 'with month <= 0' do
             params[:lookup_param] = 0
-            expect { service.filter }.to raise_error(DateFilterService::InvalidLookupParamError)
+            expect { service.filter }.to raise_error(BaseFilter::InvalidLookupParamError)
           end
 
           it 'with month > 12' do
             params[:lookup_param] = 13
-            expect { service.filter }.to raise_error(DateFilterService::InvalidLookupParamError)
+            expect { service.filter }.to raise_error(BaseFilter::InvalidLookupParamError)
           end
         end
       end
@@ -348,7 +348,7 @@ describe DateFilterService do
     context 'invalid lookup_term' do
       let(:params) { { lookup_term: 'invalid' } }
       it 'raises InvalidLookupTermError' do
-        expect { service.filter }.to raise_error(DateFilterService::InvalidLookupTermError)
+        expect { service.filter }.to raise_error(BaseFilter::InvalidLookupTermError)
       end
     end
   end

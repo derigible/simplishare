@@ -168,17 +168,17 @@ ActiveRecord::Schema.define(version: 2018_05_14_210641) do
   end
 
   create_table "tags_events", force: :cascade do |t|
-    t.bigint "tags_id"
-    t.bigint "todos_id"
-    t.index ["tags_id"], name: "index_tags_events_on_tags_id"
-    t.index ["todos_id"], name: "index_tags_events_on_todos_id"
+    t.bigint "tag_id"
+    t.bigint "event_id"
+    t.index ["event_id"], name: "index_tags_events_on_event_id"
+    t.index ["tag_id"], name: "index_tags_events_on_tag_id"
   end
 
   create_table "tags_todos", force: :cascade do |t|
-    t.bigint "tags_id"
-    t.bigint "todos_id"
-    t.index ["tags_id"], name: "index_tags_todos_on_tags_id"
-    t.index ["todos_id"], name: "index_tags_todos_on_todos_id"
+    t.bigint "tag_id"
+    t.bigint "todo_id"
+    t.index ["tag_id"], name: "index_tags_todos_on_tag_id"
+    t.index ["todo_id"], name: "index_tags_todos_on_todo_id"
   end
 
   create_table "todos", force: :cascade do |t|
@@ -221,10 +221,10 @@ ActiveRecord::Schema.define(version: 2018_05_14_210641) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "tags", "users"
-  add_foreign_key "tags_events", "tags", column: "tags_id"
-  add_foreign_key "tags_events", "todos", column: "todos_id"
-  add_foreign_key "tags_todos", "tags", column: "tags_id"
-  add_foreign_key "tags_todos", "todos", column: "todos_id"
+  add_foreign_key "tags_events", "events"
+  add_foreign_key "tags_events", "tags"
+  add_foreign_key "tags_todos", "tags"
+  add_foreign_key "tags_todos", "todos"
   add_foreign_key "todos", "events"
   add_foreign_key "todos", "users"
 end

@@ -27,5 +27,8 @@ module V1
     attribute :created_at do
       object.created_at
     end
+    attribute :tags do
+      object.tag_ids
+    end
   end
 end

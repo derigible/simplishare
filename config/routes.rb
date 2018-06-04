@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       resources :categories, only: [:index, :create], controller: 'events/categories'
     end
     resources :todos do
-      resources :tags, only: [:update], controller: 'tags/todos'
+      resources :tags, only: [:create], controller: 'tags/todos'
     end
     resources :tags
   end

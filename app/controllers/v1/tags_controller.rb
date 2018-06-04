@@ -1,6 +1,6 @@
 module V1
   class TagsController < ApiController
-    before_action :load_tag, except: [:index]
+    before_action :load_tag, except: [:index, :create]
 
     def index
       tags = paginate TagTypeFilter.new(params, policy_scope(Tag)).filter
@@ -13,7 +13,7 @@ module V1
     end
 
     def create
-      tag = Tag.new(tag_params)
+      tag = Tag.new({user: current_resource_owner}.merge!(tag_params))
       authorize tag
       if tag.save
         attach_record_if_present(tag)

@@ -18,6 +18,8 @@ class BaseFilter
   # Method that takes the params and attempts to filter by the specified key.
   # If lookup is found and does not match a query method, an error will be
   # raised. If not found, the passed in scope will be used.
+  # The `lookup_term` param is used to determine the scoping, and additional
+  # `lookup_param` parameters can be passed to augment the term.
   def filter
     send("#{@params.fetch(:lookup_term, 'default')}_lookup")
   rescue NoMethodError, KeyError

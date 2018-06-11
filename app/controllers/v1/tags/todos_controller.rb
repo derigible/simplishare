@@ -5,7 +5,7 @@ module V1
 
       def create
         @todo.tags << @tags
-        respond_with @todo, serializer: TodoSerializer
+        respond_with @todo.reload, serializer: TodoSerializer
       end
 
       private
@@ -16,7 +16,10 @@ module V1
       end
 
       def load_tags
-        @tags = Tag.where(id: params[:tag_ids])
+        tag_ids = params[:tag_ids].reject do |tag_id|
+          @todo.tag_ids.include?(tag_id)
+        end
+        @tags = Tag.where(id: tag_ids)
         @tags.each do |tag|
           authorize tag
         end

@@ -8,7 +8,7 @@ default: &default
 
 development: &development
   <<: *default
-  password: <%= ENV.fetch("DB_PASSWORD", "derigible-password") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "password") %>
   database: <%= ENV.fetch("DB_NAME", "budgetr_dev") %>
 
 local_development:

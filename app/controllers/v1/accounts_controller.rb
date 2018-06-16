@@ -1,6 +1,6 @@
 module V1
   class AccountsController < ApiController
-    before_action :load_account
+    before_action :load_account, except: [:index, :create]
 
     def index
       @accounts = paginate policy_scope(Account)
@@ -13,10 +13,11 @@ module V1
     end
 
     def create
-      @account = Account.new(account_params)
-      authorize @account
-      @account.save
-      respond_with @account, status: :created, serializer: AccountSerializer
+      account = Account.new(account_params)
+      account.user = current_resource_owner
+      authorize account
+      account.save
+      respond_with account, status: :created, serializer: AccountSerializer
     end
 
     def show

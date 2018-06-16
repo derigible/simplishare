@@ -1,6 +1,6 @@
 module V1
   class EventsController < ApiController
-    before_action :load_event, except: %i[index bulk_create]
+    before_action :load_event, except: %i[index bulk_create create]
 
     def index
       @events = paginate DateFilter.new(params, policy_scope(default_scope)).filter
@@ -13,10 +13,11 @@ module V1
     end
 
     def create
-      @event = Event.new(event_params)
-      authorize @event
-      @event.save
-      respond_with @event, status: :created, serializer: V1::Detailed::EventSerializer
+      event = Event.new(event_params)
+      event.user = current_resource_owner
+      authorize event
+      event.save
+      respond_with event, status: :created, serializer: V1::Detailed::EventSerializer
     end
 
     def show

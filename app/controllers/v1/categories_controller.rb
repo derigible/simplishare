@@ -1,6 +1,6 @@
 module V1
   class CategoriesController < ApiController
-    before_action :load_category, except: [:index]
+    before_action :load_category, except: [:index, :create]
 
     def index
       @categories = paginate policy_scope(Category)
@@ -13,10 +13,11 @@ module V1
     end
 
     def create
-      @category = Category.new(category_params)
-      authorize @category
-      @category.save
-      respond_with @category, status: :created, serializer: CategorySerializer
+      category = Category.new(category_params)
+      category.user = current_resource_owner
+      authorize category
+      category.save
+      respond_with category, status: :created, serializer: CategorySerializer
     end
 
     def show

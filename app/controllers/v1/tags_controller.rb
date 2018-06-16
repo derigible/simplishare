@@ -13,11 +13,10 @@ module V1
     end
 
     def create
-      tag = Tag.new({user: current_resource_owner}.merge!(tag_params))
+      tag = Tag.new(tag_params)
+      tag.user = current_resource_owner
       authorize tag
-      if tag.save
-        attach_record_if_present(tag)
-      end
+      attach_record_if_present(tag) if tag.save
       respond_with tag, status: :created, serializer: TagSerializer
     end
 

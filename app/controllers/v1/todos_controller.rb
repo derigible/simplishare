@@ -30,7 +30,8 @@ module V1
     end
 
     def create
-      todo = Todo.new(user: current_resource_owner, todo: {todos: []}.merge!(todo_create_params))
+      todo = Todo.new(todo: {todos: []}.merge!(todo_create_params))
+      todo.user = current_resource_owner
       authorize todo
       todo.save
       respond_with todo, status: :created, serializer: TodoSerializer

@@ -16,7 +16,7 @@ module V1
       end
 
       def load_tags
-        tag_ids = params[:tag_ids].reject do |tag_id|
+        tag_ids = params.fetch(:tag_ids, []).reject do |tag_id|
           @todo.tag_ids.include?(tag_id)
         end
         @tags = Tag.where(id: tag_ids)

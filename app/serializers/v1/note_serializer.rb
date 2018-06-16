@@ -1,5 +1,5 @@
 module V1
-  class AccountSerializer < ActiveModel::Serializer
+  class NoteSerializer < ActiveModel::Serializer
     attributes :id, :title, :body, :created_at, :updated_at
     attribute :tags do
       object.tag_ids

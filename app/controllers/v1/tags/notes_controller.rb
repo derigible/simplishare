@@ -1,0 +1,29 @@
+module V1
+  module Tags
+    class NotesController < ApiController
+      before_action :load_note, :load_tags
+
+      def create
+        @note.tags << @tags
+        respond_with @note.reload, serializer: NoteSerializer
+      end
+
+      private
+
+      def load_note
+        @note = Note.find(params[:note_id])
+        authorize @note
+      end
+
+      def load_tags
+        tag_ids = params.fetch(:tag_ids, []).reject do |tag_id|
+          @note.tag_ids.include?(tag_id)
+        end
+        @tags = Tag.where(id: tag_ids)
+        @tags.each do |tag|
+          authorize tag
+        end
+      end
+    end
+  end
+end

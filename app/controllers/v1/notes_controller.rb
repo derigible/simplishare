@@ -3,7 +3,7 @@ module V1
     before_action :load_note, except: [:index, :create]
 
     def index
-      notes = paginate policy_scope(note)
+      notes = paginate policy_scope(Note)
       respond_with notes, each_serializer: NoteSerializer
     end
 
@@ -21,7 +21,7 @@ module V1
     end
 
     def show
-      respond_with @note, serializer: V1::Detailed::NoteSerializer
+      respond_with @note, serializer: NoteSerializer
     end
 
     def destroy
@@ -32,7 +32,8 @@ module V1
     private
 
     def load_note
-      @note = note.find(params[:id])
+      @note = Note.find(params[:id])
+      authorize @note
     end
 
     def note_params

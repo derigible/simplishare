@@ -1,7 +1,7 @@
 module V1
   class TodosController < ApiController
     def index
-      todos = paginate TodosFilter.new(params, policy_scope(Todo)).filter
+      todos = paginate TodosFilter.new(params, policy_scope(Todo.eager_load(:tags).select("tags.id"))).filter
       respond_with todos, each_serializer: TodoSerializer
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_14_210641) do
+ActiveRecord::Schema.define(version: 2018_06_15_210641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,15 @@ ActiveRecord::Schema.define(version: 2018_05_14_210641) do
     t.datetime "expires_at"
   end
 
+  create_table "notes", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "body", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notes_on_user_id"
+  end
+
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
@@ -174,6 +183,13 @@ ActiveRecord::Schema.define(version: 2018_05_14_210641) do
     t.index ["tag_id"], name: "index_tags_events_on_tag_id"
   end
 
+  create_table "tags_notes", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "note_id"
+    t.index ["note_id"], name: "index_tags_notes_on_note_id"
+    t.index ["tag_id"], name: "index_tags_notes_on_tag_id"
+  end
+
   create_table "tags_todos", force: :cascade do |t|
     t.bigint "tag_id"
     t.bigint "todo_id"
@@ -184,10 +200,8 @@ ActiveRecord::Schema.define(version: 2018_05_14_210641) do
   create_table "todos", force: :cascade do |t|
     t.bigint "user_id"
     t.jsonb "todo", default: {}
-    t.bigint "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_todos_on_event_id"
     t.index ["user_id"], name: "index_todos_on_user_id"
   end
 
@@ -218,13 +232,15 @@ ActiveRecord::Schema.define(version: 2018_05_14_210641) do
   add_foreign_key "events_accounts", "events"
   add_foreign_key "events_categories", "categories"
   add_foreign_key "events_categories", "events"
+  add_foreign_key "notes", "users"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "tags", "users"
   add_foreign_key "tags_events", "events"
   add_foreign_key "tags_events", "tags"
+  add_foreign_key "tags_notes", "notes"
+  add_foreign_key "tags_notes", "tags"
   add_foreign_key "tags_todos", "tags"
   add_foreign_key "tags_todos", "todos"
-  add_foreign_key "todos", "events"
   add_foreign_key "todos", "users"
 end

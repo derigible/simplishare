@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       resources :accounts, only: [:index, :create], controller: 'events/accounts'
       resources :categories, only: [:index, :create], controller: 'events/categories'
     end
+    resources :notes do
+      resources :tags, only: [:create], controller: 'tags/notes'
+    end
     resources :todos do
       resources :tags, only: [:create], controller: 'tags/todos'
     end

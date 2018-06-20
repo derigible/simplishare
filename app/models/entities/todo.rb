@@ -1,8 +1,4 @@
-class Todo < ApplicationRecord
-  belongs_to :event, optional: true
-  belongs_to :user
-  has_and_belongs_to_many :tags
-
+class Todo < Entity
   before_save :ensure_proper_todo_formats
 
   # TODO: add validations

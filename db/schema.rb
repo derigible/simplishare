@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_15_210641) do
+ActiveRecord::Schema.define(version: 2018_06_20_050012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,23 @@ ActiveRecord::Schema.define(version: 2018_06_15_210641) do
     t.index ["run_at", "tag"], name: "index_delayed_jobs_on_run_at_and_tag"
     t.index ["strand", "id"], name: "index_delayed_jobs_on_strand"
     t.index ["tag"], name: "index_delayed_jobs_on_tag"
+  end
+
+  create_table "entities", force: :cascade do |t|
+    t.jsonb "data", default: {}
+    t.string "type", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type"], name: "index_entities_on_type"
+    t.index ["user_id"], name: "index_entities_on_user_id"
+  end
+
+  create_table "entities_tags", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "entity_id"
+    t.index ["entity_id"], name: "index_entities_tags_on_entity_id"
+    t.index ["tag_id"], name: "index_entities_tags_on_tag_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -226,6 +243,9 @@ ActiveRecord::Schema.define(version: 2018_06_15_210641) do
 
   add_foreign_key "accounts", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "entities", "users"
+  add_foreign_key "entities_tags", "entities"
+  add_foreign_key "entities_tags", "tags"
   add_foreign_key "events", "accounts"
   add_foreign_key "events", "users"
   add_foreign_key "events_accounts", "accounts"

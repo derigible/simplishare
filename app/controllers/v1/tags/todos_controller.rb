@@ -8,6 +8,13 @@ module V1
         respond_with @todo.reload, serializer: TodoSerializer
       end
 
+      def delete
+        @tags.each do |tag|
+          @todo.tags.destroy(tag)
+        end
+        respond_with @todo.reload, serializer: TodoSerializer
+      end
+
       private
 
       def load_todo

@@ -30,7 +30,8 @@ module V1
     end
 
     def create
-      todo = Todo.new(todo: {todos: []}.merge!(todo_create_params))
+      debugger
+      todo = Todo.new(data: todo_create_params)
       todo.user = current_resource_owner
       authorize todo
       todo.save
@@ -52,7 +53,7 @@ module V1
         todo = find_db_record_from_parent_chain
         authorize(todo)
         todo_child = nth_child_from_end_of_parent_chain(todo.todo, -2)
-        deleted = todo_child['todos'].reject! { |todo| todo['id'] == params[:parent_chain].last }
+        deleted = todo_child['todos'].reject! { |t| t['id'] == params[:parent_chain].last }
         raise ActiveRecord::RecordNotFound if deleted.nil? # means nothing happened and the parent_chain was wrong
         todo.save!
       end
@@ -71,7 +72,7 @@ module V1
     def nth_child_from_end_of_parent_chain(todo, n = -1)
       todo_child = todo
       todos = todo['todos']
-      params[:parent_chain].slice(1..n).each_with_index do |t_id, i|
+      params[:parent_chain].slice(1..n).each_with_index do |t_id, _|
         todo_child = todos.find { |t| t['id'] == t_id }
         # raise not found if todo_child is nil because the parentChain always ends on the desired todo,
         # and so if nil means the id does not exist
@@ -96,18 +97,18 @@ module V1
     def update_sub_task
       todo = find_db_record_from_parent_chain
       todo_child = nth_child_from_end_of_parent_chain(todo.todo)
-      if todo_child['id'] == params[:id]
-        todo_child.merge!(updated_at: Time.zone.now).merge!(todo_update_child_params)
-      else
-        raise ActiveRecord::RecordNotFound
-      end
+
+      raise ActiveRecord::RecordNotFound unless todo_child['id'] == params[:id]
+
+      todo_child['updated_at'] = Time.zone.now
+      todo_child.merge! todo_update_child_params
       todo
     end
 
     def update_task
       todo = Todo.find params[:id]
       authorize(todo)
-      todo.todo.merge! todo_update_params
+      todo.data.merge! todo_update_params
       todo
     end
 

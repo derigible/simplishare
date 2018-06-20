@@ -8,12 +8,12 @@ module V1
     end
 
     def update
-      @note.update(note_params)
+      @note.update(data: note_params)
       respond_with @note, status: :ok, serializer: NoteSerializer
     end
 
     def create
-      note = Note.new(note_params)
+      note = Note.new(data: note_params)
       note.user = current_resource_owner
       authorize note
       note.save

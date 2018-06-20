@@ -1,19 +1,37 @@
 class Todo < Entity
+  PRIORITY_TYPES = %w(low medium high).freeze
   before_save :ensure_proper_todo_formats
 
-  # TODO: add validations
+  validates :data, presence: true
+  validate :title_exists
+  validate :priority_exists_and_correct
+  # TODO: add more validations
+
+  alias_attribute :todo, :data
 
   private
 
+  def title_exists
+    errors.add(:base, 'Title cannot be blank.') unless data['title']
+  end
+
+  def priority_exists_and_correct
+    if data['priority'].blank?
+      errors.add(:base, 'Priority cannot be blank.')
+    elsif !PRIORITY_TYPES.include? data['priority']
+      errors.add(:base, "Priority must be one of #{PRIORITY_TYPES.join(',')}")
+    end
+  end
+
   def ensure_proper_todo_formats
-    self.todo['todos'] = [] if self.todo['todos'].nil?
-    ensure_todos(self.todo['todos'])
+    self.data = self.data.merge('todos' => []) if self.data['todos'].nil?
+    ensure_todos(self.data['todos'])
   end
 
   def ensure_todos(todos)
-    todos.each do |todo|
-      todo['todos'] = [] if todo['todos'].nil?
-      ensure_todos(todo['todos'])
+    todos.each do |t|
+      t['todos'] = [] if t['todos'].nil?
+      ensure_todos(t['todos'])
     end
   end
 end

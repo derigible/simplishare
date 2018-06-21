@@ -1,14 +1,16 @@
 module V1
   module Tags
     class TodosController < ApiController
-      before_action :load_todo, :load_tags
+      before_action :load_todo
+      before_action :load_tags_create, only: [:create]
+      before_action :load_tags_destroy, only: [:destroy]
 
       def create
         @todo.tags << @tags
         respond_with @todo.reload, serializer: TodoSerializer
       end
 
-      def delete
+      def destroy
         @tags.each do |tag|
           @todo.tags.destroy(tag)
         end
@@ -22,10 +24,18 @@ module V1
         authorize @todo
       end
 
-      def load_tags
+      def load_tags_create
         tag_ids = params.fetch(:tag_ids, []).reject do |tag_id|
           @todo.tag_ids.include?(tag_id)
         end
+        load_tags(tag_ids)
+      end
+
+      def load_tags_destroy
+        load_tags(params.fetch(:tag_ids, []))
+      end
+
+      def load_tags(tag_ids)
         @tags = Tag.where(id: tag_ids)
         @tags.each do |tag|
           authorize tag

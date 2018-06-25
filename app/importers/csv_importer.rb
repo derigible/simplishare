@@ -2,7 +2,7 @@ require 'csv'
 
 class CsvImporter < BaseImporter
   MINT_KEYS = ["Date", "Description", "Original Description", "Amount",
-                "Transaction Type", "Category", "Account Name", "Labels", "Notes"].freeze
+               "Transaction Type", "Category", "Account Name", "Labels", "Notes"].freeze
 
   class MissingCsvKeysError < StandardError
     def initialize(msg = "Must contain keys #{MINT_KEYS}")

@@ -16,7 +16,7 @@ class User < ApplicationRecord
   before_save :run_sanitizers
 
   def upload_events
-    EventImportService.import_csv(self, csv_uploads.read)
+    CsvImporter.new(self, csv_uploads.read).import
   end
 
   private

@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+# TODO: move this to test the csv importer and base importer classes
 describe EventImportService do
   describe '.import_csv' do
     let(:user) { create :user }

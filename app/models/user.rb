@@ -2,9 +2,10 @@ class User < ApplicationRecord
   include HtmlSanitizer
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable,
+    :confirmable
 
   # Relationships
   has_many :access_tokens, class_name: 'Oauth::AccessToken',

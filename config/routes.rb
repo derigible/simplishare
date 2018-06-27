@@ -1,16 +1,14 @@
 Rails.application.routes.draw do
-  use_doorkeeper do
-    skip_controllers :authorized_applications, :token_info, :authorizations, :tokens
-  end
-
   health_check_routes
 
-  concern :api_routes do
-    get 'account/token/info' => 'token_info#show'
-    post 'account/token' => 'custom_tokens#create'
-    post 'account/revoke' => 'custom_tokens#revoke'
+  post 'login' => 'sessions#login'
+  post 'logout' => 'sessions#logout'
+  get 'confirm_email' => 'confirmations#confirm'
 
-    resources :users, only: [:create]
+  concern :api_routes do
+    resources :users, only: [:create] do
+      post 'resend_confirmation', on: :member
+    end
 
     resources :categories do
       resources :events, only: [:index], controller: 'categories/events'

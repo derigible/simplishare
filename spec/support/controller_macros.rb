@@ -3,7 +3,7 @@ module ControllerMacros
   extend ActiveSupport::Concern
 
   included do
-    let(:current_resource_owner) do
+    let(:current_user) do
       create(:user)
     end
 
@@ -16,7 +16,7 @@ module ControllerMacros
     let(:token) do
       double(
         acceptable?: true,
-        current_resource_owner: current_resource_owner,
+        current_user: current_user,
         scopes: [:api],
         shard: shard
       )
@@ -24,7 +24,6 @@ module ControllerMacros
     let(:json) { JSON.parse(response.body) }
 
     before do
-      allow(controller).to receive(:doorkeeper_token) { token }
       request.headers['Accept'] =
         "application/vnd.budgetr.v1, #{Mime::JSON}"
       request.headers['Content-Type'] = Mime::JSON.to_s

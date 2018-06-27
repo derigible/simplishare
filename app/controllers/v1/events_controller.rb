@@ -14,7 +14,7 @@ module V1
 
     def create
       event = Event.new(event_params)
-      event.user = current_resource_owner
+      event.user = current_user
       authorize event
       event.save
       respond_with event, status: :created, serializer: V1::Detailed::EventSerializer
@@ -32,9 +32,9 @@ module V1
     # upload a csv of events (currently only supports mint transaction csvs)
     def bulk_create
       authorize Event
-      current_resource_owner.csv_uploads.attach(upload)
-      current_resource_owner.save
-      if current_resource_owner.valid?
+      current_user.csv_uploads.attach(upload)
+      current_user.save
+      if current_user.valid?
         user.send_later(:upload_events)
         head :created
       else

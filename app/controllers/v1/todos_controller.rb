@@ -32,7 +32,7 @@ module V1
     def create
       debugger
       todo = Todo.new(data: todo_create_params)
-      todo.user = current_resource_owner
+      todo.user = current_user
       authorize todo
       todo.save
       respond_with todo, status: :created, serializer: TodoSerializer

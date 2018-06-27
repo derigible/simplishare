@@ -4,9 +4,7 @@ gem 'active_model_serializers', '~> 0.10.6'
 gem 'api-pagination', '~> 4.6.3'
 gem "aws-sdk-s3", require: false
 gem 'devise', '~> 4.4.0'
-gem 'doorkeeper', '~> 4.2.6' # OAuth
 
-gem 'doorkeeper-jwt', '~> 0.1.6' # JWT support for doorkeeper
 gem 'figaro', '~> 1.0.0'
 gem 'gon', '~> 6.0.1'
 gem 'health_check'

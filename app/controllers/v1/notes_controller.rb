@@ -14,7 +14,7 @@ module V1
 
     def create
       note = Note.new(data: note_params)
-      note.user = current_resource_owner
+      note.user = current_user
       authorize note
       note.save
       respond_with note, status: :created, serializer: NoteSerializer

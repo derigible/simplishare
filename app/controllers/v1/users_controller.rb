@@ -3,10 +3,13 @@ module V1
     def create
       @user = User.new(user_params)
       authorize User
-      if @user.save
-        UserMailer.with(user: @user).welcome_email.deliver_now
-      end
+      UserMailer.with(user: @user).welcome_email.deliver_now if @user.save
       respond_with @user, status: :created, serializer: UserSerializer
+    end
+
+    def resend_confirmation
+      # check user creds
+      # do confirm email stuff here if valid
     end
 
     private

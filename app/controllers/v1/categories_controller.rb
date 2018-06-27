@@ -14,7 +14,7 @@ module V1
 
     def create
       category = Category.new(category_params)
-      category.user = current_resource_owner
+      category.user = current_user
       authorize category
       category.save
       respond_with category, status: :created, serializer: CategorySerializer

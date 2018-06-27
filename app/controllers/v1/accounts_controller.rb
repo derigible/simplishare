@@ -14,7 +14,7 @@ module V1
 
     def create
       account = Account.new(account_params)
-      account.user = current_resource_owner
+      account.user = current_user
       authorize account
       account.save
       respond_with account, status: :created, serializer: AccountSerializer

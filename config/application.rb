@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 module Budgetr
   class Application < Rails::Application
+    config.api_only = true
     config.load_defaults 5.1
 
     # Settings in config/environments/* take precedence over those specified here.

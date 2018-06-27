@@ -14,7 +14,7 @@ module V1
 
     def create
       tag = Tag.new(tag_params)
-      tag.user = current_resource_owner
+      tag.user = current_user
       authorize tag
       tag.save
       respond_with tag, status: :created, serializer: TagSerializer

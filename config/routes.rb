@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   health_check_routes
 
-  post 'login' => 'sessions#login'
-  post 'logout' => 'sessions#logout'
-  get 'confirm_email' => 'confirmations#confirm'
+  post 'login' => 'authentications#login'
+  delete 'logout' => 'authentications#logout'
 
   concern :api_routes do
     resources :users, only: [:create] do
       post 'resend_confirmation', on: :member
+      get 'confirm_email', on: :member
     end
 
     resources :categories do

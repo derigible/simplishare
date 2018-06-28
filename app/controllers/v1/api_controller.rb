@@ -39,10 +39,20 @@ module V1
     after_action :verify_authorized, except: :index
     after_action :verify_policy_scoped, only: :index
 
-    prepend_before_action -> { :authenticate_user! }
+    before_action :authenticate_user!
 
-    def skip_authorization
-      params[:controller] == 'v1/users' && params[:action] == 'create'
+    def authenticate_user!
+      @_current_user = User.find_by(
+        id: JSON::JWT.decode(
+          request.headers['Authorization'].split(' ').last, AuthenticationMethods.public_key
+        )['sub']
+      )
+      error = Exception.new 'User is not authenticated.'
+      error_render error, :unauthorized unless current_user.present?
+    end
+
+    def current_user
+      @_current_user
     end
 
     def pundit_user

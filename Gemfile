@@ -44,3 +44,6 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
+
+# Added at 2018-06-27 23:32:06 -0600 by mphillips:
+gem "json-jwt", "~> 1.9"

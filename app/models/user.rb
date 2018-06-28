@@ -7,17 +7,17 @@ class User < ApplicationRecord
     :recoverable, :rememberable, :trackable, :validatable,
     :confirmable
 
-  # Relationships
-  has_many :access_tokens, class_name: 'Oauth::AccessToken',
-                           dependent: :delete_all,
-                           foreign_key: :resource_owner_id
-
   has_one_attached :csv_uploads
 
   before_save :run_sanitizers
 
   def upload_events
     CsvImporter.new(self, csv_uploads.read).import
+  end
+
+  def self.authenticate(email, password)
+    user = User.find_for_authentication(email: email)
+    user&.valid_password?(password) && user.active_for_authentication? ? user : nil
   end
 
   private

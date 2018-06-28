@@ -3,7 +3,6 @@ module V1
     before_action :load_tag, except: [:index, :create]
 
     def index
-      debugger
       tags = paginate TagTypeFilter.new(params, policy_scope(Tag)).filter
       respond_with tags, each_serializer: TagSerializer
     end

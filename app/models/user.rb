@@ -20,6 +20,10 @@ class User < ApplicationRecord
     user&.valid_password?(password) && user.active_for_authentication? ? user : nil
   end
 
+  def send_confirmation_notification?
+    false
+  end
+
   private
 
   def run_sanitizers

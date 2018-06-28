@@ -42,6 +42,7 @@ module V1
     before_action :authenticate_user!
 
     def authenticate_user!
+      return if params[:controller] == 'v1/users'
       @_current_user = User.find_by(
         id: JSON::JWT.decode(
           request.headers['Authorization'].split(' ').last, AuthenticationMethods.public_key

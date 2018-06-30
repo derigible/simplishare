@@ -1,8 +1,9 @@
 module V1
-  class ApiController < ::ApplicationController
+  class ApiController < ActionController::API
     include Pundit
+    include Rails::Pagination
 
-    self.responder = ::Responder
+    self.responder = Concerns::Responder
     respond_to :json
 
     rescue_from ActionController::BadRequest do |e|
@@ -42,10 +43,9 @@ module V1
     before_action :authenticate_user!
 
     def authenticate_user!
-      return if params[:controller] == 'v1/users'
       @_current_user = User.find_by(
         id: JSON::JWT.decode(
-          request.headers['Authorization'].split(' ').last, AuthenticationMethods.public_key
+          request.headers['Authorization'].split(' ').last, Concerns::AuthenticationMethods.public_key
         )['sub']
       )
       error = Exception.new 'User is not authenticated.'

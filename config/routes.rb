@@ -3,13 +3,14 @@ Rails.application.routes.draw do
 
   post 'login' => 'authentications#login'
   delete 'logout' => 'authentications#logout'
+  post 'forgot_password' => 'users#forgot_password'
+
+  resources :users, only: [:create] do
+    post 'resend_confirmation', on: :member
+    get 'confirm_email', on: :member
+  end
 
   concern :api_routes do
-    resources :users, only: [:create] do
-      post 'resend_confirmation', on: :member
-      get 'confirm_email', on: :member
-    end
-
     resources :categories do
       resources :events, only: [:index], controller: 'categories/events'
     end

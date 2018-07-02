@@ -17,8 +17,18 @@ class UsersController < AdministrationController
 
   def forgot_password
     user = User.find_by email: user_params[:email]
-    UserMailer.with(user: user).reset_password.deliver_now if user.present?
+    # devise has this listed as protected since they expect this to be done through
+    # normal rails conventions. Dumb.
+    token = user.send(:set_reset_password_token)
+    UserMailer.with(user: user, reset_token: token).reset_password.deliver_now if user.present?
     head :no_content
+  end
+
+  def reset_password
+    user = User.reset_password_by_token(reset_password_params)
+    debugger
+    raise ActionController::BadRequest, 'Email provided does not match token reset email.' if user_params[:email] != user.email
+    respond_with user, status: :ok, serializer: UserSerializer
   end
 
   private
@@ -29,5 +39,9 @@ class UsersController < AdministrationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+  def reset_password_params
+    params.require(:user).permit(:password, :password_confirmation, :reset_password_token)
   end
 end

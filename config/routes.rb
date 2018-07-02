@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post 'login' => 'authentications#login'
   delete 'logout' => 'authentications#logout'
   post 'forgot_password' => 'users#forgot_password'
+  post 'reset_password' => 'users#reset_password'
 
   resources :users, only: [:create] do
     post 'resend_confirmation', on: :member

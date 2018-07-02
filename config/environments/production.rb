@@ -90,4 +90,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.active_storage.service = :amazon
+
+  config.x.budgetr.host = ENV['BUDGETR_HOST'] || 'budgetr.igibler.com'
+  config.x.budgetr.protocol = ENV['BUDGETR_PROTOCOL'] || 'https'
 end

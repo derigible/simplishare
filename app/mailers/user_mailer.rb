@@ -9,6 +9,8 @@ class UserMailer < ApplicationMailer
 
   def reset_password
     @user = params[:user]
+    budgetr = Rails.configuration.x.budgetr
+    @url = "#{budgetr[:protocol]}://#{budgetr[:host]}/auth/resetPassword?reset_token=#{params[:reset_token]}"
     mail(to: @user.email, subject: 'Reset Password to My Awesome Site')
   end
 end

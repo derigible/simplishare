@@ -55,4 +55,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   config.debug_exception_response_format = :default
+
+  config.x.budgetr.host = ENV['BUDGETR_HOST'] || 'localhost:8080'
+  config.x.budgetr.protocol = ENV['BUDGETR_PROTOCOL'] || 'http'
 end

@@ -26,7 +26,6 @@ class UsersController < AdministrationController
 
   def reset_password
     user = User.reset_password_by_token(reset_password_params)
-    debugger
     raise ActionController::BadRequest, 'Email provided does not match token reset email.' if user_params[:email] != user.email
     respond_with user, status: :ok, serializer: UserSerializer
   end

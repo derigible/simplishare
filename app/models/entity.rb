@@ -1,6 +1,5 @@
 class Entity < ApplicationRecord
-  belongs_to :user
-  has_and_belongs_to_many :tags
+  has_many :users, through: :virtual_entities
 
   validate :validate_type_unchanged, on: [:update]
   validate :data_is_hash

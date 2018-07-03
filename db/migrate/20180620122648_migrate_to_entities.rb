@@ -6,6 +6,6 @@ class MigrateToEntities < ActiveRecord::Migration[5.2]
   end
 
   def down
-    # noop - we don't want to populate the entities table again
+    # noop - we don't want to populate the tables the entities came from
   end
 end

@@ -8,6 +8,10 @@ class User < ApplicationRecord
     :confirmable
 
   has_one_attached :csv_uploads
+  has_many :virtual_entities, class_name: 'VirtualEntity'
+  has_many :entities, through: :virtual_entities
+  has_many :todos, through: :virtual_entities
+  has_many :notes, through: :virtual_entities
 
   before_save :run_sanitizers
 

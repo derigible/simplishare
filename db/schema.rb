@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_27_213347) do
+ActiveRecord::Schema.define(version: 2018_07_03_131649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,13 +84,6 @@ ActiveRecord::Schema.define(version: 2018_06_27_213347) do
     t.index ["user_id"], name: "index_entities_on_user_id"
   end
 
-  create_table "entities_tags", force: :cascade do |t|
-    t.bigint "tag_id"
-    t.bigint "entity_id"
-    t.index ["entity_id"], name: "index_entities_tags_on_entity_id"
-    t.index ["tag_id"], name: "index_entities_tags_on_tag_id"
-  end
-
   create_table "events", force: :cascade do |t|
     t.bigint "account_id"
     t.text "description"
@@ -143,8 +136,6 @@ ActiveRecord::Schema.define(version: 2018_06_27_213347) do
 
   create_table "tags", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
   create_table "tags_events", force: :cascade do |t|
@@ -178,18 +169,46 @@ ActiveRecord::Schema.define(version: 2018_06_27_213347) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "virtual_entities", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "entity_id"
+    t.datetime "shared_on"
+    t.jsonb "metadata", default: {}
+    t.index ["entity_id"], name: "index_virtual_entities_on_entity_id"
+    t.index ["user_id"], name: "index_virtual_entities_on_user_id"
+  end
+
+  create_table "virtual_entities_tags", force: :cascade do |t|
+    t.bigint "virtual_tag_id"
+    t.bigint "virtual_entity_id"
+    t.index ["virtual_entity_id"], name: "index_virtual_entities_tags_on_virtual_entity_id"
+    t.index ["virtual_tag_id"], name: "index_virtual_entities_tags_on_virtual_tag_id"
+  end
+
+  create_table "virtual_tags", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "tag_id"
+    t.datetime "shared_on"
+    t.jsonb "metadata", default: {}
+    t.index ["tag_id"], name: "index_virtual_tags_on_tag_id"
+    t.index ["user_id"], name: "index_virtual_tags_on_user_id"
+  end
+
   add_foreign_key "accounts", "users"
   add_foreign_key "categories", "users"
   add_foreign_key "entities", "users"
-  add_foreign_key "entities_tags", "entities"
-  add_foreign_key "entities_tags", "tags"
   add_foreign_key "events", "accounts"
   add_foreign_key "events", "users"
   add_foreign_key "events_accounts", "accounts"
   add_foreign_key "events_accounts", "events"
   add_foreign_key "events_categories", "categories"
   add_foreign_key "events_categories", "events"
-  add_foreign_key "tags", "users"
   add_foreign_key "tags_events", "events"
   add_foreign_key "tags_events", "tags"
+  add_foreign_key "virtual_entities", "entities"
+  add_foreign_key "virtual_entities", "users"
+  add_foreign_key "virtual_entities_tags", "virtual_entities"
+  add_foreign_key "virtual_entities_tags", "virtual_tags"
+  add_foreign_key "virtual_tags", "tags"
+  add_foreign_key "virtual_tags", "users"
 end

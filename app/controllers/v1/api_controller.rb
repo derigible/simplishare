@@ -78,3 +78,6 @@ module V1
     end
   end
 end
+# loading order problems with STI in controllers, this should
+# prevent this being an issue
+require_dependency Rails.root.join('app/models/virtual_entity')

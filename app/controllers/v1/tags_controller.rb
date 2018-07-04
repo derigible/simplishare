@@ -1,6 +1,6 @@
 module V1
   class TagsController < ApiController
-    before_action :load_tag, except: [:index, :create]
+    before_action :load_virtual_tag, except: [:index, :create]
 
     def index
       tags = paginate TagTypeFilter.new(params, policy_scope(Tag)).filter
@@ -8,31 +8,33 @@ module V1
     end
 
     def update
-      @tag.update(tag_params)
-      respond_with @tag, status: :ok, serializer: TagSerializer
+      @vtag.tag.update!(tag_params)
+      respond_with @vtag, status: :ok, serializer: TagSerializer
     end
 
     def create
       tag = Tag.new(tag_params)
-      tag.user = current_user
-      authorize tag
-      tag.save
+      vtag = VirtualTag.new user: current_user
+      authorize vtag
+      tag.save!
+      vtag.tag = tag
+      vtag.save
       respond_with tag, status: :created, serializer: TagSerializer
     end
 
     def show
-      respond_with @tag, serializer: TagSerializer
+      respond_with @vtag, serializer: TagSerializer
     end
 
     def destroy
-      @tag.destroy
+      @vtag.tag.destroy
       head :no_content
     end
 
     private
 
-    def load_tag
-      @tag = Tag.find(params[:id])
+    def load_virtual_tag
+      @vtag = VirtualTag.find(params[:id])
     end
 
     def tag_params

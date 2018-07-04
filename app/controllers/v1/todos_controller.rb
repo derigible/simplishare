@@ -1,7 +1,7 @@
 module V1
   class TodosController < ApiController
     def index
-      todos = paginate TodosFilter.new(params, policy_scope(Todo.eager_load(:tags).select("tags.id"))).filter
+      todos = paginate TodosFilter.new(params, policy_scope(Todo).eager_load(:tags).select("tags.id")).filter
       respond_with todos, each_serializer: TodoSerializer
     end
 
@@ -17,45 +17,45 @@ module V1
     #   - If the parentChain is not valid, throws a RecordNotFound
     # If id in the path does not equal one of those three, RecordNotFound is thrown
     def update
-      todo = if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+      ve = if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
         update_task
       elsif params[:id] == 'new-sub-task'
         create_sub_task
       else
         update_sub_task
       end
-      todo.save
-
-      respond_with todo, status: :ok, serializer: TodoSerializer
+      ve.todo.save!
+      respond_with ve, status: :ok, serializer: TodoSerializer
     end
 
     def create
-      debugger
       todo = Todo.new(data: todo_create_params)
-      todo.user = current_user
+      ve = VirtualEntity.new(user: current_user)
       authorize todo
-      todo.save
+      todo.save!
+      ve.entity = todo
+      ve.save
       respond_with todo, status: :created, serializer: TodoSerializer
     end
 
     def show
-      todo = Todo.find params[:id]
-      authorize(todo)
-      respond_with todo, serializer: Todo
+      ve = VirtualEntity.find params[:id]
+      authorize(ve)
+      respond_with ve, serializer: Todo
     end
 
     def destroy
-      todo = Todo.find_by(id: params[:id])
-      if todo.present?
-        authorize(todo)
-        todo.destroy
+      ve = VirtualEntity.find_by(id: params[:id])
+      if ve.present?
+        authorize(ve)
+        ve.todo.destroy
       else
-        todo = find_db_record_from_parent_chain
-        authorize(todo)
-        todo_child = nth_child_from_end_of_parent_chain(todo.todo, -2)
+        ve = find_db_record_from_parent_chain
+        authorize(ve)
+        todo_child = nth_child_from_end_of_parent_chain(ve.todo.todo, -2)
         deleted = todo_child['todos'].reject! { |t| t['id'] == params[:parent_chain].last }
         raise ActiveRecord::RecordNotFound if deleted.nil? # means nothing happened and the parent_chain was wrong
-        todo.save!
+        ve.todo.save!
       end
       head :no_content
     end
@@ -63,9 +63,9 @@ module V1
     private
 
     def find_db_record_from_parent_chain
-      todo = Todo.find params[:parent_chain].first
-      authorize(todo)
-      todo
+      ve = VirtualEntity.find params[:parent_chain].first
+      authorize(ve)
+      ve
     end
 
     # the passed in value MUST be the AR record's todo
@@ -84,32 +84,32 @@ module V1
     end
 
     def create_sub_task
-      todo = find_db_record_from_parent_chain
-      todo_child = nth_child_from_end_of_parent_chain(todo.todo)
+      ve = find_db_record_from_parent_chain
+      todo_child = nth_child_from_end_of_parent_chain(ve.todo.todo)
       todo_child['todos'].push({
         id: SecureRandom.uuid,
         created_at: Time.zone.now,
         updated_at: Time.zone.now
       }.merge!(todo_update_child_params))
-      todo
+      ve
     end
 
     def update_sub_task
-      todo = find_db_record_from_parent_chain
-      todo_child = nth_child_from_end_of_parent_chain(todo.todo)
+      ve = find_db_record_from_parent_chain
+      todo_child = nth_child_from_end_of_parent_chain(ve.todo.todo)
 
       raise ActiveRecord::RecordNotFound unless todo_child['id'] == params[:id]
 
       todo_child['updated_at'] = Time.zone.now
       todo_child.merge! todo_update_child_params
-      todo
+      ve
     end
 
     def update_task
-      todo = Todo.find params[:id]
-      authorize(todo)
-      todo.data.merge! todo_update_params
-      todo
+      ve = VirtualEntity.find params[:id]
+      authorize(ve)
+      ve.todo.data.merge! todo_update_params
+      ve
     end
 
     def todo_create_params

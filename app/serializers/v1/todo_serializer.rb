@@ -7,25 +7,25 @@ module V1
       object.id.to_s
     end
     attribute :description do
-      object.todo.todo['description']
+      object.entity.todo['description']
     end
     attribute :priority do
-      object.todo.todo['priority']
+      object.entity.todo['priority']
     end
     attribute :todos do
-      object.todo.todo['todos']
+      object.entity.todo['todos']
     end
     attribute :title do
-      object.todo.todo['title']
+      object.entity.todo['title']
     end
     attribute :completed do
-      object.todo.todo['completed']
+      object.entity.todo['completed']
     end
     attribute :updated_at do
-      object.todo.updated_at
+      object.entity.updated_at
     end
     attribute :created_at do
-      object.todo.created_at
+      object.entity.created_at
     end
     attribute :tags do
       object.virtual_tag_ids
@@ -33,7 +33,7 @@ module V1
     attribute :shared_on
     attribute :metadata
     attribute :shared_object_id do
-      object.todo.id
+      object.entity.id
     end
   end
 end

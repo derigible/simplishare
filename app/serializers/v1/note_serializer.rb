@@ -2,22 +2,22 @@ module V1
   class NoteSerializer < ActiveModel::Serializer
     attribute :id
     attribute :created_at do
-      object.note.created_at
+      object.entity.created_at
     end
     attribute :updated_at do
-      object.note.updated_at
+      object.entity.updated_at
     end
     attribute :tags do
       object.tag_ids
     end
     attribute :title do
-      object.note.data['title']
+      object.entity.data['title']
     end
     attribute :body do
-      object.note.data['body']
+      object.entity.data['body']
     end
     attribute :shared_object_id do
-      object.note.id
+      object.entity.id
     end
   end
 end

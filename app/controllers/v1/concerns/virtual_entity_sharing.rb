@@ -5,6 +5,7 @@ module V1
         ve = VirtualEntity.find params[:id]
         authorize(ve)
         share_with_user = User.find share_params[:user_id]
+        return head :no_content if share_with_user == current_user
         shared = VirtualEntity.new(
           metadata: { permissions: share_params.fetch(:permissions, ['read'])},
           shared_on: Time.zone.now,

@@ -6,13 +6,13 @@ module V1
       before_action :load_tags_destroy, only: [:destroy]
 
       def create
-        @note.tags << @tags
+        @note.virtual_tags << @vtags
         respond_with @note.reload, serializer: NoteSerializer
       end
 
       def destroy
-        @tags.each do |tag|
-          @note.tags.destroy(tag)
+        @vtags.each do |tag|
+          @note.virtual_tags.destroy(tag)
         end
         respond_with @note.reload, serializer: NoteSerializer
       end
@@ -20,13 +20,13 @@ module V1
       private
 
       def load_note
-        @note = Note.find(params[:note_id])
+        @note = VirtualEntity.find(params[:note_id])
         authorize @note
       end
 
       def load_tags_create
         tag_ids = params.fetch(:tag_ids, []).reject do |tag_id|
-          @note.tag_ids.include?(tag_id)
+          @note.virtual_tag_ids.include?(tag_id)
         end
         load_tags(tag_ids)
       end
@@ -36,8 +36,8 @@ module V1
       end
 
       def load_tags(tag_ids)
-        @tags = Tag.where(id: tag_ids)
-        @tags.each do |tag|
+        @vtags = VirtualTag.where(id: tag_ids)
+        @vtags.each do |tag|
           authorize tag
         end
       end

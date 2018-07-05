@@ -6,13 +6,13 @@ module V1
       before_action :load_tags_destroy, only: [:destroy]
 
       def create
-        @todo.tags << @tags
+        @todo.virtual_tags << @vtags
         respond_with @todo.reload, serializer: TodoSerializer
       end
 
       def destroy
-        @tags.each do |tag|
-          @todo.tags.destroy(tag)
+        @vtags.each do |tag|
+          @todo.vtags.destroy(tag)
         end
         respond_with @todo.reload, serializer: TodoSerializer
       end
@@ -20,13 +20,13 @@ module V1
       private
 
       def load_todo
-        @todo = Todo.find(params[:todo_id])
+        @todo = VirtualEntity.find(params[:todo_id])
         authorize @todo
       end
 
       def load_tags_create
         tag_ids = params.fetch(:tag_ids, []).reject do |tag_id|
-          @todo.tag_ids.include?(tag_id)
+          @todo.virtual_tag_ids.include?(tag_id)
         end
         load_tags(tag_ids)
       end
@@ -36,8 +36,8 @@ module V1
       end
 
       def load_tags(tag_ids)
-        @tags = Tag.where(id: tag_ids)
-        @tags.each do |tag|
+        @vtags = VirtualTag.where(id: tag_ids)
+        @vtags.each do |tag|
           authorize tag
         end
       end

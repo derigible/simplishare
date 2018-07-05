@@ -3,7 +3,7 @@ module V1
     include V1::Concerns::VirtualEntitySharing
 
     def index
-      todos = paginate TodosFilter.new(params, policy_scope(Todo).eager_load(:tags).select("tags.id")).filter
+      todos = paginate TodosFilter.new(params, policy_scope(Todo).eager_load(:virtual_tags).select('virtual_tags.id')).filter
       respond_with todos, each_serializer: serializer
     end
 
@@ -37,7 +37,7 @@ module V1
       todo.save!
       ve.entity = todo
       ve.save
-      respond_with todo, status: :created, serializer: serializer
+      respond_with ve, status: :created, serializer: serializer
     end
 
     def show

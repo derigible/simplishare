@@ -19,7 +19,7 @@ module V1
       tag.save!
       vtag.tag = tag
       vtag.save
-      respond_with tag, status: :created, serializer: TagSerializer
+      respond_with vtag, status: :created, serializer: TagSerializer
     end
 
     def show

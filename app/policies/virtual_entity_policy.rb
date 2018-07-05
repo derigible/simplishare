@@ -6,4 +6,11 @@ class VirtualEntityPolicy < ApplicationPolicy
   def destroy?
     record_owner? && record.metadata.fetch(:permissions, []).include?('destroy')
   end
+
+  def share?
+    record_owner? && (
+      record.shared_on.nil? || # is the original owner of the resource
+      record.metadata.fetch(:permissions, []).include?('share')
+    )
+  end
 end

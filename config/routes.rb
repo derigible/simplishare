@@ -26,9 +26,11 @@ Rails.application.routes.draw do
     end
     resources :notes do
       resource :tags, only: [:create, :destroy], controller: 'tags/notes'
+      post 'share', on: :member
     end
     resources :todos do
       resource :tags, only: [:create, :destroy], controller: 'tags/todos'
+      post 'share', on: :member
     end
     resources :tags
   end

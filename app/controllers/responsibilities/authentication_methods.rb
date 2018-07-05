@@ -1,4 +1,4 @@
-module Concerns
+module Responsibilities
   class AuthenticationMethods
     class << self
       def private_key

@@ -1,8 +1,10 @@
 module V1
   class TodosController < ApiController
+    include V1::Concerns::VirtualEntitySharing
+
     def index
       todos = paginate TodosFilter.new(params, policy_scope(Todo).eager_load(:tags).select("tags.id")).filter
-      respond_with todos, each_serializer: TodoSerializer
+      respond_with todos, each_serializer: serializer
     end
 
     #
@@ -25,7 +27,7 @@ module V1
         update_sub_task
       end
       ve.todo.save!
-      respond_with ve, status: :ok, serializer: TodoSerializer
+      respond_with ve, status: :ok, serializer: serializer
     end
 
     def create
@@ -35,7 +37,7 @@ module V1
       todo.save!
       ve.entity = todo
       ve.save
-      respond_with todo, status: :created, serializer: TodoSerializer
+      respond_with todo, status: :created, serializer: serializer
     end
 
     def show
@@ -128,6 +130,10 @@ module V1
       params
         .require(:todo)
         .permit(:description, :priority, :completed, :title, parent_chain: [])
+    end
+
+    def serializer
+      TodoSerializer
     end
   end
 end

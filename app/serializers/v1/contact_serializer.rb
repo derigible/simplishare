@@ -1,5 +1,5 @@
 module V1
-  class EventSerializer < ActiveModel::Serializer
-    attributes :id, :contact_id, :created_at
+  class ContactSerializer < ActiveModel::Serializer
+    attributes :id, :contact_id, :email, :created_at
   end
 end

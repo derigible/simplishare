@@ -1,0 +1,11 @@
+<h1>You have been invited to connect with <%= @user.email %></h1>
+<p>
+  <%= @user.email %> would like to connect with you.
+</p>
+<p>
+  To confirm invitation, visit the following link: <%= @url %>.
+</p>
+<p>
+  To confirm invitation, visit the following link: <%= "#{@url}&reject=true" %>.
+</p>
+<p>Thanks for joining and have a great day!</p>

@@ -39,7 +39,7 @@ class ApplicationPolicy
     end
   end
 
-  private
+  protected
 
   def record_owner?
     record.user_id == user.id

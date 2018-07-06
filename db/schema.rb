@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_03_131649) do
+ActiveRecord::Schema.define(version: 2018_07_06_163751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,18 @@ ActiveRecord::Schema.define(version: 2018_07_03_131649) do
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "contact_id"
+    t.string "invitation_sent_to"
+    t.string "authorization_code"
+    t.datetime "authorized_on"
+    t.datetime "rejected_on"
+    t.datetime "created_at", null: false
+    t.index ["contact_id"], name: "index_contacts_on_contact_id"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
+  end
+
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
@@ -77,11 +89,9 @@ ActiveRecord::Schema.define(version: 2018_07_03_131649) do
   create_table "entities", force: :cascade do |t|
     t.jsonb "data", default: {}
     t.string "type", null: false
-    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["type"], name: "index_entities_on_type"
-    t.index ["user_id"], name: "index_entities_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -196,7 +206,8 @@ ActiveRecord::Schema.define(version: 2018_07_03_131649) do
 
   add_foreign_key "accounts", "users"
   add_foreign_key "categories", "users"
-  add_foreign_key "entities", "users"
+  add_foreign_key "contacts", "users"
+  add_foreign_key "contacts", "users", column: "contact_id"
   add_foreign_key "events", "accounts"
   add_foreign_key "events", "users"
   add_foreign_key "events_accounts", "accounts"

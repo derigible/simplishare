@@ -5,7 +5,7 @@ module V1
     before_action :load_virtual_entity, except: [:index, :create]
 
     def index
-      notes = paginate policy_scope(Note)#.eager_load(:virtual_tags).select("virtual_tags.id")
+      notes = paginate policy_scope(Note).eager_load(:virtual_tags).select("virtual_tags.id")
       respond_with notes, each_serializer: serializer
     end
 

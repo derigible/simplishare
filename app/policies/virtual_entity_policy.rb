@@ -1,10 +1,16 @@
 class VirtualEntityPolicy < ApplicationPolicy
   def update?
-    record_owner? && record.metadata.fetch(:permissions, []).include?('update')
+    record_owner? && (
+      record.shared_on.nil? ||
+      record.metadata.fetch(:permissions, []).include?('update')
+    )
   end
 
   def destroy?
-    record_owner? && record.metadata.fetch(:permissions, []).include?('destroy')
+    record_owner? && (
+      record.shared_on.nil? ||
+      record.metadata.fetch(:permissions, []).include?('destroy')
+    )
   end
 
   def share?

@@ -7,8 +7,9 @@ Rails.application.routes.draw do
   post 'reset_password' => 'users#reset_password'
 
   resources :users, only: [:create] do
-    post 'resend_confirmation', on: :member
-    get 'confirm_email', on: :member
+    post 'resend_confirmation', on: :collection
+    get 'confirm_email', on: :collection
+    get 'authorize_contact', on: :collection
   end
 
   concern :api_routes do

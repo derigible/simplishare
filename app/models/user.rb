@@ -18,7 +18,7 @@ class User < ApplicationRecord
   end
 
   def contacts_with_objects
-    contacts.eager_load(:users).select('users.email')
+    contacts.eager_load(:user).select('users.email')
   end
 
   def pending_invitations
@@ -31,14 +31,14 @@ class User < ApplicationRecord
   end
 
   def contacts_for_serialization
-    contacts.map do |contact|
-      c = contact.user_id == self.id ? contact.contact_id : contact.user_id
-      c = 'pending' if contact.authorized_on.blank?
+    contacts_with_objects.map do |contact|
+      c_id = contact.user_id == self.id ? contact.contact_id : contact.user_id
+      c_id = 'pending' if contact.authorized_on.blank?
       email = contact.authorized_on.blank? ? contact.invitation_sent_to : contact.contact.email
-      OpenStruct.new(
-        contact_id: c,
+      Contact.new(
+        contact_id: c_id,
         created_at: contact.created_at,
-        email: email,
+        invitation_sent_to: email,
         id: contact.id
       )
     end

@@ -18,8 +18,7 @@ class UserMailer < ApplicationMailer
   def contact_invitation
     @user = params[:user]
     @url = params[:url]
-    @invitation_user = params[:invitation_user]
-    mail(to: @invitation_user, subject: 'You have been invited to make a connection')
+    mail(to: params[:invitation_email], subject: 'You have been invited to make a connection')
   end
 
   def join_invitation

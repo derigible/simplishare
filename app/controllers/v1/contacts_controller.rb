@@ -9,6 +9,20 @@ module V1
 
     def create
       invitation_user = User.find_by email: contact_params[:email]
+
+      if invitation_user == current_user
+        invitation_user.errors.add(:base, 'Cannot connect with self' )
+        raise ActiveRecord::RecordInvalid, invitation_user
+      end
+      contact = if invitation_user.present?
+                  current_user.contacts.find_by contact: invitation_user
+                else
+                  current_user.contacts.find_by invitation_sent_to: params[:email]
+                end
+      if contact.present?
+        contact.errors.add(:base, 'Contact Invitation already created')
+        raise ActiveRecord::RecordInvalid, contact
+      end
       contact = Contact.new(
         user: current_user,
         invitation_sent_to: contact_params[:email],
@@ -19,7 +33,11 @@ module V1
       contact.save!
       contact.reload
       if invitation_user.present?
-        UserMailer.with(user: contact.user, url: invitiation_confirm_url, invitation_user: @invitation_user).contact_invitation.deliver_now
+        UserMailer.with(
+          user: contact.user,
+          url: invitiation_confirm_url(contact),
+          invitation_email: contact_params[:email]
+        ).contact_invitation.deliver_now
       else
         UserMailer.with(
           invitation_email: contact_params[:email],
@@ -27,8 +45,8 @@ module V1
           invitation_code: contact.authorization_code
         ).join_invitation.deliver_now
       end
-        c = OpenStruct.new(
-        contact_id: 'pending', created_at: contact.created_at, email: contact_params[:email], id: contact.id
+      c = Contact.new(
+        contact_id: 'pending', created_at: contact.created_at, invitation_sent_to: contact_params[:email], id: contact.id
       )
       respond_with c, status: :created, serializer: ContactSerializer
     end
@@ -52,8 +70,8 @@ module V1
       params.require(:contact).permit(:email)
     end
 
-    def invitiation_confirm_url(user)
-      "#{authorize_contact_user_url}?authorization_code=#{user.authorization_code}"
+    def invitiation_confirm_url(contact)
+      "#{authorize_contact_users_url}?authorization_code=#{contact.authorization_code}"
     end
   end
 end

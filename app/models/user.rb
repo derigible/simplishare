@@ -33,7 +33,7 @@ class User < ApplicationRecord
   def contacts_for_serialization
     contacts_with_objects.map do |contact|
       c_id = contact.user_id == self.id ? contact.contact_id : contact.user_id
-      c_id = 'pending' if contact.authorized_on.blank?
+      c_id = 0 if contact.authorized_on.blank?
       email = contact.authorized_on.blank? ? contact.invitation_sent_to : contact.contact.email
       Contact.new(
         contact_id: c_id,

@@ -4,23 +4,34 @@ module V1
       def share
         ve = VirtualEntity.find params[:id]
         authorize(ve)
-        share_with_user = User.find share_params[:user_id]
-        return head :no_content if share_with_user == current_user
-        shared = VirtualEntity.new(
-          metadata: { permissions: share_params.fetch(:permissions, ['read'])},
-          shared_on: Time.zone.now,
-          user: share_with_user,
-          entity: ve.entity
-        )
-        shared.shared_on = Time.zone.now
-        shared.save!
-        head :no_content
+        share_with_users = User.where(id: share_params[:users].map { |u| u[:id] }.detect { |u_id| u_id != current_user.id })
+        debugger
+        share_with_users.each do |user|
+          debugger
+          shared = VirtualEntity.new(
+            metadata: { permissions: share_params[:users].find { |u| u[:id] == user.id }[:permissions]},
+            shared_on: Time.zone.now,
+            user: user,
+            entity: ve.entity
+          )
+          shared.shared_on = Time.zone.now
+          shared.save!
+        end
+        ves = ve.entity.shared_with_except_user(current_user)
+        respond_with ves, each_serializer: SharedWithSerializer
+      end
+
+      def shared_with
+        ve = VirtualEntity.find params[:id]
+        authorize ve
+        ves = ve.entity.shared_with_except_user(current_user)
+        respond_with ves, each_serializer: SharedWithSerializer
       end
 
       private
 
       def share_params
-        params.require(:share).permit(:user_id, permissions: [])
+        params.require(:share).permit(users: [:id, permissions: []])
       end
     end
   end

@@ -21,9 +21,6 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def shared_with?
-    record_owner? && (
-      record.shared_on.nil? || # is the original owner of the resource
-      record.metadata.fetch(:permissions, []).include?('share')
-    )
+    record_owner?
   end
 end

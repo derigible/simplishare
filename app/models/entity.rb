@@ -5,6 +5,10 @@ class Entity < ApplicationRecord
   validate :validate_type_unchanged, on: [:update]
   validate :data_is_hash
 
+  def shared_with_except_user(except_user)
+    virtual_entities.where.not(user: except_user).joins(:user).select('users.email as user_email', :metadata, :shared_on, :user_id)
+  end
+
   # TODO: add validations
 
   private

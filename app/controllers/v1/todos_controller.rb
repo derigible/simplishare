@@ -7,6 +7,13 @@ module V1
       respond_with todos, each_serializer: serializer
     end
 
+    def shared_with
+      ve = VirtualEntity.find params[:id]
+      authorize ve
+      ves = ve.entity.shared_with_except_user(current_user)
+      respond_with ves, each_serializer: SharedWithSerializer
+    end
+
     #
     # To update a top-level todo, just pass the updates as needed
     #   - The id in the path will point to the record in the database

@@ -8,7 +8,7 @@ module V1
       object.entity.updated_at
     end
     attribute :tags do
-      object.tag_ids
+      object.virtual_tag_ids
     end
     attribute :title do
       object.entity.data['title']

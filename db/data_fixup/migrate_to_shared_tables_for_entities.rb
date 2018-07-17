@@ -48,9 +48,11 @@ module DataFixup
 
       def migrate_entities_tags
         EntitiesTags.all.each do |r|
+          vt = VirtualTag.find_by! tag_id: r.tag_id
+          ve = VirtualEntity.find_by! entity_id: r.entity_id
           VirtualEntitiesTags.create!(
-            virtual_tag_id: r.tag_id,
-            virtual_entity_id: r.entity_id
+            virtual_tag_id: vt.id,
+            virtual_entity_id: ve.id
           )
         end
       end

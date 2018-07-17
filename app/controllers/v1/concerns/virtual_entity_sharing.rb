@@ -5,9 +5,7 @@ module V1
         ve = VirtualEntity.find params[:id]
         authorize(ve)
         share_with_users = User.where(id: share_params[:users].map { |u| u[:id] }.detect { |u_id| u_id != current_user.id })
-        debugger
         share_with_users.each do |user|
-          debugger
           shared = VirtualEntity.new(
             metadata: { permissions: share_params[:users].find { |u| u[:id] == user.id }[:permissions]},
             shared_on: Time.zone.now,

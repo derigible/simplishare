@@ -69,7 +69,7 @@ module DataFixup
             updated_at: r.updated_at,
             user_id: r.user_id
           )
-          TagsNotes.where(todo_id: r.id).each do |tag|
+          TagsNotes.where(note_id: r.id).each do |tag|
             EntitiesTags.create!(
               entity_id: t.id,
               tag_id: tag.tag_id

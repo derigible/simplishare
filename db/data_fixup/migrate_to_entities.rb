@@ -51,7 +51,7 @@ module DataFixup
           )
           TagsTodos.where(todo_id: r.id).each do |tag|
             EntitiesTags.create!(
-              entity_id: tag.id,
+              entity_id: t.id,
               tag_id: tag.tag_id
             )
           end
@@ -60,7 +60,7 @@ module DataFixup
 
       def migrate_notes
         NoteOriginal.all.each do |r|
-          Note.create!(
+          n = Note.create!(
             data: {
               title: r.title,
               body: r.body
@@ -71,7 +71,7 @@ module DataFixup
           )
           TagsNotes.where(note_id: r.id).each do |tag|
             EntitiesTags.create!(
-              entity_id: tag.id,
+              entity_id: n.id,
               tag_id: tag.tag_id
             )
           end

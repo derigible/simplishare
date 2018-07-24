@@ -8,6 +8,10 @@ class VirtualEntity < ApplicationRecord
   has_many :virtual_tags, through: :virtual_entities_tags
   has_many :tags, through: :virtual_tags
 
+  def owner_ve?
+    shared_on.nil?
+  end
+
   Entity.subclasses.map do |entity|
     scope_name = entity.name.downcase.pluralize.to_sym
     scope scope_name, -> (user_id) do

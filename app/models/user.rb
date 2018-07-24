@@ -30,18 +30,14 @@ class User < ApplicationRecord
     contacts.where(rejected_on: nil)
   end
 
+  def shared_contacts(user)
+    contact_ids = user.contacts.pluck(:user_id, :contact_id).flatten.uniq.reject { |i| i == id || i == user.id }
+    shared = contacts.to_a.select { |c| contact_ids.include?(c.user_id) || contact_ids.include?(c.contact_id)}
+    make_ready_for_serialization shared
+  end
+
   def contacts_for_serialization
-    contacts_with_objects.map do |contact|
-      c_id = contact.user_id == self.id ? contact.contact_id : contact.user_id
-      c_id = 0 if contact.authorized_on.blank?
-      email = contact.authorized_on.blank? ? contact.invitation_sent_to : contact.contact.email
-      Contact.new(
-        contact_id: c_id,
-        created_at: contact.created_at,
-        invitation_sent_to: email,
-        id: contact.id
-      )
-    end
+    make_ready_for_serialization contacts_with_objects
   end
 
   before_save :run_sanitizers
@@ -63,5 +59,25 @@ class User < ApplicationRecord
 
   def run_sanitizers
     html_sanitize(%i[email full_name given_name])
+  end
+
+  def make_ready_for_serialization(contacts)
+    contacts.map do |contact|
+      c_id = contact.user_id == self.id ? contact.contact_id : contact.user_id
+      c_id = 0 if contact.authorized_on.blank?
+      email = if contact.authorized_on.blank?
+        contact.invitation_sent_to
+      elsif contact.user_id == self.id
+        contact.contact.email
+      else
+        contact.user.email
+      end
+      Contact.new(
+        contact_id: c_id,
+        created_at: contact.created_at,
+        invitation_sent_to: email,
+        id: contact.id
+      )
+    end
   end
 end

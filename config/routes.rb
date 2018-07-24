@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       resource :tags, only: [:create, :destroy], controller: 'tags/todos'
       post 'share', on: :member
       get 'shared_with', on: :member
+      get 'shareable_with', on: :member
     end
     resources :tags
   end

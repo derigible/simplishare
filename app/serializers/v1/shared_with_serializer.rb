@@ -4,7 +4,7 @@ module V1
       object.user_id
     end
     attribute :email do
-      object.user_email
+      object.user.email
     end
     attribute :permissions do
       object.metadata.fetch('permissions', [])

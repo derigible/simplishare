@@ -56,6 +56,6 @@ Rails.application.configure do
 
   config.debug_exception_response_format = :default
 
-  config.x.budgetr.host = ENV['BUDGETR_HOST'] || 'localhost:8080'
-  config.x.budgetr.protocol = ENV['BUDGETR_PROTOCOL'] || 'http'
+  config.x.pinkairship.host = ENV['PINKAIRSHIP_HOST'] || 'localhost:8080'
+  config.x.pinkairship.protocol = ENV['PINKAIRSHIP_PROTOCOL'] || 'http'
 end

@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   api_version(
     module: 'v1',
-    header: { name: 'Accept', value: 'application/vnd.budgetr.v1' },
+    header: { name: 'Accept', value: 'application/vnd.pinkairship.v1' },
     parameter: { name: 'version', value: '1' },
     default: true
   ) do

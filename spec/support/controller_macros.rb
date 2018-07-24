@@ -25,7 +25,7 @@ module ControllerMacros
 
     before do
       request.headers['Accept'] =
-        "application/vnd.budgetr.v1, #{Mime::JSON}"
+        "application/vnd.pinkairship.v1, #{Mime::JSON}"
       request.headers['Content-Type'] = Mime::JSON.to_s
     end
   end

@@ -15,7 +15,7 @@ class AuthenticationsController < AdministrationController
 
   def token(user)
     claim = {
-      iss: 'budgetr',
+      iss: 'pinkairship',
       sub: user.id,
       exp: 1.week.from_now,
       nbf: Time.zone.now

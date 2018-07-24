@@ -8,7 +8,7 @@ services:
     environment: &WEB_ENV
       AUTH_TOKEN_EXPIRE_TIME: 172800
       RAILS_ENV: development
-      VIRTUAL_HOST: .api.budgetr.docker
+      VIRTUAL_HOST: .api.pinkairship.docker
     links:
       - postgres
     logging:
@@ -32,6 +32,6 @@ services:
       --host=postgres, --user=postgres, --pass=quiz_api_postgres_password
     ]
     environment:
-      VIRTUAL_HOST: pgweb.budgetr.docker
+      VIRTUAL_HOST: pgweb.pinkairship.docker
     links:
       - postgres

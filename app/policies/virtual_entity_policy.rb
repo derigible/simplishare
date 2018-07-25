@@ -14,7 +14,6 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def share?
-    debugger
     record_owner? && (
       record.shared_on.nil? || # is the original owner of the resource
       record.metadata.fetch('permissions', []).include?('share')

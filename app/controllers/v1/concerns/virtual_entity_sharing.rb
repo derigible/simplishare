@@ -4,11 +4,9 @@ module V1
       def share
         ve = VirtualEntity.find params[:id]
         authorize(ve)
-        debugger
         share_with_users = User.where(id: share_params[:users].map { |u| u[:id] }.select { |u_id| u_id != current_user.id })
         already_shared_with_ves = ve.entity.shared_with_except_users(current_user).to_a
         share_with_users.each do |user|
-          debugger
           already_shared_with_ve = already_shared_with_ves.find { |u| user.id == u.user_id }
           permissions = share_params[:users].find { |u| u[:id] == user.id }[:permissions]
           if already_shared_with_ve.present? && permissions.exclude?('owner')

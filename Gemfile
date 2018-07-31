@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'active_model_serializers', '~> 0.10.6'
-gem 'api-pagination', '~> 4.6.3'
+gem 'api-pagination'
 gem "aws-sdk-s3", require: false
 gem 'devise', '~> 4.4.0'
 
@@ -9,7 +9,7 @@ gem 'figaro', '~> 1.0.0'
 gem 'gon', '~> 6.0.1'
 gem 'health_check'
 gem 'inst-jobs'
-gem 'kaminari', '~> 1.0.1' # Paging
+gem 'pagy'
 gem 'pg', '~> 0.21.0'
 gem 'pundit'
 gem 'rack-cors', require: 'rack/cors'

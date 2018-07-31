@@ -2,6 +2,7 @@ module V1
   class ApiController < ActionController::API
     include Pundit
     include Rails::Pagination
+    include Pagy::Backend
 
     self.responder = Responsibilities::Responder
     respond_to :json

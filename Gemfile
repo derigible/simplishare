@@ -6,7 +6,6 @@ gem "aws-sdk-s3", require: false
 gem 'devise', '~> 4.4.0'
 
 gem 'figaro', '~> 1.0.0'
-gem 'gon', '~> 6.0.1'
 gem 'health_check'
 gem 'inst-jobs'
 gem 'pagy'

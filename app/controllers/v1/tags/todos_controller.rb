@@ -12,7 +12,7 @@ module V1
 
       def destroy
         @vtags.each do |tag|
-          @todo.vtags.destroy(tag)
+          @todo.virtual_tags.destroy(tag)
         end
         respond_with @todo.reload, serializer: TodoSerializer
       end

@@ -4,6 +4,6 @@ class VirtualTagPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record_owner? && record.metadata.fetch(:permissions, []).include?('destroy')
+    record_owner?
   end
 end

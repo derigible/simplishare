@@ -15,7 +15,7 @@ AllCops:
 Metrics/LineLength:
   Max: 120
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Style/BlockComments:
@@ -27,10 +27,10 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
-Style/EmptyLinesAroundBlockBody:
+Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 
-Style/SpaceAroundEqualsInParameterDefault:
+Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: false
 
 Style/StringLiterals:

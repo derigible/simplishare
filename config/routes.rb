@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     resources :notes do
       resource :tags, only: [:create, :destroy], controller: 'tags/notes'
       post 'share', on: :member
+      get 'shared_with', on: :member
+      get 'shareable_with', on: :member
     end
     resources :todos do
       resource :tags, only: [:create, :destroy], controller: 'tags/todos'

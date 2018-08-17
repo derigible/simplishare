@@ -33,10 +33,6 @@ module V1
       head :no_content
     end
 
-    def share
-
-    end
-
     private
 
     def load_virtual_entity

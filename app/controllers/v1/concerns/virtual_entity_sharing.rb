@@ -21,6 +21,7 @@ module V1
             )
             ve.shared_on = Time.zone.now
             ve.save!
+            SharingMailer.with(user: current_user, virtual_entity: ve).on_share.deliver_now
           end
         end
         ves = ve.entity.shared_with_except_users current_user

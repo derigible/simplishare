@@ -11,6 +11,7 @@ module V1
 
     def update
       @ve.note.update!(data: note_params)
+      SharingMailer.send_update(current_user, @ve.entity)
       respond_with @ve, status: :ok, serializer: serializer
     end
 

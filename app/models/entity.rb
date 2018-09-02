@@ -10,11 +10,11 @@ class Entity < ApplicationRecord
   end
 
   def owner
-    @_owner ||= owner_ve.user
+    @owner ||= owner_ve.user
   end
 
   def owner_ve
-    @_owner_ve ||= virtual_entities.find_by(shared_on: nil)
+    @owner_ve ||= virtual_entities.find_by(shared_on: nil)
   end
 
   # TODO: add validations

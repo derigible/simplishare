@@ -27,6 +27,7 @@ module V1
         update_sub_task
       end
       ve.todo.save!
+      SharingMailer.send_update(current_user, ve.entity)
       respond_with ve, status: :ok, serializer: serializer
     end
 

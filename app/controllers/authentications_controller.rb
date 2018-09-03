@@ -20,7 +20,7 @@ class AuthenticationsController < AdministrationController
       exp: 1.week.from_now,
       nbf: Time.zone.now
     }
-    jws = JSON::JWT.new(claim).sign(Responsibilities::AuthenticationMethods.private_key, :RS256)
+    jws = JSON::JWT.new(claim).sign(Delegates::AuthenticationMethods.private_key, :RS256)
     jws.to_s
   end
 

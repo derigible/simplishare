@@ -40,3 +40,6 @@ Style/StringLiterals:
 
 Style/RaiseArgs:
   Enabled: false
+
+Rails/InverseOf:
+  Enabled: false

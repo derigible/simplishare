@@ -4,7 +4,7 @@ module V1
     include Rails::Pagination
     include Pagy::Backend
 
-    self.responder = Responsibilities::Responder
+    self.responder = Delegates::Responder
     respond_to :json
 
     rescue_from ActionController::BadRequest do |e|
@@ -46,7 +46,7 @@ module V1
     def authenticate_user!
       @_current_user = User.find_by(
         id: JSON::JWT.decode(
-          request.headers['Authorization'].split(' ').last, Responsibilities::AuthenticationMethods.public_key
+          request.headers['Authorization'].split(' ').last, Delegates::AuthenticationMethods.public_key
         )['sub']
       )
       error = Exception.new 'User is not authenticated.'

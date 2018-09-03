@@ -7,10 +7,12 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record_owner? && (
-      record.shared_on.nil? ||
+    record_owner?
+  end
+
+  def destroy_entity?
+    record.shared_on.nil? ||
       record.metadata.fetch('permissions', []).include?('destroy')
-    )
   end
 
   def share?

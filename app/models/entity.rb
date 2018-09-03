@@ -1,5 +1,5 @@
 class Entity < ApplicationRecord
-  has_many :virtual_entities, dependent: :delete_all
+  has_many :virtual_entities, dependent: :destroy
   has_many :users, through: :virtual_entities
 
   validate :validate_type_unchanged, on: [:update]

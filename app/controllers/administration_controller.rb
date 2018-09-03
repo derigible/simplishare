@@ -1,5 +1,5 @@
 class AdministrationController < ApplicationController
   include Devise::Controllers::Helpers
-  self.responder = Responsibilities::Responder
+  self.responder = Delegates::Responder
   respond_to :json
 end

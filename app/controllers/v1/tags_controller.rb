@@ -1,6 +1,6 @@
 module V1
   class TagsController < ApiController
-    before_action :load_virtual_tag, except: [:index, :create]
+    before_action :load_virtual_tag, except: %i[index create]
 
     def index
       tags = paginate TagTypeFilter.new(params, policy_scope(Tag)).filter

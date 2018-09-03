@@ -1,5 +1,5 @@
 class Todo < Entity
-  PRIORITY_TYPES = %w(low medium high).freeze
+  PRIORITY_TYPES = %w[low medium high].freeze
   before_save :ensure_proper_todo_formats
 
   validates :data, presence: true

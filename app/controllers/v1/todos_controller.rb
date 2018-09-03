@@ -19,13 +19,8 @@ module V1
     #   - If the parentChain is not valid, throws a RecordNotFound
     # If id in the path does not equal one of those three, RecordNotFound is thrown
     def update
-      ve = if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
-        update_task
-      elsif params[:id] == 'new-sub-task'
-        create_sub_task
-      else
-        update_sub_task
-      end
+      ve = find_todo_for_update
+      todo_delegate(ve).update_and_retrieve
       ve.todo.save!
       SharingMailer.send_update(current_user, ve.entity)
       respond_with ve, status: :ok, serializer: serializer
@@ -51,19 +46,20 @@ module V1
       ve = VirtualEntity.find_by(id: params[:id])
       if ve.present?
         authorize(ve)
-        ve.todo.destroy
+        todo_delegate(ve).destroy_record
       else
         ve = find_db_record_from_parent_chain
-        authorize(ve)
-        todo_child = nth_child_from_end_of_parent_chain(ve.todo.todo, -2)
-        deleted = todo_child['todos'].reject! { |t| t['id'] == params[:parent_chain].last }
-        raise ActiveRecord::RecordNotFound if deleted.nil? # means nothing happened and the parent_chain was wrong
-        ve.todo.save!
+        authorize(ve, :destroy_entity?)
+        todo_delegate(ve).destroy_sub_todo
       end
       head :no_content
     end
 
     private
+
+    def todo_delegate(record)
+      @todo_delegate ||= V1::Concerns::TodoDelegate.new(record, params)
+    end
 
     def find_db_record_from_parent_chain
       ve = VirtualEntity.find params[:parent_chain].first
@@ -71,47 +67,13 @@ module V1
       ve
     end
 
-    # the passed in value MUST be the AR record's todo
-    def nth_child_from_end_of_parent_chain(todo, n = -1)
-      todo_child = todo
-      todos = todo['todos']
-      params[:parent_chain].slice(1..n).each_with_index do |t_id, _|
-        todo_child = todos.find { |t| t['id'] == t_id }
-        # raise not found if todo_child is nil because the parentChain always ends on the desired todo,
-        # and so if nil means the id does not exist
-        raise ActiveRecord::RecordNotFound if todo_child.nil?
-        # only change the todos if not at the end of the todos
-        todos = todo_child['todos']
-      end
-      todo_child
-    end
-
-    def create_sub_task
-      ve = find_db_record_from_parent_chain
-      todo_child = nth_child_from_end_of_parent_chain(ve.todo.todo)
-      todo_child['todos'].push({
-        id: SecureRandom.uuid,
-        created_at: Time.zone.now,
-        updated_at: Time.zone.now
-      }.merge!(todo_update_child_params))
-      ve
-    end
-
-    def update_sub_task
-      ve = find_db_record_from_parent_chain
-      todo_child = nth_child_from_end_of_parent_chain(ve.todo.todo)
-
-      raise ActiveRecord::RecordNotFound unless todo_child['id'] == params[:id]
-
-      todo_child['updated_at'] = Time.zone.now
-      todo_child.merge! todo_update_child_params
-      ve
-    end
-
-    def update_task
-      ve = VirtualEntity.find params[:id]
+    def find_todo_for_update
+      ve = if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+             VirtualEntity.find params[:id]
+           else
+             find_db_record_from_parent_chain
+           end
       authorize(ve)
-      ve.todo.data.merge! todo_update_params
       ve
     end
 
@@ -119,18 +81,6 @@ module V1
       params
         .require(:todo)
         .permit(:description, :priority, :todos, :title)
-    end
-
-    def todo_update_params
-      params
-        .require(:todo)
-        .permit(:description, :priority, :completed, :title)
-    end
-
-    def todo_update_child_params
-      params
-        .require(:todo)
-        .permit(:description, :priority, :completed, :title, parent_chain: [])
     end
 
     def serializer

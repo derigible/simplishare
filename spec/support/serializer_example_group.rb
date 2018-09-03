@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SerializerExampleGroup
   module Helper
     extend ActiveSupport::Concern
@@ -7,9 +9,7 @@ module SerializerExampleGroup
       let(:serializer) { described_class }
 
       let(:serializable_resource) do
-        unless serializer <= ActiveModel::Serializer
-          raise 'serializer must be defined for the resource being tested'
-        end
+        raise 'serializer must be defined for the resource being tested' unless serializer <= ActiveModel::Serializer
         ActiveModel::SerializableResource.new(
           to_serialize, serializer: serializer
         )

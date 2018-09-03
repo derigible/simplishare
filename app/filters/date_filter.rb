@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DateFilter < BaseFilter
   # The `lookup_term` parameter should pass in query values as described below
   # Current lookup_terms available are:

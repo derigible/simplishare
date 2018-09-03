@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 module V1
   module Concerns
     module VirtualEntitySharing
       def share
         ve = VirtualEntity.find params[:id]
         authorize(ve)
-        share_with_users = User.where(id: share_params[:users].map { |u| u[:id] }.select { |u_id| u_id != current_user.id })
+        share_with_users = User.where(
+          id: share_params[:users].map { |u| u[:id] }.reject { |u_id| u_id == current_user.id }
+        )
         already_shared_with_ves = ve.entity.shared_with_except_users(current_user).to_a
         share_with_users.each do |user|
           already_shared_with_ve = already_shared_with_ves.find { |u| user.id == u.user_id }
@@ -31,21 +35,21 @@ module V1
       def shared_with
         ve = VirtualEntity.find params[:id]
         authorize ve
-        if (!ve.owner_ve? && ve.metadata['permissions'].exclude?('share'))
+        if !ve.owner_ve? && ve.metadata['permissions'].exclude?('share')
           owner_ve = ve.entity.owner_ve
           owner_ve.metadata['permissions'] = ['owner']
-          respond_with [owner_ve, ve], each_serializer: V1::Detailed::SharedWithSerializer and return
+          respond_with([owner_ve, ve], each_serializer: V1::Detailed::SharedWithSerializer) && return
         end
 
         ves = if !ve.owner_ve?
-          owner_ve = ve.entity.owner_ve
-          vs = ve.entity.shared_with_except_users([current_user, owner_ve.user]).to_a
-          owner_ve.metadata['permissions'] = ['owner']
-          vs << owner_ve
-          filtered_by_shared_contacts(vs, owner_ve.user_id)
-        else
-          ve.entity.shared_with_except_users([current_user])
-        end
+                owner_ve = ve.entity.owner_ve
+                vs = ve.entity.shared_with_except_users([current_user, owner_ve.user]).to_a
+                owner_ve.metadata['permissions'] = ['owner']
+                vs << owner_ve
+                filtered_by_shared_contacts(vs, owner_ve.user_id)
+              else
+                ve.entity.shared_with_except_users([current_user])
+              end
         respond_with ves, each_serializer: SharedWithSerializer
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module V1
@@ -20,12 +22,12 @@ module V1
 
         it 'creates an events_category' do
           expect do
-            post :create, event_id: @event, category: @params
+            post :create, params: { event_id: @event, category: @params }
           end.to change { EventsCategory.count }.by 1
         end
 
         it 'creates events_category to correct category and event' do
-          post :create, event_id: @event, category: @params
+          post :create, params: { event_id: @event, category: @params }
 
           response_body = JSON.parse(response.body)
           ce = EventsCategory.where(

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module V1
   class ContactsController < ApiController
-    before_action :load_contact, except: [:index, :create]
+    before_action :load_contact, except: %i[index create]
 
     def index
       skip_policy_scope
@@ -11,7 +13,7 @@ module V1
       invitation_user = User.find_by email: contact_params[:email]
 
       if invitation_user == current_user
-        invitation_user.errors.add(:base, 'Cannot connect with self' )
+        invitation_user.errors.add(:base, 'Cannot connect with self')
         raise ActiveRecord::RecordInvalid, invitation_user
       end
       contact = if invitation_user.present?

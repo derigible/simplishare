@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class SharingMailer < ApplicationMailer
   default from: 'noreply@pinkairship.com'
   PINKAIRSHIP = Rails.configuration.x.pinkairship
-  PINKAIRSHIP_ADDRESS = "#{PINKAIRSHIP[:protocol]}://#{PINKAIRSHIP[:host]}".freeze
+  PINKAIRSHIP_ADDRESS = "#{PINKAIRSHIP[:protocol]}://#{PINKAIRSHIP[:host]}"
 
   def self.send_update(user, entity)
     entity.shared_with_except_users(user).each do |ve|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc "Uploads a csv into the events table"
 task :csv_import, [:filename] => :environment do |_, args|
   filename = args[:filename]

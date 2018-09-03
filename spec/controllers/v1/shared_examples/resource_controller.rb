@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 shared_examples_for 'a resource controller' do |actions = []|
@@ -33,31 +35,31 @@ shared_examples_for 'a resource controller' do |actions = []|
 
       context 'with valid parameters' do
         it 'returns status :created' do
-          post :create, **nested_lookup, model_sym => params
+          post :create, params: { model_sym => params }
           expect(response).to have_http_status :created
         end
 
         it 'creates a record of the model' do
           params
           expect do
-            post :create, **nested_lookup, model_sym => params
+            post :create, params: { model_sym => params }
           end.to change { model.class.count }.by 1
         end
 
         it 'renders serialized json' do
-          post :create, **nested_lookup, model_sym => params
+          post :create, params: { model_sym => params }
           expect(JSON.parse(response.body)).to eq JSON.parse(serializable_resource.to_json)
         end
       end
 
       context 'on failure' do
         it 'return status :bad_request with empty json object' do
-          post :create, **nested_lookup, model_sym => {}
+          post :create, params: { model_sym => {} }
           expect(response).to have_http_status :bad_request
         end
 
         it 'return status :bad_request with empty request' do
-          post :create, **nested_lookup
+          post :create, params: {}
           expect(response).to have_http_status :bad_request
         end
       end
@@ -73,7 +75,7 @@ shared_examples_for 'a resource controller' do |actions = []|
         let(:to_serialize) { model.reload }
 
         before do
-          put :update, id: model.id, model_sym => params
+          put :update, params: { id: model.id, model_sym => params }
         end
 
         it 'updates the model' do
@@ -87,7 +89,7 @@ shared_examples_for 'a resource controller' do |actions = []|
 
       context 'with invalid parameters' do
         before do
-          put :update, id: model.id, model_sym => {}
+          put :update, params: { id: model.id, model_sym => {} }
         end
 
         it 'returns status :bad_request' do
@@ -102,7 +104,7 @@ shared_examples_for 'a resource controller' do |actions = []|
 
       context 'with an invalid id' do
         before do
-          put :update, id: next_unused_id(model_class), model_sym => params
+          put :update, params: { id: next_unused_id(model_class), model_sym => params }
         end
 
         it 'returns status :not_found' do
@@ -118,7 +120,7 @@ shared_examples_for 'a resource controller' do |actions = []|
 
       context 'with valid id' do
         before do
-          delete :destroy, id: model.id
+          delete :destroy, params: { id: model.id }
         end
 
         it 'returns status :no_content' do
@@ -132,7 +134,7 @@ shared_examples_for 'a resource controller' do |actions = []|
 
       context 'with an invalid id' do
         before do
-          delete :destroy, id: next_unused_id(model_class)
+          delete :destroy, params: { id: next_unused_id(model_class) }
         end
 
         it 'returns status :not_found when record not found' do
@@ -147,7 +149,7 @@ shared_examples_for 'a resource controller' do |actions = []|
       let(:action) { :index }
 
       before do
-        get :index, **nested_lookup
+        get :index, params: {}
       end
 
       it 'returns status :ok' do
@@ -179,7 +181,7 @@ shared_examples_for 'a resource controller' do |actions = []|
 
         before do
           @serializer = serializer_override_hash if serializer_override_hash.key?(:show)
-          get :show, id: model.id
+          get :show, params: { id: model.id }
         end
 
         it 'returns status :ok' do
@@ -198,7 +200,7 @@ shared_examples_for 'a resource controller' do |actions = []|
 
       context 'with an invalid id' do
         before do
-          get :show, id: next_unused_id(model_class)
+          get :show, params: { id: next_unused_id(model_class) }
         end
 
         it 'returns status :not_found' do

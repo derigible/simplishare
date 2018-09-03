@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Delegates
   class AuthenticationMethods
     class << self
@@ -5,9 +7,7 @@ module Delegates
         signing_key
       end
 
-      def public_key
-        signing_key.public_key
-      end
+      delegate :public_key, to: :signing_key
 
       private
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthenticationsController < AdministrationController
   respond_to :json
 

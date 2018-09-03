@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 shared_examples_for 'a resource controller with has_many-through association' do |actions = [], link_model_factory, association_name|
@@ -13,7 +15,7 @@ shared_examples_for 'a resource controller with has_many-through association' do
       let(:to_serialize) { assigns(model_sym) }
       context 'on success' do
         before do
-          delete :destroy, id: model
+          delete :destroy, params: { id: model }
         end
 
         it 'should raise RecordNotFound on table lookup' do
@@ -36,7 +38,7 @@ shared_examples_for 'a resource controller with has_many-through association' do
 
       context 'on failure' do
         before do
-          delete :destroy, id: next_unused_id(model_class)
+          delete :destroy, params: { id: next_unused_id(model_class) }
         end
 
         it 'returns a 404 when record not found' do

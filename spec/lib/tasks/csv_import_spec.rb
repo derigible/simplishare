@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'csv_import' do
   include_context 'rake'
 

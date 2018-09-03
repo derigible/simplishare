@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   class EventSerializer < ActiveModel::Serializer
     # TODO: add back in the date fields

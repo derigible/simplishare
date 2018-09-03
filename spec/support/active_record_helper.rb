@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveRecordHelper
   def next_unused_id(model_class)
     max_id = model_class.maximum(:id) || 0

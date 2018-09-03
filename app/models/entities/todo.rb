@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Todo < Entity
   PRIORITY_TYPES = %w[low medium high].freeze
   before_save :ensure_proper_todo_formats
@@ -24,8 +26,8 @@ class Todo < Entity
   end
 
   def ensure_proper_todo_formats
-    self.data = self.data.merge('todos' => []) if self.data['todos'].nil?
-    ensure_todos(self.data['todos'])
+    self.data = data.merge('todos' => []) if data['todos'].nil?
+    ensure_todos(data['todos'])
   end
 
   def ensure_todos(todos)

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module V1
   class CategoriesController < ApiController
-    before_action :load_category, except: [:index, :create]
+    before_action :load_category, except: %i[index create]
 
     def index
       @categories = paginate policy_scope(Category)

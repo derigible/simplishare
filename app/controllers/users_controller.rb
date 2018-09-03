@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < AdministrationController
   def create
     @user = User.new(user_params.except(:invitation_code))
@@ -41,11 +43,13 @@ class UsersController < AdministrationController
 
     if params[:reject].present?
       contact.reject!
-      render 'invitation_rejected' and return
+      # rubocop:disable Style/AndOr
+      render('invitation_rejected') and return
+      # rubocop:enable Style/AndOr
     end
 
     @url = "#{UserMailer::PINKAIRSHIP_ADDRESS}/auth?registering=true&invitation_code=#{params[:authorization_code]}"
-    render 'please_register' and return if contact.contact_id.blank?
+    render('please_register') && return if contact.contact_id.blank?
 
     contact.update!(authorized_on: Time.zone.now)
     @user = contact.user

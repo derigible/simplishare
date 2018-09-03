@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   class ApiController < ActionController::API
     include Pundit
@@ -50,7 +52,7 @@ module V1
         )['sub']
       )
       error = Exception.new 'User is not authenticated.'
-      error_render error, :unauthorized unless current_user.present?
+      error_render error, :unauthorized if current_user.blank?
     end
 
     def current_user

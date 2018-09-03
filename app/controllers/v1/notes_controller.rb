@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module V1
   class NotesController < ApiController
     include V1::Concerns::VirtualEntitySharing
 
-    before_action :load_virtual_entity, except: [:index, :create]
+    before_action :load_virtual_entity, except: %i[index create]
 
     def index
       notes = paginate policy_scope(Note).eager_load(:virtual_tags).select("virtual_tags.id")

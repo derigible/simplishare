@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module V1
@@ -20,12 +22,12 @@ module V1
 
         it 'creates an events_account' do
           expect do
-            post :create, event_id: @event.id, account: @params
+            post :create, params: { event_id: @event.id, account: @params }
           end.to change { EventsAccount.count }.by 1
         end
 
         it 'creates events_account to correct account and event' do
-          post :create, event_id: @event.id, account: @params
+          post :create, params: { event_id: @event.id, account: @params }
 
           response_body = JSON.parse(response.body)
           at = EventsAccount.where(

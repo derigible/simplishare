@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module V1
   class AccountsController < ApiController
-    before_action :load_account, except: [:index, :create]
+    before_action :load_account, except: %i[index create]
 
     def index
       @accounts = paginate policy_scope(Account)

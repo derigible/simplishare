@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Delegates
   class Responder < ActionController::Responder
     def api_behavior

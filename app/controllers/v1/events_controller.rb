@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   class EventsController < ApiController
     before_action :load_event, except: %i[index bulk_create create]

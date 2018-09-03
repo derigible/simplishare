@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1::Concerns
   class TodoDelegate
     def initialize(virtual_entity, params)

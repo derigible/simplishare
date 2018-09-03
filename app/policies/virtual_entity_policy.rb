@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VirtualEntityPolicy < ApplicationPolicy
   def update?
     record_owner? && (

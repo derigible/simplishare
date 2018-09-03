@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include HtmlSanitizer
 
@@ -14,7 +16,7 @@ class User < ApplicationRecord
   has_many :notes, through: :virtual_entities
 
   def contacts
-    Contact.where('user_id = ? OR contact_id = ?', self.id, self.id)
+    Contact.where('user_id = ? OR contact_id = ?', id, id)
   end
 
   def contacts_with_objects
@@ -32,7 +34,7 @@ class User < ApplicationRecord
 
   def shared_contacts(user)
     contact_ids = user.contacts.pluck(:user_id, :contact_id).flatten.uniq.reject { |i| i == id || i == user.id }
-    shared = contacts.to_a.select { |c| contact_ids.include?(c.user_id) || contact_ids.include?(c.contact_id)}
+    shared = contacts.to_a.select { |c| contact_ids.include?(c.user_id) || contact_ids.include?(c.contact_id) }
     make_ready_for_serialization shared
   end
 
@@ -48,7 +50,7 @@ class User < ApplicationRecord
 
   def self.authenticate(email, password)
     user = User.find_for_authentication(email: email)
-    user&.valid_password?(password) && user.active_for_authentication? ? user : nil
+    user&.valid_password?(password) && user&.active_for_authentication? ? user : nil
   end
 
   def send_confirmation_notification?
@@ -63,14 +65,14 @@ class User < ApplicationRecord
 
   def make_ready_for_serialization(contacts)
     contacts.map do |contact|
-      c_id = contact.user_id == self.id ? contact.contact_id : contact.user_id
+      c_id = contact.user_id == id ? contact.contact_id : contact.user_id
       c_id = 0 if contact.authorized_on.blank?
       email = if contact.authorized_on.blank?
-        contact.invitation_sent_to
-      elsif contact.user_id == self.id
-        contact.contact.email
-      else
-        contact.user.email
+                contact.invitation_sent_to
+              elsif contact.user_id == id
+                contact.contact.email
+              else
+                contact.user.email
       end
       Contact.new(
         contact_id: c_id,

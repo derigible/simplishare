@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Entity < ApplicationRecord
   has_many :virtual_entities, dependent: :destroy
   has_many :users, through: :virtual_entities

@@ -4,12 +4,11 @@ Rails:
 AllCops:
   TargetRailsVersion: 5.0
   TargetRubyVersion: 2.4
-  Include:
-    - '**/Rakefile'
-    - '**/config.ru'
+
   Exclude:
-    - 'db/**/*'
+    - 'bin/**/*'
     - 'config/**/*'
+    - 'db/**/*'
     - 'script/**/*'
     - 'vendor/**/*'
   DisplayCopNames: true

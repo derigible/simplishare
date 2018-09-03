@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BaseFilter
   class InvalidLookupTermError < StandardError
     def initialize(lookup_term)

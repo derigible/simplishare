@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   class SharedWithSerializer < ActiveModel::Serializer
     attribute :id do

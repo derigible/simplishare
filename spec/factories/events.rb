@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 rand = Random.new
 
 FactoryGirl.define do

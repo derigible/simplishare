@@ -10,10 +10,13 @@ class User < ApplicationRecord
     :confirmable
 
   has_one_attached :csv_uploads
-  has_many :virtual_entities, class_name: 'VirtualEntity'
+  has_many :virtual_entities, class_name: 'VirtualEntity', inverse_of: :user, dependent: :destroy
   has_many :entities, through: :virtual_entities
   has_many :todos, through: :virtual_entities
   has_many :notes, through: :virtual_entities
+
+  validates :email, presence: true
+  validates :username, presence: true
 
   def contacts
     Contact.where('user_id = ? OR contact_id = ?', id, id)
@@ -60,7 +63,7 @@ class User < ApplicationRecord
   private
 
   def run_sanitizers
-    html_sanitize(%i[email full_name given_name])
+    html_sanitize(%i[email full_name username])
   end
 
   def make_ready_for_serialization(contacts)

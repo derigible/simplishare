@@ -12,7 +12,7 @@ module DataFixup
 
       def generate_unique_name
         User.all.each_with_index do |u, i|
-          u.update_attribute(:username, "User #{SecureRandom.hex(5)}#{i}")
+          u.update_attribute(:username, u.email.split('@').first)
         end
       end
     end

@@ -16,13 +16,13 @@ class AuthenticationsController < AdministrationController
   private
 
   def token(user)
-    claim = {
+    claims = {
       iss: 'pinkairship',
       sub: user.id,
       exp: 1.week.from_now,
-      nbf: Time.zone.now
+      iat: Time.zone.now
     }
-    jws = JSON::JWT.new(claim).sign(Delegates::AuthenticationMethods.private_key, :RS256)
+    jws = JSON::JWT.new(claims).sign(Delegates::AuthenticationMethods.private_key, :RS256)
     jws.to_s
   end
 

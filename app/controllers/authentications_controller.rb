@@ -9,11 +9,20 @@ class AuthenticationsController < AdministrationController
 
   def login
     user = User.authenticate(login_params[:email], login_params[:password])
-    render(json: { token: token(user) }, status: :ok) && return if user.present?
+    render(json: login_json(user), status: :ok) && return if user.present?
     render json: { error: 'Password and username combo did not match' }, status: :unauthorized
   end
 
   private
+
+  def login_json(user)
+    {
+      token: token(user),
+      id: user.id,
+      email: user.email,
+      username: user.username
+    }
+  end
 
   def token(user)
     claims = {

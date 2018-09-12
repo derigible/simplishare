@@ -40,6 +40,10 @@ module V1
       error_render(e, :bad_request)
     end
 
+    rescue_from JSON::JWT::Exception do |e|
+      error_render(e, :unauthorized)
+    end
+
     after_action :verify_authorized, except: :index
     after_action :verify_policy_scoped, only: :index
 

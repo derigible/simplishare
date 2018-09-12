@@ -55,6 +55,11 @@ class UsersController < AdministrationController
     @user = contact.user
   end
 
+  def show
+    user = User.find params[:id]
+    respond_with user, serializer: UserSerializer
+  end
+
   private
 
   def url

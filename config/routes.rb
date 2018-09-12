@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   post 'forgot_password' => 'users#forgot_password'
   post 'reset_password' => 'users#reset_password'
 
-  resources :users, only: [:create] do
+  resources :users, only: [:create, :show] do
     post 'resend_confirmation', on: :collection
     get 'confirm_email', on: :collection
     get 'authorize_contact', on: :collection

@@ -2,13 +2,14 @@
 
 module V1::Concerns
   class TodoDelegate
-    def initialize(virtual_entity, params)
+    def initialize(virtual_entity, user, params)
       @virtual_entity = virtual_entity
       @params = params
+      @user = user
     end
 
     def destroy_record
-      if VirtualEntityPolicy.new(current_user, virtual_entity).destroy_entity?
+      if VirtualEntityPolicy.new(user, virtual_entity).destroy_entity?
         virtual_entity.todo.destroy
       else
         virtual_entity.destroy
@@ -33,7 +34,7 @@ module V1::Concerns
 
     private
 
-    attr_reader :params, :virtual_entity
+    attr_reader :params, :virtual_entity, :user
 
     def todo_without_sub_todo(todo)
       todo['todos'].reject! { |t| t['id'] == params[:parent_chain].last }

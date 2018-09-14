@@ -60,7 +60,7 @@ module V1
     private
 
     def todo_delegate(record)
-      @todo_delegate ||= V1::Concerns::TodoDelegate.new(record, params)
+      @todo_delegate ||= V1::Concerns::TodoDelegate.new(record, current_user, params)
     end
 
     def find_db_record_from_parent_chain

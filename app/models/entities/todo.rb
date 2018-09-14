@@ -18,9 +18,9 @@ class Todo < Entity
   end
 
   def priority_exists_and_correct
-    if data['priority'].blank?
+    if priority.blank?
       errors.add(:base, 'Priority cannot be blank.')
-    elsif !PRIORITY_TYPES.include? data['priority']
+    elsif !PRIORITY_TYPES.include? priority
       errors.add(:base, "Priority must be one of #{PRIORITY_TYPES.join(',')}")
     end
   end

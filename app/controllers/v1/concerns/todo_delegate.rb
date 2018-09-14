@@ -74,13 +74,21 @@ module V1::Concerns
     end
 
     def update_todo
-      virtual_entity.todo.data.merge! todo_update_params
+      virtual_entity.todo.data.merge! todo_update_todo_params
+      virtual_entity.todo.priority = todo_update_entity_params[:priority] if todo_update_entity_params[:priority]
+      virtual_entity.todo.archived = todo_update_entity_params[:completed] if todo_update_entity_params[:completed]
     end
 
-    def todo_update_params
+    def todo_update_todo_params
       params
         .require(:todo)
-        .permit(:description, :priority, :completed, :title)
+        .permit(:description, :title)
+    end
+
+    def todo_update_entity_params
+      params
+        .require(:todo)
+        .permit(:priority, :completed)
     end
 
     def todo_update_child_params

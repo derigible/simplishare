@@ -29,7 +29,7 @@ module V1
     end
 
     def create
-      todo = Todo.new(data: todo_create_params)
+      todo = Todo.new(todo_create_params)
       ve = VirtualEntity.new(user: current_user)
       authorize todo
       todo.save!
@@ -80,9 +80,16 @@ module V1
     end
 
     def todo_create_params
-      params
-        .require(:todo)
-        .permit(:description, :priority, :todos, :title)
+      request_params = params.require(:todo)
+                             .permit(:description, :priority, :todos, :title)
+      {
+        priority: request_params[:priority],
+        data: {
+          todos: request_params[:todos],
+          title: request_params[:title],
+          description: request_params[:description]
+        }.compact
+      }.compact
     end
 
     def serializer

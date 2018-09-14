@@ -24,7 +24,6 @@ gem 'versionist', '~> 1.4.1'
 
 group :development, :test do
   gem 'byebug'
-  gem 'factory_girl_rails'
   gem 'faker', '~> 1.6.2' # Generate fake data for testing
   gem 'forgery'
   gem 'listen', '~> 3.1.5'

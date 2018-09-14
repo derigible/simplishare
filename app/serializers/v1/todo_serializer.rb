@@ -12,7 +12,7 @@ module V1
       object.entity.todo['description']
     end
     attribute :priority do
-      object.entity.todo['priority']
+      object.entity.priority
     end
     attribute :todos do
       object.entity.todo['todos']
@@ -21,7 +21,7 @@ module V1
       object.entity.todo['title']
     end
     attribute :completed do
-      object.entity.todo['completed']
+      object.entity.archived
     end
     attribute :updated_at do
       object.entity.updated_at

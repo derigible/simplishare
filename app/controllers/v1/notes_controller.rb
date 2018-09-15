@@ -12,13 +12,18 @@ module V1
     end
 
     def update
-      @ve.note.update!(data: note_params)
+      skip_authorization
+      if updating_note?
+        authorize(@ve)
+        @ve.note.update!(update_note_params)
+      end
+      update_archived_if_requested
       SharingMailer.send_update(current_user, @ve.entity)
       respond_with @ve, status: :ok, serializer: serializer
     end
 
     def create
-      note = Note.new(data: note_params)
+      note = Note.new(create_note_params)
       ve = VirtualEntity.new(user: current_user)
       authorize ve
       note.save!
@@ -40,11 +45,42 @@ module V1
 
     def load_virtual_entity
       @ve = VirtualEntity.find(params[:id])
-      authorize @ve
     end
 
-    def note_params
-      params.require(:note).permit(:title, :body)
+    def create_note_params
+      to_create = { data: request_params.select { |k, _| %w[title body].include? k } }
+      to_create[:priority] = request_params[:priority]
+      to_create
+    end
+
+    def update_note_params
+      updates = {}
+      data = request_params.select { |k, _| %w[title body].include? k }
+      updates[:data] = data unless data.empty?
+      updates[:priority] = request_params[:priority] if request_params[:request_params]
+      updates
+    end
+
+    def request_params
+      @request_params ||= params.require(:note).permit(:title, :body, :archived, :update_shared, :priority)
+    end
+
+    def update_archived_if_requested
+      return unless request_params[:archived]
+      policy = VirtualEntityPolicy.new(current_user, @ve)
+      if policy.archive_entity? && request_params[:update_shared]
+        @ve.entity.update!(archived: true)
+      elsif policy.archive?
+        @ve.update!(archived: true)
+      else
+        raise Pundit::NotAuthorizedError, query: :update?, record: @ve, policy: policy
+      end
+    end
+
+    def updating_note?
+      %i[title body priority].any? do |param|
+        request_params.include? param
+      end
     end
 
     def serializer

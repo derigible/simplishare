@@ -18,6 +18,12 @@ module V1
     attribute :body do
       object.entity.data['body']
     end
+    attribute :archived do
+      object.entity.archived || object.archived
+    end
+    attribute :priority do
+      object.entity.priority
+    end
     attribute :shared_on
     attribute :shared do
       object.metadata[:shared] || false

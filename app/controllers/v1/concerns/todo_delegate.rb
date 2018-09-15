@@ -40,8 +40,10 @@ module V1::Concerns
       return if todo_update_entity_params[:completed].nil?
       if policy.archive_entity? && todo_update_todo_params[:update_shared]
         virtual_entity.todo.update!(archived: todo_update_entity_params[:completed])
-      else
+      elsif policy.archive?
         virtual_entity.update!(archived: todo_update_entity_params[:completed])
+      else
+        raise Pundit::NotAuthorizedError, query: :update?, record: @ve, policy: policy
       end
     end
 

@@ -4,12 +4,6 @@ module DataFixup
       self.inheritance_column = :_type_disabled
     end
 
-    class Todo < Entity
-      def self.sti_name
-        'Todo'
-      end
-    end
-
     class << self
       def run
         update_archived_and_priority

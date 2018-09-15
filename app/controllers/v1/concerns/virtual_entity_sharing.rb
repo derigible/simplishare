@@ -4,30 +4,32 @@ module V1
   module Concerns
     module VirtualEntitySharing
       def share
-        ve = VirtualEntity.find params[:id]
-        authorize(ve)
+        virtual_entity = VirtualEntity.find params[:id]
+        authorize(virtual_entity)
         share_with_users = User.where(
           id: share_params[:users].map { |u| u[:id] }.reject { |u_id| u_id == current_user.id }
         )
-        already_shared_with_ves = ve.entity.shared_with_except_users(current_user).to_a
+        already_shared_with_ves = virtual_entity.entity.shared_with_except_users(current_user).to_a
         share_with_users.each do |user|
           already_shared_with_ve = already_shared_with_ves.find { |u| user.id == u.user_id }
           permissions = share_params[:users].find { |u| u[:id] == user.id }[:permissions]
           if already_shared_with_ve.present? && permissions.exclude?('owner')
-            ve = VirtualEntity.find_by! user_id: already_shared_with_ve.user_id, entity: ve.entity
+            ve = VirtualEntity.find_by! user_id: already_shared_with_ve.user_id, entity: virtual_entity.entity
             ve.update! metadata: { permissions: permissions }
           elsif permissions.exclude?('owner')
             ve = VirtualEntity.new(
               metadata: { permissions: permissions },
               shared_on: Time.zone.now,
               user: user,
-              entity: ve.entity
+              entity: virtual_entity.entity
             )
             ve.shared_on = Time.zone.now
             ve.save!
             SharingMailer.with(user: current_user, virtual_entity: ve).on_share.deliver_now
           end
         end
+        debugger
+        virtual_entity.metadata[:shared] = true and virtual_entity.save! unless virtual_entity.metadata[:shared]
         ves = ve.entity.shared_with_except_users current_user
         respond_with ves, each_serializer: SharedWithSerializer
       end

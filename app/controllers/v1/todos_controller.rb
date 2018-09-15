@@ -21,11 +21,12 @@ module V1
     #   - If the parentChain is not valid, throws a RecordNotFound
     # If id in the path does not equal one of those three, RecordNotFound is thrown
     def update
-      ve = find_todo_for_update
-      todo_delegate(ve).update_and_retrieve
-      ve.todo.save!
-      SharingMailer.send_update(current_user, ve.entity)
-      respond_with ve, status: :ok, serializer: serializer
+      skip_authorization
+      @ve = find_todo_for_update
+      todo_delegate.update
+      todo_delegate.change_archive_if_requested
+      SharingMailer.send_update(current_user, @ve.entity)
+      respond_with @ve, status: :ok, serializer: serializer
     end
 
     def create
@@ -45,38 +46,34 @@ module V1
     end
 
     def destroy
-      ve = VirtualEntity.find_by(id: params[:id])
-      if ve.present?
-        authorize(ve)
-        todo_delegate(ve).destroy_record
+      skip_authorization
+      @ve = VirtualEntity.find_by(id: params[:id])
+      if @ve.present?
+        todo_delegate.destroy_record
       else
-        ve = find_db_record_from_parent_chain
-        authorize(ve, :destroy_entity?)
-        todo_delegate(ve).destroy_sub_todo
+        @ve = find_db_record_from_parent_chain
+        authorize(@ve, :destroy_entity?)
+        todo_delegate.destroy_sub_todo
       end
       head :no_content
     end
 
     private
 
-    def todo_delegate(record)
-      @todo_delegate ||= V1::Concerns::TodoDelegate.new(record, current_user, params)
+    def todo_delegate
+      @todo_delegate ||= V1::Concerns::TodoDelegate.new(@ve, current_user, params)
     end
 
     def find_db_record_from_parent_chain
-      ve = VirtualEntity.find params[:parent_chain].first
-      authorize(ve)
-      ve
+      VirtualEntity.find params[:parent_chain].first
     end
 
     def find_todo_for_update
-      ve = if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
-             VirtualEntity.find params[:id]
-           else
-             find_db_record_from_parent_chain
-           end
-      authorize(ve)
-      ve
+      if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+        VirtualEntity.find params[:id]
+      else
+        find_db_record_from_parent_chain
+      end
     end
 
     def todo_create_params

@@ -21,7 +21,7 @@ module V1
       object.entity.todo['title']
     end
     attribute :completed do
-      object.entity.archived
+      object.entity.archived || object.archived
     end
     attribute :updated_at do
       object.entity.updated_at
@@ -33,6 +33,9 @@ module V1
       object.virtual_tag_ids
     end
     attribute :shared_on
+    attribute :shared do
+      object.metadata['shared'] || false
+    end
     attribute :metadata
     attribute :shared_object_id do
       object.entity.id

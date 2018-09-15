@@ -2,10 +2,15 @@
 
 class VirtualEntityPolicy < ApplicationPolicy
   def update?
-    record_owner? && (
-      record.shared_on.nil? ||
-      record.metadata.fetch('permissions', []).include?('update')
-    )
+    owner_or_has_permission? 'edit'
+  end
+
+  def archive?
+    record_owner?
+  end
+
+  def archive_entity?
+    owner_or_has_permission? 'edit'
   end
 
   def destroy?
@@ -13,15 +18,11 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def destroy_entity?
-    record.shared_on.nil? ||
-      record.metadata.fetch('permissions', []).include?('destroy')
+    owner_or_has_permission?('destroy')
   end
 
   def share?
-    record_owner? && (
-      record.shared_on.nil? || # is the original owner of the resource
-      record.metadata.fetch('permissions', []).include?('share')
-    )
+    owner_or_has_permission? 'share'
   end
 
   def shared_with?
@@ -30,5 +31,14 @@ class VirtualEntityPolicy < ApplicationPolicy
 
   def shareable_with?
     record_owner?
+  end
+
+  private
+
+  def owner_or_has_permission?(perm)
+    record_owner? && (
+      record.shared_on.nil? || # is the original owner of the resource
+      record.metadata.fetch('permissions', []).include?(perm)
+    )
   end
 end

@@ -9,10 +9,12 @@ module V1::Concerns
     end
 
     def destroy_record
-      if VirtualEntityPolicy.new(user, virtual_entity).destroy_entity?
+      if policy.destroy_entity?
         virtual_entity.todo.destroy
-      else
+      elsif policy.destroy?
         virtual_entity.destroy
+      else
+        raise Pundit::NotAuthorizedError, query: :destroy?, record: virtual_entity, policy: policy
       end
     end
 
@@ -22,19 +24,34 @@ module V1::Concerns
       virtual_entity.todo.save!
     end
 
-    def update_and_retrieve
-      if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+    def update
+      if not_subtask?
         update_todo
       elsif params[:id] == 'new-sub-task'
         create_sub_todo
       else
         update_sub_todo
       end
+      virtual_entity.todo.save!
+    end
+
+    def change_archive_if_requested
+      return unless not_subtask?
+      return if todo_update_entity_params[:completed].nil?
+      if policy.archive_entity? && todo_update_todo_params[:update_shared]
+        virtual_entity.todo.update!(archived: todo_update_entity_params[:completed])
+      else
+        virtual_entity.update!(archived: todo_update_entity_params[:completed])
+      end
     end
 
     private
 
     attr_reader :params, :virtual_entity, :user
+
+    def not_subtask?
+      params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+    end
 
     def todo_without_sub_todo(todo)
       todo['todos'].reject! { |t| t['id'] == params[:parent_chain].last }
@@ -74,9 +91,9 @@ module V1::Concerns
     end
 
     def update_todo
+      priority = todo_update_entity_params[:priority]
       virtual_entity.todo.data.merge! todo_update_todo_params
-      virtual_entity.todo.priority = todo_update_entity_params[:priority] if todo_update_entity_params[:priority]
-      virtual_entity.todo.archived = todo_update_entity_params[:completed] if todo_update_entity_params[:completed]
+      virtual_entity.todo.priority = priority if priority
     end
 
     def todo_update_todo_params
@@ -88,13 +105,17 @@ module V1::Concerns
     def todo_update_entity_params
       params
         .require(:todo)
-        .permit(:priority, :completed)
+        .permit(:priority, :completed, :update_shared)
     end
 
     def todo_update_child_params
       params
         .require(:todo)
         .permit(:description, :priority, :completed, :title, parent_chain: [])
+    end
+
+    def policy
+      VirtualEntityPolicy.new(user, virtual_entity)
     end
   end
 end

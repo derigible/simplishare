@@ -18,6 +18,11 @@ module V1
     attribute :body do
       object.entity.data['body']
     end
+    attribute :shared_on
+    attribute :shared do
+      object.metadata[:shared] || false
+    end
+    attribute :metadata
     attribute :shared_object_id do
       object.entity.id
     end

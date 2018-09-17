@@ -33,6 +33,7 @@ module V1
     end
 
     def create
+      debugger
       todo = Todo.new(todo_create_params)
       ve = VirtualEntity.new(user: current_user)
       authorize todo

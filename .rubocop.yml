@@ -40,5 +40,8 @@ Style/StringLiterals:
 Style/RaiseArgs:
   Enabled: false
 
+Style/AndOr:
+  Enabled: false
+
 Rails/InverseOf:
   Enabled: false

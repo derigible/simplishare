@@ -4,79 +4,41 @@ module V1
   module Concerns
     module VirtualEntitySharing
       def share
-        virtual_entity = VirtualEntity.find params[:id]
-        authorize(virtual_entity)
-        share_with_users = User.where(
-          id: share_params[:users].map { |u| u[:id] }.reject { |u_id| u_id == current_user.id }
-        )
-        already_shared_with_ves = virtual_entity.entity.shared_with_except_users(current_user).to_a
-        share_with_users.each do |user|
-          already_shared_with_ve = already_shared_with_ves.find { |u| user.id == u.user_id }
-          permissions = share_params[:users].find { |u| u[:id] == user.id }[:permissions]
-          if already_shared_with_ve.present? && permissions.exclude?('owner')
-            ve = VirtualEntity.find_by! user_id: already_shared_with_ve.user_id, entity: virtual_entity.entity
-            ve.update! metadata: { permissions: permissions }
-          elsif permissions.exclude?('owner')
-            ve = VirtualEntity.new(
-              metadata: { permissions: permissions },
-              shared_on: Time.zone.now,
-              user: user,
-              entity: virtual_entity.entity
-            )
-            ve.shared_on = Time.zone.now
-            ve.save!
-            SharingMailer.with(user: current_user, virtual_entity: ve).on_share.deliver_now
-          end
-        end
-        debugger
-        virtual_entity.metadata[:shared] = true and virtual_entity.save! unless virtual_entity.metadata[:shared]
-        ves = ve.entity.shared_with_except_users current_user
-        respond_with ves, each_serializer: SharedWithSerializer
+        delegate.share_or_update_permissions
+        delegate.mark_as_shared
+        respond_with virtual_entity.entity.shared_with_except_users(current_user), each_serializer: SharedWithSerializer
       end
 
       def shared_with
-        ve = VirtualEntity.find params[:id]
-        authorize ve
-        if !ve.owner_ve? && ve.metadata['permissions'].exclude?('share')
-          owner_ve = ve.entity.owner_ve
+        if delegate.can_view_shared_with?
+          owner_ve = virtual_entity.entity.owner_ve
           owner_ve.metadata['permissions'] = ['owner']
-          respond_with([owner_ve, ve], each_serializer: V1::Detailed::SharedWithSerializer) && return
+          respond_with([owner_ve, @virtual_entity], each_serializer: V1::Detailed::SharedWithSerializer) and return
         end
-
-        ves = if !ve.owner_ve?
-                owner_ve = ve.entity.owner_ve
-                vs = ve.entity.shared_with_except_users([current_user, owner_ve.user]).to_a
-                owner_ve.metadata['permissions'] = ['owner']
-                vs << owner_ve
-                filtered_by_shared_contacts(vs, owner_ve.user_id)
-              else
-                ve.entity.shared_with_except_users([current_user])
-              end
-        respond_with ves, each_serializer: SharedWithSerializer
+        respond_with delegate.retrieve_shared_with, each_serializer: SharedWithSerializer
       end
 
       def shareable_with
-        ve = VirtualEntity.find params[:id]
-        authorize ve
-        if ve.owner_ve?
+        if virtual_entity.owner_ve?
           respond_with current_user.contacts_for_serialization, each_serializer: ContactSerializer
         else
-          owner = ve.entity.owner
+          owner = virtual_entity.entity.owner
           respond_with current_user.shared_contacts(owner), each_serializer: ContactSerializer
         end
       end
 
       private
 
-      def share_params
-        params.require(:share).permit(users: [:id, permissions: []])
+      def delegate
+        @delegate ||= begin
+          d = ShareDelegate.new(params, current_user)
+          authorize(d.virtual_entity)
+          d
+        end
       end
 
-      def filtered_by_shared_contacts(vs, except_id)
-        contact_ids = current_user.contacts.pluck(:user_id, :contact_id).flatten
-        vs.each_with_object([]) do |v, memo|
-          memo << v if v.user_id == except_id || contact_ids.include?(v.user_id)
-        end
+      def virtual_entity
+        delegate.virtual_entity
       end
     end
   end

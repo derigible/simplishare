@@ -33,10 +33,12 @@ module V1
     end
 
     def show
+      authorize(@ve)
       respond_with @ve, serializer: serializer
     end
 
     def destroy
+      authorize(@ve)
       @ve.note.destroy
       head :no_content
     end
@@ -57,7 +59,7 @@ module V1
       updates = {}
       data = request_params.select { |k, _| %w[title body].include? k }
       updates[:data] = data unless data.empty?
-      updates[:priority] = request_params[:priority] if request_params[:request_params]
+      updates[:priority] = request_params[:priority] if request_params[:priority]
       updates
     end
 
@@ -66,12 +68,16 @@ module V1
     end
 
     def update_archived_if_requested
-      return unless request_params[:archived]
+      return if request_params[:archived].nil?
       policy = VirtualEntityPolicy.new(current_user, @ve)
-      if policy.archive_entity? && request_params[:update_shared]
-        @ve.entity.update!(archived: true)
+      update_archived(policy, request_params[:archived], request_params[:update_shared])
+    end
+
+    def update_archived(policy, new_archived, update_shared)
+      if policy.archive_entity? && update_shared
+        @ve.entity.update!(archived: new_archived)
       elsif policy.archive?
-        @ve.update!(archived: true)
+        @ve.update!(archived: new_archived)
       else
         raise Pundit::NotAuthorizedError, query: :update?, record: @ve, policy: policy
       end

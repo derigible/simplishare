@@ -22,7 +22,7 @@ module V1
       object.entity.archived || object.archived
     end
     attribute :priority do
-      object.entity.priority
+      object.entity.priority || 'medium'
     end
     attribute :shared_on
     attribute :shared do

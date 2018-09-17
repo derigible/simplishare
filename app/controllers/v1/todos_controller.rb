@@ -5,7 +5,10 @@ module V1
     include V1::Concerns::VirtualEntitySharing
 
     def index
-      todos = paginate TodosFilter.new(params, policy_scope(Todo).eager_load(:virtual_tags).select('virtual_tags.id')).filter
+      todos = paginate TodosFilter.new(
+        params,
+        policy_scope(Todo).eager_load(:virtual_tags).select('virtual_tags.id')
+      ).filter
       respond_with todos, each_serializer: serializer
     end
 

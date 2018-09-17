@@ -20,7 +20,8 @@ module V1::Concerns
 
     def destroy_sub_todo
       todo_child = nth_child_from_end_of_parent_chain(virtual_entity.todo.todo, -2)
-      raise ActiveRecord::RecordNotFound if todo_without_sub_todo(todo_child).nil? # means nothing happened and the parent_chain was wrong
+      # means nothing happened and the parent_chain was wrong
+      raise ActiveRecord::RecordNotFound if todo_without_sub_todo(todo_child).nil?
       virtual_entity.todo.save!
     end
 
@@ -38,13 +39,7 @@ module V1::Concerns
     def change_archive_if_requested
       return unless not_subtask?
       return if todo_update_entity_params[:completed].nil?
-      if policy.archive_entity? && todo_update_todo_params[:update_shared]
-        virtual_entity.todo.update!(archived: todo_update_entity_params[:completed])
-      elsif policy.archive?
-        virtual_entity.update!(archived: todo_update_entity_params[:completed])
-      else
-        raise Pundit::NotAuthorizedError, query: :update?, record: @ve, policy: policy
-      end
+      update_archived(todo_update_entity_params[:completed], todo_update_todo_params[:update_shared])
     end
 
     private
@@ -96,6 +91,16 @@ module V1::Concerns
       priority = todo_update_entity_params[:priority]
       virtual_entity.todo.data.merge! todo_update_todo_params
       virtual_entity.todo.priority = priority if priority
+    end
+
+    def update_archived(new_completed, update_shared)
+      if policy.archive_entity? && update_shared
+        virtual_entity.todo.update!(archived: new_completed)
+      elsif policy.archive?
+        virtual_entity.update!(archived: new_completed)
+      else
+        raise Pundit::NotAuthorizedError, query: :update?, record: @ve, policy: policy
+      end
     end
 
     def todo_update_todo_params

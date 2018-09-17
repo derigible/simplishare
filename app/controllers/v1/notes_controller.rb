@@ -38,8 +38,15 @@ module V1
     end
 
     def destroy
-      authorize(@ve)
-      @ve.note.destroy
+      skip_authorization
+      policy = VirtualEntityPolicy.new(current_user, @ve)
+      if policy.destroy_entity?
+        @ve.note.destroy
+      elsif policy.destroy?
+        @ve.destroy
+      else
+        raise Pundit::NotAuthorizedError, query: :destroy?, record: @ve, policy: policy
+      end
       head :no_content
     end
 

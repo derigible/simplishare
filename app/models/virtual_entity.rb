@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VirtualEntity < ApplicationRecord
-  PERMISSIONS = %w[read edit destroy share].freeze
+  PERMISSIONS = %w[read edit destroy share owner].freeze
   belongs_to :user
   belongs_to :entity
   belongs_to :todo, foreign_key: :entity_id, optional: true
@@ -10,6 +10,9 @@ class VirtualEntity < ApplicationRecord
   has_many :virtual_entities_tags, dependent: :delete_all
   has_many :virtual_tags, through: :virtual_entities_tags
   has_many :tags, through: :virtual_tags
+
+  before_validation :ensure_permissions_exist
+  before_validation :ensure_read_if_other_permissions_exist
 
   validate :validate_correct_permissions
 
@@ -24,14 +27,33 @@ class VirtualEntity < ApplicationRecord
     end
   end
 
+  def permissions
+    metadata['permissions']
+  end
+
+  def permissions=(perms)
+    metadata['permissions'] = perms
+  end
+
   private
+
+  def ensure_permissions_exist
+    return unless permissions.nil?
+    perms = shared_on.nil? ? ['owner'] : []
+    self.permissions = perms
+  end
+
+  def ensure_read_if_other_permissions_exist
+    return if permissions.empty? || permissions.include?('read') || permissions.include?('owner')
+    self.permissions += ['read']
+  end
 
   def validate_correct_permissions
     metadata.fetch('permissions', []).each do |perm|
       next if PERMISSIONS.include? perm
       errors.add(
         :metadata,
-        "Available permissions does not include requeste permission #{perm}."
+        "Available permissions does not include requested permission #{perm}."
       )
     end
   end

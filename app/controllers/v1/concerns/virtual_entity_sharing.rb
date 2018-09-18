@@ -12,7 +12,7 @@ module V1
       def shared_with
         if delegate.can_view_shared_with?
           owner_ve = virtual_entity.entity.owner_ve
-          owner_ve.metadata['permissions'] = ['owner']
+          owner_ve.permissions = ['owner']
           respond_with([owner_ve, virtual_entity], each_serializer: V1::Detailed::SharedWithSerializer) and return
         end
         respond_with delegate.retrieve_shared_with, each_serializer: SharedWithSerializer

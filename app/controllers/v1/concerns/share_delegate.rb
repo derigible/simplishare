@@ -11,7 +11,7 @@ module V1::Concerns
     end
 
     def can_view_shared_with?
-      !@virtual_entity.owner_ve? && @virtual_entity.metadata['permissions'].exclude?('share')
+      !@virtual_entity.owner_ve? && @virtual_entity.permissions.exclude?('share')
     end
 
     def mark_as_shared
@@ -21,7 +21,7 @@ module V1::Concerns
     def retrieve_shared_with
       if !@virtual_entity.owner_ve?
         shared_with = retrieve_shared_with_except_current_user_and_owner
-        owner_ve.metadata['permissions'] = ['owner']
+        owner_ve.permissions = ['owner']
         shared_with << owner_ve
         filtered_by_shared_contacts(shared_with, owner_ve.user_id)
       else
@@ -87,8 +87,10 @@ module V1::Concerns
     end
 
     def share_with_user(entity, user, permissions)
+      # only set read on initial share if not set. we want to allow empty permissions still
+      perms = permissions.empty? ? ['read'] : permissions
       ve = VirtualEntity.new(
-        metadata: { permissions: permissions },
+        metadata: { permissions: perms },
         shared_on: Time.zone.now,
         user: user,
         entity: entity

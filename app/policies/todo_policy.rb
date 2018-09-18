@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-class TodoPolicy < ApplicationPolicy
+class TodoPolicy < VirtualEntityPolicy
   class Scope < Scope
-    def resolve
-      VirtualEntity.todos(user.id)
+    def initialize(user, _)
+      @user = user
+      @scope = VirtualEntity.todos(user.id)
     end
   end
 end

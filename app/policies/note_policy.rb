@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-class NotePolicy < ApplicationPolicy
+class NotePolicy < VirtualEntityPolicy
   class Scope < Scope
-    def resolve
-      VirtualEntity.notes(user.id)
+    def initialize(user, _)
+      @user = user
+      @scope = VirtualEntity.notes(user.id)
     end
   end
 end

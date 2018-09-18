@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class VirtualEntityPolicy < ApplicationPolicy
+  def show?
+    owner_or_has_permission? 'read'
+  end
+
   def update?
     owner_or_has_permission? 'edit'
   end
@@ -33,11 +37,19 @@ class VirtualEntityPolicy < ApplicationPolicy
     record_owner?
   end
 
+  class Scope
+    attr_reader :user, :scope
+
+    def resolve
+      scope.where("metadata -> 'permissions' ?& array[:permissions]", permissions: %w[owner read])
+    end
+  end
+
   private
 
   def owner_or_has_permission?(perm)
     record_owner? && (
-      record.shared_on.nil? || # is the original owner of the resource
+      record.metadata.fetch('permissions', []).include?('owner') ||
       record.metadata.fetch('permissions', []).include?(perm)
     )
   end

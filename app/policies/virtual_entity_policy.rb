@@ -41,7 +41,7 @@ class VirtualEntityPolicy < ApplicationPolicy
     attr_reader :user, :scope
 
     def resolve
-      scope.where("metadata -> 'permissions' ?& array[:permissions]", permissions: %w[owner read])
+      scope.where("virtual_entities.metadata -> 'permissions' ?| array[:permissions]", permissions: %w[owner read])
     end
   end
 

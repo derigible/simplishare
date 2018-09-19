@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  PREFERENCE_HASH = {
+    email: {
+      virtual_entity: %i[update create delete share link]
+    }
+  }.with_indifferent_access.freeze
+
   include HtmlSanitizer
 
   # Include default devise modules. Others available are:
@@ -17,6 +23,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true
   validates :username, presence: true
+
+  before_save :run_sanitizers
 
   def contacts
     Contact.where('user_id = ? OR contact_id = ?', id, id)
@@ -36,16 +44,20 @@ class User < ApplicationRecord
   end
 
   def shared_contacts(user)
-    contact_ids = user.contacts.pluck(:user_id, :contact_id).flatten.uniq.reject { |i| i == id || i == user.id }
+    contact_ids = shared_contacts_ids(user)
     shared = contacts.to_a.select { |c| contact_ids.include?(c.user_id) || contact_ids.include?(c.contact_id) }
     make_ready_for_serialization shared
+  end
+
+  def shared_contacts_ids(user)
+    user.contacts.pluck(:user_id, :contact_id).flatten.uniq.reject do |shared_contact_id|
+      [id, user.id].include? shared_contact_id
+    end
   end
 
   def contacts_for_serialization
     make_ready_for_serialization contacts_with_objects
   end
-
-  before_save :run_sanitizers
 
   def upload_events
     CsvImporter.new(self, csv_uploads.read).import
@@ -60,6 +72,19 @@ class User < ApplicationRecord
     false
   end
 
+  def update_preference(preference_type:, record_type:, action:, preference:)
+    if valid_preference?(preference_type, record_type, action)
+      errors.add(:preferences, "#{preference_type} -> #{record_type} -> #{action} not valid.")
+    else
+      preferences[preference_type] = preferences.fetch(preference_type, {}).merge!(
+        record_type => (preferences.dig(preference_type, record_type) || {}).merge!(
+          action => preference
+        )
+      )
+    end
+    save!
+  end
+
   private
 
   def run_sanitizers
@@ -68,21 +93,37 @@ class User < ApplicationRecord
 
   def make_ready_for_serialization(contacts)
     contacts.map do |contact|
-      c_id = contact.user_id == id ? contact.contact_id : contact.user_id
-      c_id = 0 if contact.authorized_on.blank?
-      email = if contact.authorized_on.blank?
-                contact.invitation_sent_to
-              elsif contact.user_id == id
-                contact.contact.email
-              else
-                contact.user.email
-      end
+      email = retrieve_contact_email(contact)
       Contact.new(
-        contact_id: c_id,
+        contact_id: retrieve_contact_id(contact),
         created_at: contact.created_at,
         invitation_sent_to: email,
         id: contact.id
       )
     end
+  end
+
+  def retrieve_contact_email(contact)
+    if contact.authorized_on.blank?
+      contact.invitation_sent_to
+    elsif contact.user_id == id
+      contact.contact.email
+    else
+      contact.user.email
+    end
+  end
+
+  def retrieve_contact_id(contact)
+    if contact.user_id == id
+      contact.contact_id
+    elsif contact.authorized_on.present?
+      contact.user_id
+    else
+      0
+    end
+  end
+
+  def valid_preference?(preference_type, record_type, action)
+    PREFERENCE_HASH.dig(preference_type, record_type)&.include?(action)
   end
 end

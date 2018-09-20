@@ -12,6 +12,13 @@ Rails.application.routes.draw do
     get 'authorize_contact', on: :collection
   end
 
+  concern :virtual_entity do
+    post 'share', on: :member
+    get 'shared_with', on: :member
+    get 'shareable_with', on: :member
+    put 'preferences', on: :member
+  end
+
   concern :api_routes do
     resources :categories do
       resources :events, only: [:index], controller: 'categories/events'
@@ -27,17 +34,14 @@ Rails.application.routes.draw do
     end
     resources :notes do
       resource :tags, only: [:create, :destroy], controller: 'tags/notes'
-      post 'share', on: :member
-      get 'shared_with', on: :member
-      get 'shareable_with', on: :member
+      concerns :virtual_entity
     end
     resources :todos do
       resource :tags, only: [:create, :destroy], controller: 'tags/todos'
-      post 'share', on: :member
-      get 'shared_with', on: :member
-      get 'shareable_with', on: :member
+      concerns :virtual_entity
     end
     resources :tags
+    resources :preferences, only: [:update, :show]
   end
 
   api_version(

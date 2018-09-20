@@ -29,6 +29,7 @@ module V1
       object.metadata[:shared] || false
     end
     attribute :metadata
+    attribute :preferences
     attribute :shared_object_id do
       object.entity.id
     end

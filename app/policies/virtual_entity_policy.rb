@@ -37,6 +37,10 @@ class VirtualEntityPolicy < ApplicationPolicy
     record_owner?
   end
 
+  def preferences?
+    record_owner?
+  end
+
   class Scope
     attr_reader :user, :scope
 

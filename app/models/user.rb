@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  PREFERENCE_HASH = {
-    email: {
-      virtual_entity: %i[update create delete share link]
-    }
-  }.with_indifferent_access.freeze
-
   include HtmlSanitizer
+  include Preferences
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
@@ -72,19 +67,6 @@ class User < ApplicationRecord
     false
   end
 
-  def update_preference(preference_type:, record_type:, action:, preference:)
-    if valid_preference?(preference_type, record_type, action)
-      errors.add(:preferences, "#{preference_type} -> #{record_type} -> #{action} not valid.")
-    else
-      preferences[preference_type] = preferences.fetch(preference_type, {}).merge!(
-        record_type => (preferences.dig(preference_type, record_type) || {}).merge!(
-          action => preference
-        )
-      )
-    end
-    save!
-  end
-
   private
 
   def run_sanitizers
@@ -121,9 +103,5 @@ class User < ApplicationRecord
     else
       0
     end
-  end
-
-  def valid_preference?(preference_type, record_type, action)
-    PREFERENCE_HASH.dig(preference_type, record_type)&.include?(action)
   end
 end

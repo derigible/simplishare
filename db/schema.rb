@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_19_222154) do
+ActiveRecord::Schema.define(version: 2018_09_20_124929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 2018_09_19_222154) do
     t.datetime "shared_on"
     t.jsonb "metadata", default: {}
     t.boolean "archived"
+    t.jsonb "preferences", default: {}
     t.index ["entity_id"], name: "index_virtual_entities_on_entity_id"
     t.index ["user_id"], name: "index_virtual_entities_on_user_id"
   end

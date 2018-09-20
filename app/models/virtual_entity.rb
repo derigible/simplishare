@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class VirtualEntity < ApplicationRecord
+  include Preferences
+
   PERMISSIONS = %w[read edit destroy share owner].freeze
   belongs_to :user
   belongs_to :entity

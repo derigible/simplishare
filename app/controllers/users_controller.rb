@@ -43,9 +43,7 @@ class UsersController < AdministrationController
 
     if params[:reject].present?
       contact.reject!
-      # rubocop:disable Style/AndOr
       render('invitation_rejected') and return
-      # rubocop:enable Style/AndOr
     end
 
     @url = "#{UserMailer::PINKAIRSHIP_ADDRESS}/auth?registering=true&invitation_code=#{params[:authorization_code]}"

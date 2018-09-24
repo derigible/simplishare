@@ -3,6 +3,7 @@
 module V1
   class NotesController < ApiController
     include V1::Concerns::VirtualEntitySharing
+    include V1::Concerns::VirtualEntityPreferences
 
     before_action :load_virtual_entity, except: %i[index create]
 

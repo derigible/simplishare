@@ -20,6 +20,7 @@ class User < ApplicationRecord
   validates :username, presence: true
 
   before_save :run_sanitizers
+  before_create :prepopulate_preference_hash
 
   def contacts
     Contact.where('user_id = ? OR contact_id = ?', id, id)

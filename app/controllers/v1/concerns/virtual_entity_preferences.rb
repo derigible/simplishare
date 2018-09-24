@@ -2,7 +2,7 @@
 
 module V1
   module Concerns
-    module VirtualEntityPermissions
+    module VirtualEntityPreferences
       def preferences
         ve = VirtualEntity.find params[:id]
         authorize(ve)
@@ -10,10 +10,11 @@ module V1
         respond_with ve, serializer: serializer
       end
 
+      private
+
       def preferences_params
         params.require(:preferences).permit(record_type, action, preference_type, preference)
       end
-      private_class_method :preferences_params
     end
   end
 end

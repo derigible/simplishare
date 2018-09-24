@@ -18,6 +18,8 @@ class VirtualEntity < ApplicationRecord
 
   validate :validate_correct_permissions
 
+  before_create :prepopulate_preference_hash
+
   def owner_ve?
     shared_on.nil?
   end

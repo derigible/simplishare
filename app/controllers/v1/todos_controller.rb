@@ -3,6 +3,7 @@
 module V1
   class TodosController < ApiController
     include V1::Concerns::VirtualEntitySharing
+    include V1::Concerns::VirtualEntityPreferences
 
     def index
       todos = paginate TodosFilter.new(

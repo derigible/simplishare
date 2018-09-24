@@ -19,10 +19,36 @@ module Preferences
     end
   end
 
+  # will move to private once all models have been updated correctly
+  def prepopulate_preference_hash
+    self.preferences = PREFERENCE_HASH.keys.each_with_object({}) do |preference_type, memo|
+      memo[preference_type] = user_record? ? populate_user_preference(preference_type) : populate_type(preference_type)
+    end
+  end
+
   private
 
+  def populate_user_preference(preference_type)
+    PREFERENCE_HASH[preference_type].keys.each_with_object({}) do |record_type, memo|
+      memo[record_type] = PREFERENCE_HASH[preference_type][record_type].each_with_object({}) do |action, action_memo|
+        action_memo[action] = false
+      end
+    end
+  end
+
+  def populate_type(preference_type)
+    type = entity.type.downcase
+    PREFERENCE_HASH[preference_type][type].each_with_object(type => {}) do |action, memo|
+      memo[type][action] = false
+    end
+  end
+
+  def user_record?
+    self.class.name == 'User'
+  end
+
   def valid_preference?(preference_type, record_type, action)
-    PREFERENCE_HASH.dig(preference_type, record_type)&.include?(action) &&
-      (self.class.name == 'User' || record_type.to_s.capitalize == entity.type)
+    PREFERENCE_HASH.dig(preference_type, record_type)&.include?(action.to_sym) &&
+      (user_record? || record_type.to_s.capitalize == entity.type)
   end
 end

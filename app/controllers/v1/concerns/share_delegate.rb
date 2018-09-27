@@ -104,6 +104,5 @@ module V1::Concerns
       ve = VirtualEntity.find_by! user_id: user_id, entity: entity
       ve.update! metadata: { permissions: permissions }
     end
-
   end
 end

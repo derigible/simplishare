@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Preferences
   PREFERENCE_HASH = {
     email: {
@@ -8,11 +10,7 @@ module Preferences
 
   def update_preference(preference_type:, record_type:, action:, preference:)
     if valid_preference?(preference_type, record_type, action)
-      preferences[preference_type] = preferences.fetch(preference_type, {}).merge!(
-        record_type => (preferences.dig(preference_type, record_type) || {}).merge!(
-          action => preference
-        )
-      )
+      update_preference_hash(preference_type, record_type, action, preference)
     else
       errors.add(:preferences, "#{preference_type} -> #{record_type} -> #{action} not valid.")
       raise ActiveRecord::RecordInvalid, self
@@ -28,10 +26,19 @@ module Preferences
 
   private
 
+  def update_preference_hash(preference_type, record_type, action, preference)
+    preferences[preference_type] = preferences.fetch(preference_type, {}).merge!(
+      record_type => (preferences.dig(preference_type, record_type) || {}).merge!(
+        action => preference
+      )
+    )
+    save!
+  end
+
   def populate_user_preference(preference_type)
     PREFERENCE_HASH[preference_type].keys.each_with_object({}) do |record_type, memo|
       memo[record_type] = PREFERENCE_HASH[preference_type][record_type].each_with_object({}) do |action, action_memo|
-        action_memo[action] = false
+        action_memo[action] = true
       end
     end
   end

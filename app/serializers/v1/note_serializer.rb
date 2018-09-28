@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module V1
-  class NoteSerializer < ActiveModel::Serializer
-    attribute :id
+  class NoteSerializer < VirtualEntitySerializer
     attribute :created_at do
       object.entity.created_at
     end
@@ -23,15 +22,6 @@ module V1
     end
     attribute :priority do
       object.entity.priority || 'medium'
-    end
-    attribute :shared_on
-    attribute :shared do
-      object.metadata[:shared] || false
-    end
-    attribute :metadata
-    attribute :preferences
-    attribute :shared_object_id do
-      object.entity.id
     end
   end
 end

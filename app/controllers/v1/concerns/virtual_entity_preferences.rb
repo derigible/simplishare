@@ -6,14 +6,14 @@ module V1
       def preferences
         ve = VirtualEntity.find params[:id]
         authorize(ve)
-        ve.update_preferences preferences_params
+        ve.update_preference(**preferences_params.to_h.symbolize_keys)
         respond_with ve, serializer: serializer
       end
 
       private
 
       def preferences_params
-        params.require(:preferences).permit(record_type, action, preference_type, preference)
+        params.require(:preferences).permit(:record_type, :action, :preference_type, :preference)
       end
     end
   end

@@ -5,7 +5,7 @@ module V1::Concerns
     def share
       delegate.share_or_update_permissions
       delegate.mark_as_shared
-      respond_with virtual_entity.entity.shared_with_except_users(current_user), each_serializer: SharedWithSerializer
+      respond_with virtual_entity.entity.shared_with_except_users(current_user), each_serializer: V1::SharedWithSerializer
     end
 
     def shared_with
@@ -14,15 +14,15 @@ module V1::Concerns
         owner_ve.permissions = ['owner']
         respond_with([owner_ve, virtual_entity], each_serializer: V1::Detailed::SharedWithSerializer) and return
       end
-      respond_with delegate.retrieve_shared_with, each_serializer: SharedWithSerializer
+      respond_with delegate.retrieve_shared_with, each_serializer: V1::SharedWithSerializer
     end
 
     def shareable_with
       if virtual_entity.owner_ve?
-        respond_with current_user.contacts_for_serialization, each_serializer: ContactSerializer
+        respond_with current_user.contacts_for_serialization, each_serializer: V1::ContactSerializer
       else
         owner = virtual_entity.entity.owner
-        respond_with current_user.shared_contacts(owner), each_serializer: ContactSerializer
+        respond_with current_user.shared_contacts(owner), each_serializer: V1::ContactSerializer
       end
     end
 

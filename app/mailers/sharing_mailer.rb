@@ -7,6 +7,7 @@ class SharingMailer < ApplicationMailer
 
   def self.send_update(user, entity)
     entity.shared_with_except_users(user).each do |ve|
+      next if ve.skip_notification?(:email, entity.type, :update)
       on_update(user, ve, entity.type).deliver_now
     end
   end

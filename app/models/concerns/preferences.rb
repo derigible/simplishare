@@ -8,6 +8,12 @@ module Preferences
     }
   }.with_indifferent_access.freeze
 
+  def skip_notification?(preference, record_type, action)
+    ve_pref = preferences[preference][record_type.downcase.to_sym][action]
+    user_pref = user.preferences[preference][record_type.downcase.to_sym][action]
+    check_skip(ve_pref, user_pref)
+  end
+
   def update_preference(preference_type:, record_type:, action:, preference:)
     if valid_preference?(preference_type, record_type, action)
       update_preference_hash(preference_type, record_type, action, preference)
@@ -38,7 +44,7 @@ module Preferences
   def populate_user_preference(preference_type)
     PREFERENCE_HASH[preference_type].keys.each_with_object({}) do |record_type, memo|
       memo[record_type] = PREFERENCE_HASH[preference_type][record_type].each_with_object({}) do |action, action_memo|
-        action_memo[action] = true
+        action_memo[action] = 'always'
       end
     end
   end
@@ -46,7 +52,7 @@ module Preferences
   def populate_type(preference_type)
     type = entity.type.downcase
     PREFERENCE_HASH[preference_type][type].each_with_object(type => {}) do |action, memo|
-      memo[type][action] = false
+      memo[type][action] = 'not_set'
     end
   end
 
@@ -57,5 +63,11 @@ module Preferences
   def valid_preference?(preference_type, record_type, action)
     PREFERENCE_HASH.dig(preference_type, record_type)&.include?(action.to_sym) &&
       (user_record? || record_type.to_s.capitalize == entity.type)
+  end
+
+  def check_skip(ve_pref, user_pref)
+    return true if ve_pref == 'always'
+    return false if ve_pref == 'never'
+    user_pref == 'always'
   end
 end

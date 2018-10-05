@@ -50,10 +50,12 @@ module V1
     before_action :authenticate_user!
 
     def authenticate_user!
-      jwt = decode_jwt
-      error_render Exception.new('Jwt is not valid'), :unauthorized && return if invalid_jwt?(jwt)
+      if invalid_jwt?
+        error_render(Exception.new(jwt_verifier.errors.join(';')), :unauthorized)
+        return
+      end
       @_current_user = User.find_by(
-        id: jwt['sub']
+        id: decoded_jwt['sub']
       )
       error_render Exception.new('User is not authenticated.'), :unauthorized if current_user.blank?
     end
@@ -79,14 +81,18 @@ module V1
 
     private
 
-    def decode_jwt
-      JSON::JWT.decode(
+    def decoded_jwt
+      @decoded_jwt ||= JSON::JWT.decode(
         request.headers['Authorization'].split(' ').last, Delegates::AuthenticationMethods.public_key
       ).with_indifferent_access
     end
 
-    def invalid_jwt?(jwt)
-      Delegates::JwtVerifier.new(jwt).verify_jwt
+    def jwt_verifier
+      @jwt_verifier ||= Delegates::JwtVerifier.new(decoded_jwt)
+    end
+
+    def invalid_jwt?
+      !jwt_verifier.verify_jwt
     end
 
     def error_render(error, status)

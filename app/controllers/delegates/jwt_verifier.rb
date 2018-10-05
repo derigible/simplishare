@@ -29,7 +29,7 @@ module Delegates
 
     def verify_issued_at(jwt)
       lower_bound = issued_at_lower_bound
-      return unless Time.zone.at(jwt[:iat]).between?(lower_bound, Time.zone.now)
+      return if Time.zone.at(jwt[:iat]).between?(lower_bound, Time.zone.now)
       errors << "Issued at of #{jwt[:iat]} not between #{lower_bound.to_i} and #{Time.zone.now.to_i}"
     end
 
@@ -39,7 +39,7 @@ module Delegates
     end
 
     def issued_at_lower_bound
-      ENV.key?('issued_at_minutes_ago') ? ENV['issued_at_minutes_ago'].minutes.ago : 1.week.ago
+      ENV.key?('issued_at_minutes_ago') ? ENV['issued_at_minutes_ago'].to_i.minutes.ago : 1.week.ago
     end
   end
 end

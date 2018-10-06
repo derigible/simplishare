@@ -39,6 +39,10 @@ class VirtualEntity < ApplicationRecord
     metadata['permissions'] = perms
   end
 
+  def permission?(perm)
+    permissions.include? perm
+  end
+
   private
 
   def ensure_permissions_exist

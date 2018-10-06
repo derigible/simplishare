@@ -10,7 +10,7 @@ module V1::Concerns
       load_virtual_entity
     end
 
-    def can_view_shared_with?
+    def cannot_view_shared_with?
       !@virtual_entity.owner_ve? && @virtual_entity.permissions.exclude?('share')
     end
 

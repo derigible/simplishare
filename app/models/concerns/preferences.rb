@@ -3,14 +3,14 @@
 module Preferences
   PREFERENCE_HASH = {
     email: {
-      todo: %i[update create delete share link],
-      note: %i[update create delete share link]
+      todo: %i[update delete share link],
+      note: %i[update delete share link]
     }
   }.with_indifferent_access.freeze
 
   def skip_notification?(preference, record_type, action)
-    ve_pref = preferences[preference][record_type.downcase.to_sym][action]
-    user_pref = user.preferences[preference][record_type.downcase.to_sym][action]
+    ve_pref = preferences[preference][record_type.downcase][action]
+    user_pref = user.preferences[preference][record_type.downcase][action]
     check_skip(ve_pref, user_pref)
   end
 
@@ -66,8 +66,8 @@ module Preferences
   end
 
   def check_skip(ve_pref, user_pref)
-    return true if ve_pref == 'always'
-    return false if ve_pref == 'never'
-    user_pref == 'always'
+    return false if ve_pref == 'always'
+    return true if ve_pref == 'never'
+    user_pref == 'never'
   end
 end

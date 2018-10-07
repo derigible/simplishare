@@ -3,8 +3,8 @@
 module Preferences
   PREFERENCE_HASH = {
     email: {
-      todo: %i[update delete share link],
-      note: %i[update delete share link]
+      todo: %i[update],
+      note: %i[update]
     }
   }.with_indifferent_access.freeze
 

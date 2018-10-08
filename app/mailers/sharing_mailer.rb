@@ -16,7 +16,7 @@ class SharingMailer < ApplicationMailer
     @user = user
     @type = type
     @virtual_entity = virtual_entity
-    @url = "#{PINKAIRSHIP_ADDRESS}/#{@type.downcase.pluralize}/read/#{@virtual_entity.id}"
+    @url = "#{PINKAIRSHIP_ADDRESS}/#{@type.downcase.pluralize}/view/#{@virtual_entity.id}"
     mail(to: virtual_entity.user.email, subject: "#{@user.email} has updated a #{@type}")
   end
 
@@ -25,7 +25,7 @@ class SharingMailer < ApplicationMailer
     @virtual_entity = params[:virtual_entity]
     @type = @virtual_entity.entity.type
     @shared_with = @virtual_entity.user
-    @url = "#{PINKAIRSHIP_ADDRESS}/#{@type.downcase.pluralize}/read/#{@virtual_entity.id}"
+    @url = "#{PINKAIRSHIP_ADDRESS}/#{@type.downcase.pluralize}/view/#{@virtual_entity.id}"
     mail(to: @shared_with.email, subject: "#{@user.email} has shared a #{@type}")
   end
 end

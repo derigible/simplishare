@@ -47,11 +47,11 @@ module V1::Concerns
     attr_reader :params, :virtual_entity, :user
 
     def not_subtask?
-      params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+      params[:id] != 'new-sub-task' && (params[:parent_chain].nil? || params[:parent_chain].size == 1)
     end
 
     def todo_without_sub_todo(todo)
-      todo['todos'].reject! { |t| t['id'] == params[:parent_chain].last }
+      todo['todos'].reject! { |t| t['id'] == params[:parent_chain]&.last }
     end
 
     # the passed in value MUST be the AR record's todo
@@ -71,11 +71,7 @@ module V1::Concerns
 
     def create_sub_todo
       todo_child = nth_child_from_end_of_parent_chain(virtual_entity.todo.todo)
-      todo_child['todos'].push({
-        id: SecureRandom.uuid,
-        created_at: Time.zone.now,
-        updated_at: Time.zone.now
-      }.merge!(todo_update_child_params))
+      todo_child['todos'].push(todo_update_child_params)
     end
 
     def update_sub_todo

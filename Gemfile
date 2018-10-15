@@ -16,7 +16,6 @@ gem 'pundit'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rails', '~> 5.2.0'
 gem 'responders' # Dry up controller responses
-gem 'rolify', '~> 5.0.0' # Roles
 gem 'sanitize', '~> 4.0.1'
 gem 'seedbank', '~> 0.3.0' # Used for seeding different environments
 gem 'swagger-blocks', '~> 1.3.0' # API Documentation

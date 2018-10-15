@@ -21,6 +21,9 @@ class Todo < Entity
   def ensure_todos(todos)
     todos.each do |t|
       t['todos'] = [] if t['todos'].nil?
+      t['id'] = SecureRandom.uuid if t['id'].nil?
+      t['created_at'] = Time.zone.now if t['created_at'].nil?
+      t['updated_at'] = Time.zone.now if t['updated_at'].nil?
       ensure_todos(t['todos'])
     end
   end

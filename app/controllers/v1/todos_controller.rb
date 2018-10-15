@@ -73,7 +73,7 @@ module V1
     end
 
     def find_todo_for_update
-      if params[:id] != 'new-sub-task' && params[:parent_chain].size == 1
+      if params[:id] != 'new-sub-task' && (params[:parent_chain].nil? || params[:parent_chain].size == 1)
         VirtualEntity.find params[:id]
       else
         find_db_record_from_parent_chain

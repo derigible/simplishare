@@ -12,6 +12,40 @@ class SharingMailer < ApplicationMailer
     end
   end
 
+  def self.send_archive(user, virtual_entity)
+    entity = virtual_entity.entity
+    entity.shared_with_except_users(user).each do |ve|
+      next if (!ve.permissions.include?('archive') && !ve.permissions.include?('owner')) || ve.skip_notification?('email', entity.type, 'archive')
+      on_archive(user, ve, entity.type, virtual_entity.archived).deliver_now
+    end
+  end
+
+  def self.send_archive_and_update(user, virtual_entity)
+    entity = virtual_entity.entity
+    entity.shared_with_except_users(user).each do |ve|
+      next if (!ve.permissions.include?('archive') && !ve.permissions.include?('owner')) || ve.skip_notification?('email', entity.type, 'archive')
+      on_archive_and_update(user, ve, entity.type, virtual_entity.archived).deliver_now
+    end
+  end
+
+  def on_archive(user, virtual_entity, type, restored)
+    @user = user
+    @type = type
+    @virtual_entity = virtual_entity
+    @restored = restored
+    @url = "#{PINKAIRSHIP_ADDRESS}/#{@type.downcase.pluralize}/view/#{@virtual_entity.id}"
+    mail(to: virtual_entity.user.email, subject: "#{@user.email} has #{@restored ? 'archived' : 'restored'} a #{@type}")
+  end
+
+  def on_archive_and_update(user, virtual_entity, type, restored)
+    @user = user
+    @type = type
+    @virtual_entity = virtual_entity
+    @restored = restored
+    @url = "#{PINKAIRSHIP_ADDRESS}/#{@type.downcase.pluralize}/view/#{@virtual_entity.id}"
+    mail(to: virtual_entity.user.email, subject: "#{@user.email} has #{@restored ? 'archived' : 'restored'} and updated a #{@type}")
+  end
+
   def on_update(user, virtual_entity, type)
     @user = user
     @type = type

@@ -42,6 +42,14 @@ module V1::Concerns
       update_archived(todo_update_entity_params[:completed], todo_update_todo_params[:update_shared])
     end
 
+    def archived?
+      !todo_update_entity_params[:completed].nil?
+    end
+
+    def archive_only?
+      archived? && params[:todo].keys.size == 1
+    end
+
     private
 
     attr_reader :params, :virtual_entity, :user

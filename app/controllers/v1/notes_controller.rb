@@ -19,7 +19,7 @@ module V1
         @ve.note.update!(update_note_params)
       end
       update_archived_if_requested
-      SharingMailer.send_update(current_user, @ve.entity)
+      send_update_notifications
       respond_with @ve, status: :ok, serializer: serializer
     end
 
@@ -73,6 +73,24 @@ module V1
 
     def request_params
       @request_params ||= params.require(:note).permit(:title, :body, :archived, :update_shared, :priority)
+    end
+
+    def archived?
+      !request_params[:archived].nil?
+    end
+
+    def archive_only?
+      archived? && request_params.keys.size == 1
+    end
+
+    def send_update_notifications
+      if archive_only?
+        SharingMailer.send_archive(current_user, @ve)
+      elsif archived?
+        SharingMailer.send_archive_and_update(current_user, @ve)
+      else
+        SharingMailer.send_update(current_user, @ve.entity)
+      end
     end
 
     def update_archived_if_requested

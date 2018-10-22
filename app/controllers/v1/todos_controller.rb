@@ -29,7 +29,7 @@ module V1
       @ve = find_todo_for_update
       todo_delegate.update
       todo_delegate.change_archive_if_requested
-      SharingMailer.send_update(current_user, @ve.entity)
+      send_update_notifications
       respond_with @ve, status: :ok, serializer: serializer
     end
 
@@ -77,6 +77,16 @@ module V1
         VirtualEntity.find params[:id]
       else
         find_db_record_from_parent_chain
+      end
+    end
+
+    def send_update_notifications
+      if todo_delegate.archive_only?
+        SharingMailer.send_archive(current_user, @ve)
+      elsif todo_delegate.archived?
+        SharingMailer.send_archive_and_update(current_user, @ve)
+      else
+        SharingMailer.send_update(current_user, @ve.entity)
       end
     end
 

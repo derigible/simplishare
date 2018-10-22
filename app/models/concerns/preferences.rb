@@ -3,8 +3,8 @@
 module Preferences
   PREFERENCE_HASH = {
     email: {
-      todo: %i[update],
-      note: %i[update]
+      todo: %i[update archive],
+      note: %i[update archive]
     }
   }.with_indifferent_access.freeze
 

@@ -1,0 +1,17 @@
+/* .eslintrc.js */
+const defaultEslint = require('@instructure/ui-presets/eslint')
+module.exports = Object.assign(
+  {},
+  defaultEslint,
+  {
+    rules: Object.assign(
+      {},
+      defaultEslint.rules,
+      {
+        'notice/notice': [0],
+        'no-case-declarations': [0],
+        'no-undefined': [0]
+      }
+    )
+  }
+)

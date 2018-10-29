@@ -29,3 +29,11 @@ storage/*
 config/secrets.yml.enc
 config/secrets.yml.key
 public/*
+
+*node_modules*
+npm-debug.log
+.env
+*__build__*
+.babel-cache
+stats.json
+prod-stats.json

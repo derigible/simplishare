@@ -1,0 +1,10 @@
+.history_wrapper {
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.table_wrapper {
+  height: 100%;
+  width: 100%;
+}

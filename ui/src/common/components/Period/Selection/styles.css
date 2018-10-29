@@ -1,0 +1,9 @@
+.base {
+  background-color: var(--baseColor);
+  margin: 0 var(--baseMargin);
+  padding: var(--basePadding);
+}
+
+.clicked {
+  background-color: var(--clickedColor);
+}

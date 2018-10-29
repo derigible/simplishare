@@ -1,0 +1,24 @@
+.center {
+  margin: auto;
+  max-width: 30rem;
+}
+
+.formWrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.toRegisterWrapper {
+  max-width: 13rem;
+  margin: auto;
+}
+
+.toLoginWrapper {
+  max-width: 6.1rem;
+  margin: auto;
+}
+
+.placeHolder {
+  height: 3.5rem
+}

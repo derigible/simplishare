@@ -1,0 +1,18 @@
+.inline {
+  display: inline;
+}
+
+.link {
+  height: var(--headerHeight);
+  padding: 0 var(--linkPadding);
+  color: var(--linkColor);
+}
+
+.active {
+  border-bottom: .5rem var(--linkActiveBorderStyle) var(--linkActiveBorderColor);
+  border-bottom-width: .5rem;
+}
+
+.inactive {
+  margin-bottom: .75rem;
+}

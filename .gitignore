@@ -19,6 +19,7 @@ docker-compose.override.yml
 
 # Swagger UI (built by task)
 /public/docs
+/public/index.html
 
 #byebug
 .byebug_history
@@ -28,8 +29,6 @@ storage/*
 # Other things we ignore for now
 config/secrets.yml.enc
 config/secrets.yml.key
-public/*
-
 *node_modules*
 npm-debug.log
 .env

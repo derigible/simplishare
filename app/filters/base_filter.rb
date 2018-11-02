@@ -33,6 +33,6 @@ class BaseFilter
   attr_reader :scope
 
   def default_lookup
-    scope.all
+    scope
   end
 end

@@ -3,19 +3,19 @@
 module V1::Concerns
   module VirtualEntitySharing
     def share
-      delegate.share_or_update_permissions
-      delegate.mark_as_shared
+      handler.share_or_update_permissions
+      handler.mark_as_shared
       respond_with(
         virtual_entity.entity.shared_with_except_users(current_user), each_serializer: V1::SharedWithSerializer
       )
     end
 
     def shared_with
-      if delegate.cannot_view_shared_with?
+      if handler.cannot_view_shared_with?
         owner_ve.permissions = ['owner']
         respond_with([owner_ve, virtual_entity], each_serializer: V1::Detailed::SharedWithSerializer) and return
       end
-      respond_with delegate.retrieve_shared_with, each_serializer: V1::SharedWithSerializer
+      respond_with handler.retrieve_shared_with, each_serializer: V1::SharedWithSerializer
     end
 
     def shareable_with
@@ -30,16 +30,16 @@ module V1::Concerns
 
     private
 
-    def delegate
-      @delegate ||= begin
-        d = ShareDelegate.new(params, current_user)
+    def handler
+      @handler ||= begin
+        d = ShareHandler.new(params, current_user)
         authorize(d.virtual_entity)
         d
       end
     end
 
     def virtual_entity
-      delegate.virtual_entity
+      handler.virtual_entity
     end
 
     def owner

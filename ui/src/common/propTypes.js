@@ -26,7 +26,7 @@ export const todoProps = PropTypes.shape({
   description: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.number),
   todos: PropTypes.array,
-  completed: PropTypes.bool,
+  archived: PropTypes.bool,
   priority: PropTypes.oneOf(['low', 'medium', 'high']).isRequired,
   title: PropTypes.string.isRequired,
   created_at: PropTypes.string.isRequired,

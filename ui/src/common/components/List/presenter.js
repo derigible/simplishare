@@ -75,7 +75,7 @@ export default class List extends Component {
 
   filterEntity = (entity) => {
     if (
-       (this.hideCompleted && (!!entity.completed || !!entity.archived))
+       (this.hideCompleted && (!!entity.archived || !!entity.archived))
     || this.onlyLowPriority && entity.priority !== 'low'
     || this.onlyMedPriority && entity.priority !== 'medium'
     || this.onlyHighPriority && entity.priority !== 'high'

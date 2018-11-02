@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module V1::Concerns
-  class ShareDelegate
+module V1::Handlers
+  class ShareHandler
     attr_reader :virtual_entity
 
     def initialize(parameters, current_user)

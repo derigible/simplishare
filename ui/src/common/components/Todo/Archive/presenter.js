@@ -12,7 +12,7 @@ export default class Todo extends PureComponent {
   }
 
   markCompleted = () => {
-    const updates = { completed: !this.props.entity.completed }
+    const updates = { archived: !this.props.entity.archived }
     if (!this.props.entity.sharedOn && this.props.entity.shared) {
       if (confirm('Do you want to mark complete for all users?')) {
         updates.update_shared = true

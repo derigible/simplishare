@@ -27,7 +27,7 @@ export default class SubTask extends Component {
     const { todos, deletedTodos, hideCompleted } = this.props
     const filtered = todos.filter((t) => !deletedTodos.has(t.id))
     if (hideCompleted) {
-      return filtered.filter((t) => t.completed !== true )
+      return filtered.filter((t) => t.archived !== true )
     }
     return filtered
   }

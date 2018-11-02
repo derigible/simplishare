@@ -17,7 +17,7 @@ module V1
     attribute :title do
       object.entity.todo['title']
     end
-    attribute :completed do
+    attribute :archived do
       object.entity.archived || object.archived
     end
     attribute :updated_at do

@@ -32,7 +32,7 @@ module V1::Concerns
 
     def handler
       @handler ||= begin
-        d = ShareHandler.new(params, current_user)
+        d = V1::Handlers::ShareHandler.new(params, current_user)
         authorize(d.virtual_entity)
         d
       end

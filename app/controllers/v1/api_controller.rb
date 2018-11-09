@@ -90,7 +90,7 @@ module V1
 
     def decoded_jwt
       auth_header = request.headers['Authorization']&.split(' ')&.last
-      raise AuthTokenMissingException, 'User is not authenticated. Missing bearer token.' if current_user.blank?
+      raise AuthTokenMissingException, 'User is not authenticated. Missing bearer token.' if auth_header.blank?
       @decoded_jwt ||= JSON::JWT.decode(
         auth_header, Delegates::AuthenticationMethods.public_key
       ).with_indifferent_access

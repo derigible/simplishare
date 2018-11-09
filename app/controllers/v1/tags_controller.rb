@@ -5,7 +5,7 @@ module V1
     before_action :load_virtual_tag, except: %i[index create]
 
     def index
-      tags = paginate TagTypeFilter.new(params, policy_scope(Tag)).filter
+      tags = paginate params, policy_scope(Tag).filter
       respond_with tags, each_serializer: TagSerializer
     end
 

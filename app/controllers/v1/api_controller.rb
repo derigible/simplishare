@@ -9,6 +9,13 @@ module V1
     self.responder = Delegates::Responder
     respond_to :json
 
+    class AuthTokenMissingException < StandardError
+    end
+
+    rescue_from AuthTokenMissingException do |e|
+      error_render(e, :unauthorized)
+    end
+
     rescue_from ActionController::BadRequest do |e|
       error_render(e, :bad_request)
     end
@@ -83,7 +90,7 @@ module V1
 
     def decoded_jwt
       auth_header = request.headers['Authorization']&.split(' ')&.last
-      error_render Exception.new('User is not authenticated.'), :unauthorized if auth_header.blank?
+      raise AuthTokenMissingException, 'User is not authenticated.' if current_user.blank?
       @decoded_jwt ||= JSON::JWT.decode(
         auth_header, Delegates::AuthenticationMethods.public_key
       ).with_indifferent_access

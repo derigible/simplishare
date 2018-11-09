@@ -82,8 +82,10 @@ module V1
     private
 
     def decoded_jwt
+      auth_header = request.headers['Authorization']&.split(' ')&.last
+      error_render Exception.new('User is not authenticated.'), :unauthorized if auth_header.blank?
       @decoded_jwt ||= JSON::JWT.decode(
-        request.headers['Authorization'].split(' ').last, Delegates::AuthenticationMethods.public_key
+        auth_header, Delegates::AuthenticationMethods.public_key
       ).with_indifferent_access
     end
 

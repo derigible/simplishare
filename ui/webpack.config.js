@@ -20,7 +20,7 @@ const webpackDevServerUrl = process.env.SERVER_URL || 'http://localhost:8080/'
 
 const ENV = isProduction && !isProductionTest
 ? {
-  'API_HOST': JSON.stringify('api.pinkairship.com'),
+  'API_HOST': JSON.stringify('pinkairship.com'),
   'API_PROTOCOL': JSON.stringify('https'),
   'NODE_ENV': JSON.stringify('production')
 }
@@ -52,7 +52,7 @@ Object.assign(exports, {
     chunkFilename: '[name].[chunkhash].js',
     filename: '[name].[chunkhash].js',
     path: build,
-    publicPath: '/'
+    publicPath: 'https://static.pinkairship.com/'
   },
   resolve: {
     alias: {

@@ -17,10 +17,6 @@ docker-compose.override.yml
 .slacker
 .vscode
 
-# Swagger UI (built by task)
-/public/docs
-/public/index.html
-
 #byebug
 .byebug_history
 seeded_access_tokens

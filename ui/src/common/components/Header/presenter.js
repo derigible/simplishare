@@ -26,7 +26,7 @@ class Header extends Component {
     return (
       <nav className={styles.header}>
         <Flex>
-          <FlexItem shrink grow padding="small 0 0 0">
+          <FlexItem shrink grow padding="xx-small 0 0 0">
             <ul className={styles.list}>
               <li className={styles.listItem}>
                 <NavigationLink
@@ -44,6 +44,7 @@ class Header extends Component {
               <li className={styles.listItem}>
                 <NavigationLink
                   href="/todos"
+                  navigateTo={this.props.navigateTo}
                   windowPathname={this.props.windowPathname}
                 >
                   Todos
@@ -52,6 +53,7 @@ class Header extends Component {
               <li className={styles.listItem}>
                 <NavigationLink
                   href="/notes"
+                  navigateTo={this.props.navigateTo}
                   windowPathname={this.props.windowPathname}
                 >
                   Notes
@@ -123,7 +125,8 @@ Header.propTypes = {
   children: PropTypes.element,
   username: PropTypes.string,
   windowPathname: PropTypes.string.isRequired,
-  src: PropTypes.string
+  src: PropTypes.string,
+  navigateTo: PropTypes.func.isRequired
 }
 
 Header.defaultProps = {

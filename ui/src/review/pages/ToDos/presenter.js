@@ -30,9 +30,9 @@ export default class ToDos extends PureComponent {
 
   constructor (props) {
     super(props)
-    const parts =  window.location.pathname.split('/')
+    const parts =  window.location.hash.split('/')
     const id = parts[parts.length - 1]
-    const todoId = window.location.pathname.includes('view') && id !== 'new'
+    const todoId = window.location.hash.includes('view') && id !== 'new'
       ? parseInt(id, 10)
       : null
 
@@ -44,9 +44,9 @@ export default class ToDos extends PureComponent {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const parts =  window.location.pathname.split('/')
+    const parts =  window.location.hash.split('/')
     const id = parts[parts.length - 1]
-    const todoId = window.location.pathname.includes('view') && id !== 'new'
+    const todoId = window.location.hash.includes('view') && id !== 'new'
       ? parseInt(id, 10)
       : null
 

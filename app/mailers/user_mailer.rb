@@ -13,7 +13,7 @@ class UserMailer < ApplicationMailer
 
   def reset_password
     @user = params[:user]
-    @url = "#{PINKAIRSHIP_ADDRESS}/auth/resetPassword?reset_token=#{params[:reset_token]}"
+    @url = "#{PINKAIRSHIP_ADDRESS}/#!auth/resetPassword?reset_token=#{params[:reset_token]}"
     mail(to: @user.email, subject: 'Reset Password to PinkAirship.com!')
   end
 
@@ -25,7 +25,7 @@ class UserMailer < ApplicationMailer
 
   def join_invitation
     @invitee_email = params[:invitee_email]
-    @url = "#{PINKAIRSHIP_ADDRESS}/auth?registering=true&invitation_code=#{params[:invitation_code]}"
+    @url = "#{PINKAIRSHIP_ADDRESS}/#!auth?registering=true&invitation_code=#{params[:invitation_code]}"
     mail(to: params[:invitation_email], subject: 'You have been invited to join PinkAirship.com!')
   end
 end

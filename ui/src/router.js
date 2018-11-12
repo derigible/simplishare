@@ -4,7 +4,7 @@ import Router from 'middle-router'
 import NotFound from './errors/NotFound'
 
 const configureRouter = () => {
-  return Router()
+  return Router({ hash: '#!' })
     .lazy(
       '/',
       () => {

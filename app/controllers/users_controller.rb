@@ -46,7 +46,7 @@ class UsersController < AdministrationController
       render('invitation_rejected') and return
     end
 
-    @url = "#{UserMailer::PINKAIRSHIP_ADDRESS}/auth?registering=true&invitation_code=#{params[:authorization_code]}"
+    @url = "#{UserMailer::PINKAIRSHIP_ADDRESS}/#!auth?registering=true&invitation_code=#{params[:authorization_code]}"
     render('please_register') && return if contact.contact_id.blank?
 
     contact.update!(authorized_on: Time.zone.now)

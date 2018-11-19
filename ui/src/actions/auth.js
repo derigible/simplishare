@@ -35,13 +35,13 @@ export function logout (successCallback = (data) => data, errorCallback = (data)
 
 export const submitForgotEmail = (dispatch) => {
   return function (credParams, successCallback = (data) => data, errorCallback = (data) => data) {
-    const { username } = credParams
+    const { email } = credParams
     return post(
       'forgot_password',
       {
         requestBody: {
           user: {
-            email: username
+            email
           }
         },
         beforeFetch: () => {}

@@ -39,7 +39,7 @@ function populateUserData (dispatch) {
 }
 
 export default function getAppData (dispatch, routePath) {
-  const appRegex = /\/?(\w*)[/?\s]?/
+  const appRegex = /#!(\w*)[/?\s]?/
   const app = appRegex.exec(routePath)[1]
   if (app === 'auth') { return }
   populateUserData(dispatch)

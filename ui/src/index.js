@@ -20,20 +20,20 @@ registerAuthorizationHeader(getAuthorizationHeader)
 const refreshTokenConnection = () => {}
 registerAuthorizationCheck(refreshTokenConnection)
 registerDefaultErrorHandler((response) => {
-  const path = window.location.pathname
+  const path = window.location.hash
   const strippedPath = path.replace(/\//g, '')
 
-  if (response.status === 401 && strippedPath.split('?')[0] !== 'auth') {
-    router.navigate(`/auth?redirect=${path}`)
+  if (response.status === 401 && strippedPath.split('?')[0] !== '#!auth') {
+    router.navigate(`auth?redirect=${path}`)
   }
 })
 
 const authToken = getAccessToken()
-let path = window.location.pathname
+let path = window.location.hash
 const pathParts = path.split('/')
 
-if (!authToken && !pathParts.includes('auth')) {
-  path = `/auth?redirect=${path}`
+if (!authToken && !pathParts.includes('#!auth')) {
+  path = `#!auth?redirect=${path}`
   window.history.replaceState({}, 'auth page', path)
 }
 

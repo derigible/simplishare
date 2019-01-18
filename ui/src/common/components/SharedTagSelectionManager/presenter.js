@@ -56,6 +56,13 @@ export default class SharedTagSelectionManager extends Component {
 
   handleTagSelected = (tags) => {
     this.props.setSelectedTags(tags)
+    setTimeout(() => {
+      this.selectedTagsToLocalStorage(tags)
+    })
+  }
+
+  selectedTagsToLocalStorage (tags) {
+    localStorage.setItem('selectedTags', JSON.stringify(tags))
   }
 
   render () {

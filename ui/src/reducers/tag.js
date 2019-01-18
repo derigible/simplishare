@@ -1,10 +1,12 @@
 import * as actionTypes from '../constants/actionTypes'
 import { OPEN } from '../constants/tagTypes'
 
+const localStorageTags = localStorage.getItem('selectedTags')
+
 const initialState = {
   tags: {},
   tagsRetrieved: 'pending',
-  selectedTags: [OPEN]
+  selectedTags: localStorageTags ? JSON.parse(localStorageTags) : [OPEN]
 }
 
 export default function (state = initialState, action) {

@@ -23,7 +23,8 @@ import Link from '@instructure/ui-elements/lib/components/Link'
 class Header extends Component {
   render () {
     // const { isOpen, closeSidebar, openSidebar, children } = this.props
-    const windowPathname = ['', '/'].includes(this.props.windowPathname)? '/todos' : this.props.windowPathname
+    const parts = (['', '/'].includes(this.props.windowPathname)? '/todos' : this.props.windowPathname).split('/')
+    const windowPathname = parts.length > 1 ? parts[1] : parts[0]
     return (
       <nav className={styles.header}>
         <Flex margin="x-small none none none">
@@ -45,7 +46,7 @@ class Header extends Component {
               </li> */}
               <li className={styles.listItem}>
                 <NavigationLink
-                  href="/todos"
+                  href="todos"
                   navigateTo={this.props.navigateTo}
                   windowPathname={windowPathname}
                 >
@@ -54,7 +55,7 @@ class Header extends Component {
               </li>
               <li className={styles.listItem}>
                 <NavigationLink
-                  href="/notes"
+                  href="notes"
                   navigateTo={this.props.navigateTo}
                   windowPathname={windowPathname}
                 >

@@ -5,6 +5,10 @@ import theme from '@instructure/ui-themes/lib/canvas'
 
 theme.use()
 
+if (!window.location.href.includes('#!')) {
+  window.history.replaceState({}, 'placeHash', '#!')
+}
+
 import configureStore from './stores/configureStore'
 import { updatePath } from './actions'
 import { registerAuthorizationCheck, registerAuthorizationHeader, registerDefaultErrorHandler } from './api_client'

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import classNames from 'classnames'
-import Button from '@instructure/ui-buttons/lib/components/Button'
+import Link from '@instructure/ui-elements/lib/components/Link'
 import themeable from '@instructure/ui-themeable'
 
 import styles from './styles.css'
@@ -20,11 +20,11 @@ class NavigationLink extends Component {
     }
 
     return (
-      <Button variant="link" onClick={this.onClick} margin="none" padding="none">
+      <Link onClick={this.onClick} margin="none">
         <span className={styles.link}>
           {children}
         </span>
-      </Button>
+      </Link>
     )
   }
 }

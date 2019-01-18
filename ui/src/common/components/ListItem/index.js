@@ -40,17 +40,16 @@ export default class ListItem extends Component {
       <View
         as="div"
         background="default"
-        shadow={this.listItemInFocus ? "topmost" : null}
-        stacking={this.listItemInFocus ? "above" : null}
         borderWidth={hideBorder ? undefined : `${this.listItemInFocus ? 'medium' : 'small'} none none none`}
         padding="xxx-small"
         onMouseEnter={this.focusOn}
         onMouseLeave={this.focusOff}
         onBlur={this.focusOff}
         onFocus={this.focusOn}
-        margin={this.listItemInFocus ? 'none none xxx-small none' : 'none'}
       >
-        {renderChildren(this.forceFocus)}
+        <div style={this.listItemInFocus ? {backgroundColor: 'aliceblue'} : {}}>
+          {renderChildren(this.forceFocus)}
+        </div>
       </View>
     )
   }

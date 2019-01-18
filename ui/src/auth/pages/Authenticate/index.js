@@ -21,7 +21,7 @@ function mapDispatchToProps (dispatch) {
     submitCredentials: (credParams) => {
       fetchOne('AuthToken', {fetchFunc: 'submitUserCredentials', errorMessage: 'Credentials incorrect. Please enter valid credentials.'})(dispatch)(credParams)
         .then((data) => {
-          const redirectTo = window.location.search.split('=')[1] || '/todos'
+          const redirectTo = window.location.search.split('=')[1] || 'todos'
           getAppData(dispatch, redirectTo)
           navigateTo(redirectTo)(dispatch)
         })

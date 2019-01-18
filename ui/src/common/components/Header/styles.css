@@ -24,6 +24,7 @@
 
 .listItem {
   display: inline-block;
+  margin-right: var(--hamburgerIconPaddingLeftRight);
 }
 
 .logo {

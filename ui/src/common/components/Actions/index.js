@@ -17,7 +17,8 @@ export default class Todo extends PureComponent {
     showPopover: false
   }
 
-  showPopover = () => {
+  showPopover = (e) => {
+    e.stopPropagation()
     this.setState({showPopover: true})
   }
 

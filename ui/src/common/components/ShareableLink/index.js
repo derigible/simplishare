@@ -21,7 +21,7 @@ export default class ShareableLink extends Component {
       + '//'
       + urlParts.hostname
       + (urlParts.port.length > 0 ? `:${urlParts.port}` : '')
-      + '/'
+      + '#!'
       + entityType
       + '/view/'
       + entity.shared_object_id

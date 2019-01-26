@@ -74,6 +74,7 @@ class SelectionManager extends Component {
         label={label}
         optionsMaxWidth="3rem"
         selectedOption={selectedTags.map((t) => `${t}`)}
+        stacking="topmost"
       >
         {
           this.renderOptions()

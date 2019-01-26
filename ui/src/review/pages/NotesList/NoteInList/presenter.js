@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import difference from 'lodash/difference'
+import keycode from 'keycode'
 
 import Button from '@instructure/ui-buttons/lib/components/Button'
 import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
@@ -41,6 +42,11 @@ export default class NoteInList extends Component {
 
   handleNoteRead = () => {
     this.props.readNote(this.props.entity.id)
+  }
+
+  handleKONoteRead = e => {
+    if (keycode.isEventKey(e, 'enter')) this.handleNoteRead()
+
   }
 
   handleDelete = () => {
@@ -87,72 +93,81 @@ export default class NoteInList extends Component {
     const { entity, possibleTags, onSelectMenuOpenChange } = this.props
 
     return (
-      <Flex direction="column">
-        <FlexItem padding="x-small xxx-small">
-          { entity.archived
-            ? <Heading><s>{entity.title || 'Untitled Note'}</s></Heading>
-            : <Heading>{entity.title || 'Untitled Note'}</Heading>
-          }
-        </FlexItem>
-        <FlexItem padding="xxx-small small">
-          <Flex padding="xxx-small none">
-            <FlexItem shrink grow>
-              <Typography>
-                {entity.body.length > 100 ? `${entity.body.slice(0, 100)} ...` : entity.body}
-              </Typography>
-            </FlexItem>
-            <FlexItem>
-              <Actions>
-                <View as="div" margin="0 0 small 0">
-                  <Priority
-                    priority={entity.priority}
-                    changePriority={this.changePriority}
-                    ref={this.setPriorityRef}
-                  />
-                </View>
-                <View as="div" margin="0 0 small 0">
-                  <Button variant="icon" icon={IconEye} size="small" onClick={this.handleNoteRead}>
-                    <ScreenReaderContent>Read Note</ScreenReaderContent>
-                  </Button>
-                </View>
-                <View as="div" margin="0 0 small 0">
-                  <Snooze
-                    entityType="Note"
-                    entityId={entity.id}
-                  />
-                </View>
-                <View as="div" margin="0 0 small 0">
-                  <Button variant="icon" icon={IconEdit} size="small" onClick={this.handleNoteEdit}>
-                    <ScreenReaderContent>Edit Note</ScreenReaderContent>
-                  </Button>
-                </View>
-                <View as="div" margin="0 0 small 0">
-                  <Checkmark
-                    label="Archive Note"
-                    callback={this.handleArchiveNote}
-                  />
-                </View>
-                <View as="div">
-                  <Delete
-                    label="Delete Note"
-                    callback={this.handleDelete}
-                  />
-                </View>
-              </Actions>
-            </FlexItem>
-          </Flex>
-        </FlexItem>
-        <FlexItem padding="xxx-small small">
-          <SelectionManager
-            possibleTags={possibleTags}
-            onSelectTag={this.handleAddTag}
-            onTagDefine={this.handleCreateAndAddTag}
-            selectedTags={entity.tags}
-            label="Tags"
-            onMenuOpenChange={onSelectMenuOpenChange}
-          />
-        </FlexItem>
-      </Flex>
+      <div
+        onClick={this.handleNoteRead}
+        role="button"
+        tabIndex="0"
+        onKeyDown={this.handleKONoteRead}
+        style={{cursor: 'pointer'}}
+      >
+        <Flex direction="column">
+          <FlexItem padding="x-small xxx-small">
+            { entity.archived
+              ? <Heading><s>{entity.title || 'Untitled Note'}</s></Heading>
+              : <Heading>{entity.title || 'Untitled Note'}</Heading>
+            }
+          </FlexItem>
+          <FlexItem padding="xxx-small small">
+            <Flex padding="xxx-small none">
+              <FlexItem shrink grow>
+                <Typography>
+                  {entity.body.length > 100 ? `${entity.body.slice(0, 100)} ...` : entity.body}
+                </Typography>
+              </FlexItem>
+              <FlexItem>
+                <Actions>
+                  <View as="div" margin="0 0 small 0">
+                    <Priority
+                      priority={entity.priority}
+                      changePriority={this.changePriority}
+                      ref={this.setPriorityRef}
+                    />
+                  </View>
+                  <View as="div" margin="0 0 small 0">
+                    <Button variant="icon" icon={IconEye} size="small" onClick={this.handleNoteRead}>
+                      <ScreenReaderContent>Read Note</ScreenReaderContent>
+                    </Button>
+                  </View>
+                  <View as="div" margin="0 0 small 0">
+                    <Snooze
+                      entityType="Note"
+                      entityId={entity.id}
+                    />
+                  </View>
+                  <View as="div" margin="0 0 small 0">
+                    <Button variant="icon" icon={IconEdit} size="small" onClick={this.handleNoteEdit}>
+                      <ScreenReaderContent>Edit Note</ScreenReaderContent>
+                    </Button>
+                  </View>
+                  <View as="div" margin="0 0 small 0">
+                    <Checkmark
+                      label="Archive Note"
+                      callback={this.handleArchiveNote}
+                    />
+                  </View>
+                  <View as="div">
+                    <Delete
+                      label="Delete Note"
+                      callback={this.handleDelete}
+                    />
+                  </View>
+                </Actions>
+              </FlexItem>
+            </Flex>
+            {/* Removed for now until instui bug fixed */}
+            {/* <View as="div" margin="x-small none">
+              <SelectionManager
+                possibleTags={possibleTags}
+                onSelectTag={this.handleAddTag}
+                onTagDefine={this.handleCreateAndAddTag}
+                selectedTags={entity.tags}
+                label="Tags"
+                onMenuOpenChange={onSelectMenuOpenChange}
+              />
+            </View> */}
+          </FlexItem>
+        </Flex>
+      </div>
     )
   }
 }

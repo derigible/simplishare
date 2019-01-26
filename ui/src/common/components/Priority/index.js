@@ -16,7 +16,11 @@ import IconLowPriority from '@instructure/ui-icons/lib/Line/IconArrowDown'
 export default class Priority extends PureComponent {
   static propTypes = {
     changePriority: PropTypes.func.isRequired,
-    priority: PropTypes.oneOf(['low', 'medium', 'high']).isRequired
+    priority: PropTypes.oneOf(['low', 'medium', 'high'])
+  }
+
+  static defaultProps = {
+    priority: 'medium'
   }
 
   state = {

@@ -177,8 +177,8 @@ export default class Note extends Component {
     const { possibleTags, isEdit, entity } = this.props
     return (
       <View as="div" margin="none small">
-        <Flex as="div" direction="column">
-          <FlexItem padding="x-small xxx-small">
+        <Flex direction="column">
+          <FlexItem padding="x-small xx-small">
             {isEdit
               ? <TextInput
                   label="Note Title"
@@ -189,7 +189,7 @@ export default class Note extends Component {
               : <Heading level="h2">{this.state.title}</Heading>
             }
           </FlexItem>
-          <FlexItem grow shrink padding="xxx-small xxx-small">
+          <FlexItem grow shrink padding="xxx-small xx-small">
             {isEdit
               ? <TextArea
                   height={this.getRemHeight()}
@@ -202,17 +202,18 @@ export default class Note extends Component {
                 />
               : <p><Text as="pre">{this.state.body}</Text></p>
             }
-          </FlexItem>
-          <FlexItem padding="xxx-small xxx-small">
             {/* Use Details here */}
+            {/* This is moved into the same flexitem for now due to instui bug */}
             {isEdit
-              ? <SelectionManager
-                  possibleTags={possibleTags}
-                  onSelectTag={this.handleTagging}
-                  onTagDefine={this.handleTagDefine}
-                  selectedTags={this.state.tag_ids}
-                  label="Tags"
-                />
+              ? <View as="div" margin="x-small xx-small">
+                  <SelectionManager
+                    possibleTags={possibleTags}
+                    onSelectTag={this.handleTagging}
+                    onTagDefine={this.handleTagDefine}
+                    selectedTags={this.state.tag_ids}
+                    label="Tags"
+                  />
+                </View>
               : this.state.tag_ids.map((t) => {
                   const tag = possibleTags[0].options.find((pt) => pt.id === t)
                   if (tag) {
@@ -237,7 +238,7 @@ export default class Note extends Component {
               }
               {!this.isNewNote
                 ? (
-                    <FlexItem>
+                    <FlexItem grow shrink>
                       <Share
                         shareId={entity.id}
                         shareType="Note"
@@ -248,7 +249,7 @@ export default class Note extends Component {
               }
             </Flex>
           </FlexItem>
-          <FlexItem padding="small xxx-small">
+          <FlexItem padding="small xx-small">
             <hr />
             <Button variant="primary" onClick={isEdit ? this.saveNote : this.switchToEdit}>
               {isEdit ? 'Save Note' : 'Edit Note'}

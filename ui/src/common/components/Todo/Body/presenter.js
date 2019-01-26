@@ -117,7 +117,10 @@ export default class Body extends Component {
               </ToggleGroup>
             : null
           }
-          <ShareableLink entity={entity} entityType='todos' />
+          {entity.shared
+            ? <ShareableLink entity={entity} entityType='todos' />
+            : null
+          }
           <Details
             createdAt={entity.created_at}
             updatedAt={entity.updated_at}

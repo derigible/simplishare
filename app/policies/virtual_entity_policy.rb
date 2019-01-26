@@ -41,6 +41,10 @@ class VirtualEntityPolicy < ApplicationPolicy
     record_owner?
   end
 
+  def snooze?
+    record_owner?
+  end
+
   class Scope
     attr_reader :user, :scope
 

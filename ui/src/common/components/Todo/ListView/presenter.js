@@ -6,10 +6,12 @@ import Flex, { FlexItem } from '@instructure/ui-layout/lib/components/Flex'
 
 import View from '@instructure/ui-layout/lib/components/View'
 
+import Actions from '../../Actions'
+import Snooze from '../../Snooze'
 import Archive from '../Archive'
+import Destroy from '../Destroy'
 import Summary from '../Summary'
 import Body from '../Body'
-import Destroy from '../Destroy'
 import Priority from '../../Priority'
 import * as customPropTypes from '../../../propTypes'
 
@@ -103,14 +105,31 @@ export default class ListView extends PureComponent {
             </Button>
           </FlexItem>
           <FlexItem>
-            <Archive
-              entity={entity}
-              parentChain={this.parentChain}
-            />
-            <Destroy
-              entity={entity}
-              parentChain={this.parentChain}
-            />
+            <Actions>
+              {this.parentChain.length === 1
+                ? (
+                    <View as="div" margin="small none">
+                      <Snooze
+                        entityId={entity.id}
+                        entityType="Todo"
+                      />
+                    </View>
+                  )
+                : null
+              }
+              <View as="div" margin="small none">
+                <Archive
+                  entity={entity}
+                  parentChain={this.parentChain}
+                />
+              </View>
+              <View as="div">
+                <Destroy
+                  entity={entity}
+                  parentChain={this.parentChain}
+                />
+              </View>
+            </Actions>
           </FlexItem>
         </Flex>
         <div style={{display: this.state.showBody ? 'block' : 'none'}}>

@@ -125,6 +125,24 @@ export function destroy (entity, funcOpts = {}) {
     }
   }
 }
+
+export function snooze (entityType) {
+  return function (dispatch) {
+    return function (id, until) {
+      const successCallback = () => {
+        return dispatch(actions[`remove${entityType}`](id))
+      }
+      return dispatch(
+        actions[`snooze${entityType}`](
+          id,
+          until,
+          successCallback,
+          baseErrorHandler(dispatch)
+        )
+      )
+    }
+  }
+}
 /* eslint-enable import/namespace */
 
 export function tagEntity (dispatch) {

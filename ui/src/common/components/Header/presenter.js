@@ -84,13 +84,13 @@ class Header extends Component {
                     Welcome {this.props.username}
                   </Text>
                   <ul>
-                    <li>
-                      <Link href="/admin">
+                    <li style={{marginBottom: '0.25rem'}}>
+                      <Link href="#!admin">
                         Preferences
                       </Link>
                     </li>
                     <li>
-                      <Link href="/admin/contacts">
+                      <Link href="#!admin/contacts">
                         Contacts
                       </Link>
                     </li>

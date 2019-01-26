@@ -20,6 +20,8 @@ class VirtualEntity < ApplicationRecord
 
   before_create :prepopulate_preference_hash
 
+  scope :unsnoozed, -> { where('snooze_until < ?', Time.zone.now).or(where(snooze_until: nil)) }
+
   def owner_ve?
     shared_on.nil?
   end

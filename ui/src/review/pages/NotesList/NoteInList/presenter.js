@@ -17,6 +17,9 @@ import Note from '../../Note/presenter'
 import Delete from '../../../../common/components/Delete'
 import Checkmark from '../../../../common/components/Checkmark'
 import Priority from '../../../../common/components/Priority'
+import Actions from '../../../../common/components/Actions'
+import View from '@instructure/ui-layout/lib/components/View'
+import Snooze from '../../../../common/components/Snooze'
 
 export default class NoteInList extends Component {
   static propTypes = {
@@ -99,25 +102,43 @@ export default class NoteInList extends Component {
               </Typography>
             </FlexItem>
             <FlexItem>
-              <Priority
-                priority={entity.priority}
-                changePriority={this.changePriority}
-                ref={this.setPriorityRef}
-              />
-              <Button variant="icon" icon={IconEye} size="small" onClick={this.handleNoteRead}>
-                <ScreenReaderContent>Read Note</ScreenReaderContent>
-              </Button>
-              <Button variant="icon" icon={IconEdit} size="small" onClick={this.handleNoteEdit}>
-                <ScreenReaderContent>Edit Note</ScreenReaderContent>
-              </Button>
-              <Checkmark
-                label="Archive Note"
-                callback={this.handleArchiveNote}
-              />
-              <Delete
-                label="Delete Note"
-                callback={this.handleDelete}
-              />
+              <Actions>
+                <View as="div" margin="0 0 small 0">
+                  <Priority
+                    priority={entity.priority}
+                    changePriority={this.changePriority}
+                    ref={this.setPriorityRef}
+                  />
+                </View>
+                <View as="div" margin="0 0 small 0">
+                  <Button variant="icon" icon={IconEye} size="small" onClick={this.handleNoteRead}>
+                    <ScreenReaderContent>Read Note</ScreenReaderContent>
+                  </Button>
+                </View>
+                <View as="div" margin="0 0 small 0">
+                  <Snooze
+                    entityType="Note"
+                    entityId={entity.id}
+                  />
+                </View>
+                <View as="div" margin="0 0 small 0">
+                  <Button variant="icon" icon={IconEdit} size="small" onClick={this.handleNoteEdit}>
+                    <ScreenReaderContent>Edit Note</ScreenReaderContent>
+                  </Button>
+                </View>
+                <View as="div" margin="0 0 small 0">
+                  <Checkmark
+                    label="Archive Note"
+                    callback={this.handleArchiveNote}
+                  />
+                </View>
+                <View as="div">
+                  <Delete
+                    label="Delete Note"
+                    callback={this.handleDelete}
+                  />
+                </View>
+              </Actions>
             </FlexItem>
           </Flex>
         </FlexItem>

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get 'shared_with', on: :member
     get 'shareable_with', on: :member
     put 'preferences', on: :member
+    put 'snooze', on: :member
   end
 
   concern :api_routes do

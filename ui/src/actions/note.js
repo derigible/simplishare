@@ -141,3 +141,20 @@ export function updateNotePreferences (id, preferences, successCallBack, errorCa
     .catch(errorCallBack)
   }
 }
+
+export function snoozeNote (id, snooze_until, successCallBack, errorCallBack, opts = {}) {
+  return function (dispatch) {
+    return api_client.put(
+      `notes/${id}/snooze`,
+      {
+        requestBody: {
+          snooze: {
+            snooze_until
+          }
+        }
+      }
+    )
+    .then(successCallBack)
+    .catch(errorCallBack)
+  }
+}

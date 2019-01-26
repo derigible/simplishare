@@ -1,7 +1,7 @@
 import * as actionTypes from '../constants/actionTypes'
 import api_client from '../api_client'
 
-export function removeTodo (id, opts) {
+export function removeTodo (id, opts = {}) {
   const { parentChain } = opts
   return {
     type: actionTypes.TODOS_REMOVE_TODO,
@@ -131,6 +131,23 @@ export function updateTodoPreferences (id, preferences, successCallBack, errorCa
       {
         requestBody: {
           preferences
+        }
+      }
+    )
+    .then(successCallBack)
+    .catch(errorCallBack)
+  }
+}
+
+export function snoozeTodo (id, snooze_until, successCallBack, errorCallBack, opts = {}) {
+  return function (dispatch) {
+    return api_client.put(
+      `todos/${id}/snooze`,
+      {
+        requestBody: {
+          snooze: {
+            snooze_until
+          }
         }
       }
     )

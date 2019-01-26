@@ -30,7 +30,7 @@ module V1
         perform_update unless archive_only?
         update_archived_if_requested
         send_update_notifications
-        respond_with @ve, status: :ok, serializer: serializer
+        respond_with @ve, serializer: serializer
       end
 
       def destroy
@@ -44,6 +44,13 @@ module V1
           raise Pundit::NotAuthorizedError, query: :destroy?, record: @ve, policy: policy
         end
         head :no_content
+      end
+
+      def snooze
+        authorize(@ve)
+        @ve.update(snooze_params)
+        @ve.save
+        respond_with @ve, serializer: serializer
       end
 
       included do
@@ -65,7 +72,7 @@ module V1
       end
 
       def index_scope
-        policy_scope(entity_model).eager_load(:virtual_tags).select("virtual_tags.id")
+        policy_scope(entity_model).unsnoozed.eager_load(:virtual_tags).select("virtual_tags.id")
       end
 
       def index_filter(scope)
@@ -80,6 +87,10 @@ module V1
 
       def update_params
         raise 'Must define on controller'
+      end
+
+      def snooze_params
+        params.require(:snooze).permit(:snooze_until)
       end
 
       def perform_update
@@ -110,7 +121,7 @@ module V1
 
       def update_archived(policy, new_archived, update_shared)
         if policy.archive_entity? && update_shared
-          @ve.todo.update!(archived: new_archived)
+          @ve.entity.update!(archived: new_archived)
         elsif policy.archive?
           @ve.update!(archived: new_archived)
         else

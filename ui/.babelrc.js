@@ -5,7 +5,6 @@ module.exports = {
     coverage: Boolean(process.env.COVERAGE)
   }]],
   plugins: [
-    ["transform-runtime", {"polyfill": false}],
     'recharts'
   ],
   env: {

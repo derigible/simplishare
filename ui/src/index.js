@@ -12,7 +12,7 @@ if (!window.location.href.includes('#!')) {
 import configureStore from './stores/configureStore'
 import { updatePath } from './actions'
 import { registerAuthorizationCheck, registerAuthorizationHeader, registerDefaultErrorHandler } from './api_client'
-import { getAuthorizationHeader, getAccessToken } from './api_client/basicInterface'
+import { getAuthorizationHeader, getAccessToken  } from './api_client/basicInterface'
 import getAppData, { registerState } from './api_client/hydrator'
 
 import { router } from './router'

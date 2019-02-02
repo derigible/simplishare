@@ -7,6 +7,7 @@ import Button from '@instructure/ui-buttons/lib/components/Button'
 import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
 import Flex, { FlexItem } from '@instructure/ui-layout/lib/components/Flex'
 import Heading from '@instructure/ui-elements/lib/components/Heading'
+import Pill from '@instructure/ui-elements/lib/components/Pill'
 import Typography from '@instructure/ui-elements/lib/components/Text'
 
 import IconEdit from '@instructure/ui-icons/lib/Line/IconEdit'
@@ -154,17 +155,16 @@ export default class NoteInList extends Component {
                 </Actions>
               </FlexItem>
             </Flex>
-            {/* Removed for now until instui bug fixed */}
-            {/* <View as="div" margin="x-small none">
-              <SelectionManager
-                possibleTags={possibleTags}
-                onSelectTag={this.handleAddTag}
-                onTagDefine={this.handleCreateAndAddTag}
-                selectedTags={entity.tags}
-                label="Tags"
-                onMenuOpenChange={onSelectMenuOpenChange}
-              />
-            </View> */}
+          </FlexItem>
+          <FlexItem padding={entity.tags.length > 0 ? "small" : 'none'}>
+            {
+              entity.tags.map((t) => {
+                const tag = possibleTags[0].options.find((pt) => pt.id === t)
+                if (tag) {
+                  return <Pill key={tag.id} text={tag.name} margin="0 small 0 0" />
+                }
+              })
+            }
           </FlexItem>
         </Flex>
       </div>

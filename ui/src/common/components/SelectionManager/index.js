@@ -8,6 +8,9 @@ import { selectionManagerProps } from '../../propTypes'
 class SelectionManager extends Component {
   shouldComponentUpdate (nextProps) {
     return this.props.possibleTags.length !== nextProps.possibleTags.length
+      || this.props.possibleTags.some((tags, i) => {
+        return tags.length === nextProps.possibleTags[i].length
+      })
       || !isEqual(this.props.selectedTags, nextProps.selectedTags)
   }
 

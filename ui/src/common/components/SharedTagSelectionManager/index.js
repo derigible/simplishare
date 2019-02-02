@@ -11,9 +11,10 @@ import {
 import List from './presenter'
 
 function mapStateToProps (state) {
+  const options = Object.values(state.tag.tags)
   return {
-    tagsRetrieved: state.tag.tagsRetrieved,
-    possibleTags: [{label: 'Tags', options: Object.values(state.tag.tags)}],
+    tagsRetrieved: state.tag.tagsRetrieved && options.length > 0 ? 'success' : 'inProgress',
+    possibleTags: [{label: 'Tags', options }],
     selectedTags: state.tag.selectedTags
   }
 }

@@ -25,7 +25,16 @@ export function registerDefaultErrorHandler (handler) {
   defaultErrorHandler = handler
 }
 
-const apiUrl = `${process.env.API_PROTOCOL}://${process.env.API_HOST}/`
+let apiHost = null
+
+// both www.pinkairship.com and pinkairship.com point to same api, so prevent browser CORS check
+if (process.env.API_HOST === 'pinkairship.com' && window.location.hostname.includes('www')) {
+  apiHost = `www.${process.env.apiHost}`
+} else {
+  apiHost = process.env.API_HOST
+}
+
+const apiUrl = `${process.env.API_PROTOCOL}://${apiHost}/`
 
 const jsonHeaders = {
   'Accept': 'application/json',

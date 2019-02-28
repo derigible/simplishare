@@ -8,9 +8,6 @@ module V1
     attribute :description do
       object.entity.todo['description']
     end
-    attribute :priority do
-      object.entity.priority
-    end
     attribute :todos do
       object.entity.todo['todos']
     end
@@ -19,12 +16,6 @@ module V1
     end
     attribute :archived do
       object.entity.archived || object.archived
-    end
-    attribute :updated_at do
-      object.entity.updated_at
-    end
-    attribute :created_at do
-      object.entity.created_at
     end
   end
 end

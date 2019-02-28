@@ -15,7 +15,16 @@ module V1
     attribute :metadata
     attribute :preferences
     attribute :shared_object_id do
-      object.entity.id
+      object.entity.id.to_s
+    end
+    attribute :updated_at do
+      object.entity.updated_at
+    end
+    attribute :created_at do
+      object.entity.created_at
+    end
+    attribute :priority do
+      object.entity.priority
     end
   end
 end

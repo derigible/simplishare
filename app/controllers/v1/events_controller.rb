@@ -60,7 +60,7 @@ module V1
     end
 
     def default_scope
-      Event.eager_load(:events_accounts, :events_categories)
+      Event.eager_load(:accounts, :categories)
     end
   end
 end

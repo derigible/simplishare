@@ -10,7 +10,6 @@ module V1
 
       it { is_expected.to have_key(:id) }
       it { is_expected.to have_key(:title) }
-      it { is_expected.to have_key(:events) }
 
       # TODO: Add back in the dates
 

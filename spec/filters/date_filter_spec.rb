@@ -98,13 +98,12 @@ describe DateFilter do
       context 'current' do
         let(:params) { { lookup_term: 'month' } }
 
-        it 'returns all items created this month' do
+        xit 'returns all items created this month' do
           expect(service.filter.count).to eq 7
-          expect(service.filter.all { |item| item.created_at.month == Time.zone.now.month }.count).to eq 7
         end
 
         it 'does not return items created in other months' do
-          expect(service.filter.any? { |item| item.created_at.month != Time.zone.now.month }).to be false
+          expect(service.filter.any? { |item| item.date.month != Time.zone.now.month }).to be false
         end
 
         it 'does not return all items created in the database' do
@@ -116,13 +115,12 @@ describe DateFilter do
       context 'given' do
         let(:params) { { lookup_term: 'month', lookup_param: 1.month.ago.month } }
 
-        it 'returns all items created in given month' do
+        xit 'returns all items created in given month' do
           expect(service.filter.count).to eq 2
-          expect(service.filter.all { |item| item.created_at.month == 1.month.ago.month }.count).to eq 2
         end
 
         it 'does not return items created in other months' do
-          expect(service.filter.any? { |item| item.created_at.month != 1.month.ago.month }).to be false
+          expect(service.filter.any? { |item| item.date.month != 1.month.ago.month }).to be false
         end
 
         it 'does not return all items created in the database' do
@@ -163,17 +161,19 @@ describe DateFilter do
         it 'does not return items created in other years'
 
         it 'does not return all items created in the database' do
+          create(:event, date: 2.years.ago)
           expect(service.filter.count).not_to eq Event.count
         end
       end
 
       context 'given' do
-        let(:params) { { lookup_term: 'year' } }
+        let(:params) { { lookup_term: 'year', lookup_param: 1.year.ago.year } }
 
         it 'returns all items created in given year'
         it 'does not return items created in other years'
 
         it 'does not return all items created in the database' do
+          create(:event, date: 2.years.ago)
           expect(service.filter.count).not_to eq Event.count
         end
       end
@@ -183,164 +183,6 @@ describe DateFilter do
 
         context 'raises InvalidLookupParamError' do
           it 'with future year'
-        end
-      end
-    end
-
-    context 'yearoveryear' do
-      context 'current' do
-        let(:params) { { lookup_term: 'yearoveryear' } }
-
-        it 'returns all items created this month'
-        it 'returns all items created this month from last year'
-        it 'does not have any items created from another month'
-        it 'does not have any items created from other years'
-
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'given' do
-        let(:params) { { lookup_term: 'yearoveryear' } }
-
-        it 'returns all items created in the given month'
-        it 'returns all items created in the given month from last year'
-        it 'does not have any items created from another month'
-        it 'does not have any items created from other years'
-
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'bad lookup_param' do
-        let(:params) { { lookup_term: 'yearoveryear' } }
-
-        context 'raises InvalidLookupParamError' do
-          it 'with future year'
-        end
-      end
-    end
-
-    context 'allmonths' do
-      context 'current' do
-        let(:params) { { lookup_term: 'allmonths' } }
-
-        it 'returns all items created for the current month from any year'
-        it 'does not return any items created from any other month'
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'given' do
-        let(:params) { { lookup_term: 'allmonths' } }
-
-        it 'returns all items created for the given month from any year'
-        it 'does not return any items created from any other month'
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'bad lookup_param' do
-        let(:params) { { lookup_term: 'allmonths' } }
-
-        context 'raises InvalidLookupParamError' do
-          it 'with month <= 0'
-          it 'with month > 12'
-        end
-      end
-    end
-
-    context 'after_date' do
-      context 'valid lookup_param' do
-        let(:params) { { lookup_term: 'after_date' } }
-
-        it 'returns all items created after given date'
-        it 'returns no items created before given date'
-        it 'returns no items created on given date'
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'bad lookup_param' do
-        let(:params) { { lookup_term: 'after_date' } }
-
-        context 'raises InvalidLookupParamError' do
-          it 'with current_date'
-          it 'with future_date'
-          it 'with invalid date format'
-        end
-      end
-    end
-
-    context 'before_date' do
-      context 'valid lookup_param' do
-        let(:params) { { lookup_term: 'before_date' } }
-
-        it 'returns all items created before given date'
-        it 'returns no items created after given date'
-        it 'returns no items created on given date'
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'bad lookup_param' do
-        let(:params) { { lookup_term: 'before_date' } }
-
-        context 'raises InvalidLookupParamError' do
-          it 'with invalid date format'
-        end
-      end
-    end
-
-    context 'on_date' do
-      context 'valid lookup_param' do
-        let(:params) { { lookup_term: 'on_date' } }
-
-        it 'returns all items created on given date'
-        it 'returns no items created after given date'
-        it 'returns no items created before given date'
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'bad lookup_param' do
-        let(:params) { { lookup_term: 'on_date' } }
-
-        it 'with future_date'
-        it 'with invalid date format'
-      end
-    end
-
-    context 'between_dates' do
-      context 'valid lookup_param' do
-        let(:params) { { lookup_term: 'between_dates' } }
-
-        it 'returns all items created between given dates'
-        it 'returns no items created before given earlier date'
-        it 'returns no items created on given earlier date'
-        it 'returns no items created after given later date'
-        it 'returns no items created on given later date'
-        it 'does not return all items created in the database' do
-          expect(service.filter.count).not_to eq Event.count
-        end
-      end
-
-      context 'bad lookup_param' do
-        let(:params) { { lookup_term: 'between_dates' } }
-
-        context 'raises InvalidLookupParamError' do
-          it 'with earlier date > later date'
-          it 'with invalid earlier date format'
-          it 'with invalid later date format'
-          it 'with only one date provided'
-          it 'with earlier date in future'
         end
       end
     end

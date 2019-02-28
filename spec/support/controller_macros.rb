@@ -9,31 +9,35 @@ module ControllerMacros
       create(:user)
     end
 
+    let(:jws) do
+      claims = {
+        iss: 'pinkairship',
+        sub: current_user.id,
+        exp: 1.week.from_now,
+        iat: Time.zone.now
+      }
+      jws = JSON::JWT.new(claims).sign(Delegates::AuthenticationMethods.private_key, :RS256)
+      jws.to_s
+    end
+
     let(:shard) do
       double(activate: true).tap do |shard_double|
         allow(shard_double).to receive(:activate).and_yield
       end
     end
 
-    let(:token) do
-      double(
-        acceptable?: true,
-        current_user: current_user,
-        scopes: [:api],
-        shard: shard
-      )
-    end
     let(:json) { JSON.parse(response.body) }
 
     before do
       request.headers['Accept'] =
-        "application/vnd.pinkairship.v1, #{Mime::JSON}"
-      request.headers['Content-Type'] = Mime::JSON.to_s
+        "#{Mime[:json]}, application/vnd.pinkairship.v1"
+      request.headers['Content-Type'] = Mime[:json].to_s
+      request.headers['Authorization'] = "Bearer #{jws}"
     end
   end
 
   def attributes_with_foreign_keys(*args)
-    FactoryGirl.create(*args).attributes.delete_if do |k, _|
+    FactoryBot.create(*args).attributes.delete_if do |k, _|
       %w[id type created_at updated_at].member?(k)
     end
   end

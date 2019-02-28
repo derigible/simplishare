@@ -6,7 +6,12 @@ describe V1::ApiController do
   it { is_expected.to rescue_from(ActionController::ParameterMissing) }
   it { is_expected.to rescue_from(ActiveRecord::RecordInvalid) }
   it { is_expected.to rescue_from(ActiveRecord::RecordNotFound) }
-  it { is_expected.to rescue_from(JWT::ExpiredSignature) }
+  it { is_expected.to rescue_from(described_class::AuthTokenMissingException) }
+  it { is_expected.to rescue_from(ActionController::BadRequest) }
+  it { is_expected.to rescue_from(Pundit::NotAuthorizedError) }
+  it { is_expected.to rescue_from(BaseFilter::InvalidLookupTermError) }
+  it { is_expected.to rescue_from(BaseFilter::InvalidLookupParamError) }
+  it { is_expected.to rescue_from(JSON::JWT::Exception) }
 
   describe '#error_render' do
     let(:error) { instance_double(ActiveRecord::RecordNotFound, message: 'This is a test') }

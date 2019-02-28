@@ -28,10 +28,10 @@ group :development, :test do
   gem 'listen', '~> 3.1.5'
   gem 'rb-readline'
   gem 'rspec-rails'
-  gem 'ruby-graphviz', '~> 1.2.1' # Provide dot and neato commands for railroady
 end
 
 group :test do
+  gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem 'rails-controller-testing'
   gem 'rubocop', require: false

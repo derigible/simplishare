@@ -2,7 +2,7 @@
 
 rand = Random.new
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :event do
     description { Faker::Hipster.sentence }
     amount { rand.rand(1...500) }
@@ -10,25 +10,5 @@ FactoryGirl.define do
     notes { Faker::Hacker.say_something_smart }
     user { create :user }
     date { Time.zone.now }
-
-    factory :event_with_account do
-      transient do
-        account { create(:account) }
-      end
-
-      after(:create) do |event, evaluator|
-        event.accounts << evaluator.account
-      end
-    end
-
-    factory :event_with_category do
-      transient do
-        category { create(:category) }
-      end
-
-      after(:create) do |event, evaluator|
-        event.categories << evaluator.category
-      end
-    end
   end
 end

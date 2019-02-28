@@ -4,20 +4,20 @@ shared_examples 'a paginated resource' do
   let(:params) { {} }
 
   before(:all) do
-    @old_per_page = Kaminari.config.default_per_page
-    @old_max_per_page = Kaminari.config.max_per_page
+    @old_per_page = Pagy::VARS[:items] = 50
+    @old_max_per_page = Pagy::VARS[:max_per_page] = 200
   end
 
   before do
-    Kaminari.config.default_per_page = 1
-    Kaminari.config.max_per_page = 3
+    Pagy::VARS[:items] = 1
+    Pagy::VARS[:max_per_page] = 3
 
     create_entity_list
   end
 
   after(:all) do
-    Kaminari.config.default_per_page = @old_per_page
-    Kaminari.config.max_per_page = @old_max_per_page
+    Pagy::VARS[:items] = @old_per_page
+    Pagy::VARS[:max_per_page] = @old_max_per_page
   end
 
   it 'paginates the response' do

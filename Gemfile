@@ -38,6 +38,7 @@ group :test do
   gem 'rubocop', require: false
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', require: false
+  gem 'timecop'
 end
 
 group :doc do

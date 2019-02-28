@@ -2,6 +2,7 @@
 
 shared_examples 'a paginated resource' do
   let(:params) { {} }
+  let(:create_entity_list) { raise 'Override in spec' }
 
   before(:all) do
     @old_per_page = Pagy::VARS[:items] = 50
@@ -12,7 +13,7 @@ shared_examples 'a paginated resource' do
     Pagy::VARS[:items] = 1
     Pagy::VARS[:max_per_page] = 3
 
-    create_entity_list
+    create_entity_list.call(5)
   end
 
   after(:all) do

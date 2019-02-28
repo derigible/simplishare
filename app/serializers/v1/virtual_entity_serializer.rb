@@ -5,6 +5,9 @@ module V1
     attribute :id do
       object.id.to_s
     end
+    attribute :archived do
+      object.entity.archived || object.archived
+    end
     attribute :tags do
       object.virtual_tag_ids
     end

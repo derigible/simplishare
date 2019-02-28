@@ -7,7 +7,7 @@ class Note < Entity
   private
 
   def ensure_priority
-    update!(priority: 'medium') if priority.nil?
+    self.priority = 'medium' if priority.nil?
   end
 
   def body_exists

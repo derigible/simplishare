@@ -5,9 +5,8 @@ module ControllerMacros
   extend ActiveSupport::Concern
 
   included do
-    let(:current_user) do
-      create(:user)
-    end
+    let(:user) { create(:user) }
+    let(:current_user) { user }
 
     let(:jws) do
       claims = {

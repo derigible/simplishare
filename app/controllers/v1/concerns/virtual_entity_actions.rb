@@ -37,9 +37,9 @@ module V1
         skip_authorization
         policy = VirtualEntityPolicy.new(current_user, @ve)
         if policy.destroy_entity?
-          @ve.entity.destroy
+          @ve.entity.destroy!
         elsif policy.destroy?
-          @ve.destroy
+          @ve.destroy!
         else
           raise Pundit::NotAuthorizedError, query: :destroy?, record: @ve, policy: policy
         end

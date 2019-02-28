@@ -14,8 +14,5 @@ module V1
     attribute :title do
       object.entity.todo['title']
     end
-    attribute :archived do
-      object.entity.archived || object.archived
-    end
   end
 end

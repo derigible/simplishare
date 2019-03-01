@@ -23,4 +23,12 @@ describe V1::TodosController do
       let(:json_schema) { Schemas::Note }
     end
   end
+
+  describe '#update' do
+    it_behaves_like 'a virtual_entity update action' do
+      let(:factory) { Factories::TodoFactory }
+      let(:json_schema) { Schemas::Todo }
+      let(:updates) { { todo: { title: 'truth' } } }
+    end
+  end
 end

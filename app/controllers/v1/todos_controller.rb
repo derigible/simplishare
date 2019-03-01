@@ -42,6 +42,7 @@ module V1
     end
 
     def perform_update
+      authorize(@ve)
       todo_handler.update
     end
 

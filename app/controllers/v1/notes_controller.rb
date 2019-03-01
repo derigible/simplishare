@@ -33,7 +33,7 @@ module V1
     def update_params
       updates = {}
       data = request_params.select { |k, _| %w[title body].include? k }
-      updates[:data] = data unless data.empty?
+      updates[:data] = @ve.entity.data.merge(data) unless data.empty?
       updates[:priority] = request_params[:priority] if request_params[:priority]
       updates
     end

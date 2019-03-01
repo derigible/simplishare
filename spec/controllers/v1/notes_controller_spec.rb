@@ -23,4 +23,12 @@ describe V1::NotesController do
       let(:json_schema) { Schemas::Note }
     end
   end
+
+  describe '#update' do
+    it_behaves_like 'a virtual_entity update action' do
+      let(:factory) { Factories::NoteFactory }
+      let(:json_schema) { Schemas::Note }
+      let(:updates) { { note: {} } }
+    end
+  end
 end

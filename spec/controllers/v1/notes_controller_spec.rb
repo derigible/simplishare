@@ -31,4 +31,8 @@ describe V1::NotesController do
       let(:updates) { { note: { title: 'truth' } } }
     end
   end
+
+  describe '#archiving' do
+    it_behaves_like 'an archivable entity'
+  end
 end

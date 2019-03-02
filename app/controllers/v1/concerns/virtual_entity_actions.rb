@@ -33,6 +33,10 @@ module V1
         respond_with @ve, serializer: serializer
       end
 
+      def archive
+        raise 'Not implemented yet'
+      end
+
       def destroy
         skip_authorization
         policy = VirtualEntityPolicy.new(current_user, @ve)

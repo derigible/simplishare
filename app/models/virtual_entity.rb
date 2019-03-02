@@ -3,7 +3,7 @@
 class VirtualEntity < ApplicationRecord
   include Preferences
 
-  PERMISSIONS = %w[read edit destroy share owner].freeze
+  PERMISSIONS = %w[archive read edit destroy share owner].freeze
   belongs_to :user
   belongs_to :entity
   belongs_to :todo, foreign_key: :entity_id, optional: true

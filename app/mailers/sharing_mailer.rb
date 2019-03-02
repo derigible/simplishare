@@ -15,7 +15,7 @@ class SharingMailer < ApplicationMailer
   def self.send_archive(user, virtual_entity)
     entity = virtual_entity.entity
     entity.shared_with_except_users(user).each do |ve|
-      next if skip_notification?(entity, ve)
+      next if ve.skip_notification?('email', entity.type, 'archive')
       on_archive(user, ve, entity.type, virtual_entity.archived).deliver_now
     end
   end
@@ -23,14 +23,9 @@ class SharingMailer < ApplicationMailer
   def self.send_archive_and_update(user, virtual_entity)
     entity = virtual_entity.entity
     entity.shared_with_except_users(user).each do |ve|
-      next if skip_notification?(entity, ve)
+      next if ve.skip_notification?('email', entity.type, 'archive')
       on_archive_and_update(user, ve, entity.type, virtual_entity.archived).deliver_now
     end
-  end
-
-  def self.skip_notification?(entity, virtual_entity)
-    (!virtual_entity.permissions.include?('archive') && !virtual_entity.permissions.include?('owner')) ||
-      virtual_entity.skip_notification?('email', entity.type, 'archive')
   end
 
   def on_archive(user, virtual_entity, type, restored)

@@ -14,7 +14,7 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def archive_entity?
-    owner_or_has_permission? 'edit'
+    owner_or_has_permission? 'archive'
   end
 
   def destroy?

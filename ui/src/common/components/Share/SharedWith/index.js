@@ -11,7 +11,7 @@ export default class SharedWith extends Component {
     user: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       email: PropTypes.string.isRequired,
-      permissions: PropTypes.arrayOf(PropTypes.oneOf(['read', 'edit', 'destroy', 'share', 'owner']))
+      permissions: PropTypes.arrayOf(PropTypes.oneOf(['archive', 'read', 'edit', 'destroy', 'share', 'owner']))
     }).isRequired,
     setPermissions: PropTypes.func.isRequired
   }
@@ -34,6 +34,10 @@ export default class SharedWith extends Component {
 
   setEdit = () => {
     this.setPerm('edit')
+  }
+
+  setArchive = () => {
+    this.setPerm('archive')
   }
 
   setDestroy = () => {
@@ -60,6 +64,13 @@ export default class SharedWith extends Component {
           label="edit"
           checked={permissions.includes('edit')}
           onChange={this.setEdit}
+        />
+        &nbsp;
+        <Checkbox
+          inline
+          label="archive"
+          checked={permissions.includes('archive')}
+          onChange={this.setArchive}
         />
         &nbsp;
         <Checkbox

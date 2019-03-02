@@ -23,7 +23,7 @@ export default class Share extends Component {
     sharedWith: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       email: PropTypes.string.isRequired,
-      permissions: PropTypes.arrayOf(PropTypes.oneOf(['read', 'edit', 'destroy', 'share', 'owner'])),
+      permissions: PropTypes.arrayOf(PropTypes.oneOf(['archive', 'read', 'edit', 'destroy', 'share', 'owner'])),
       share_restricted: PropTypes.bool,
       owner: PropTypes.bool
     })),

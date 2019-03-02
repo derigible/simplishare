@@ -82,13 +82,13 @@ describe DateFilter do
 
     context 'month' do
       before do
-        create_list(:event, 2, created_at: 1.month.ago)
+        create_list(:event, 2, date: 1.month.ago)
         if Time.zone.now.mday > 26
-          create(:event, created_at: 6.days.ago)
-          create(:event, created_at: 15.days.ago)
+          create(:event, date: 6.days.ago)
+          create(:event, date: 15.days.ago)
         elsif Time.zone.now.mday > 1
-          create(:event, created_at: 1.day.ago)
-          create(:event, created_at: 1.day.ago)
+          create(:event, date: 1.day.ago)
+          create(:event, date: 1.day.ago)
         else
           create(:event)
           create(:event)

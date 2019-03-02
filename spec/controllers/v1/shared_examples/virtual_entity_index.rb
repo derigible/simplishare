@@ -33,7 +33,7 @@ shared_examples_for 'a virtual_entity index action' do
     end
   end
 
-  context 'with snoozed entity' do
+  context 'with snoozed virtual_entity' do
     before do
       VirtualEntity.first.update! snooze_until: 1.day.from_now
     end

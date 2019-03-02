@@ -31,4 +31,8 @@ describe V1::TodosController do
       let(:updates) { { todo: { title: 'truth' } } }
     end
   end
+
+  describe '#archiving' do
+    it_behaves_like 'an archivable entity'
+  end
 end

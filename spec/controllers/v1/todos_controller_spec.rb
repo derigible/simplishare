@@ -33,6 +33,9 @@ describe V1::TodosController do
   end
 
   describe '#archiving' do
-    it_behaves_like 'an archivable entity'
+    it_behaves_like 'an archivable entity' do
+      let(:factory) { Factories::TodoFactory }
+      let(:json_schema) { Schemas::Todo }
+    end
   end
 end

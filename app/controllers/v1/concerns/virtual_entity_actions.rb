@@ -76,7 +76,9 @@ module V1
       end
 
       def index_scope
-        policy_scope(entity_model).unsnoozed.eager_load(:virtual_tags).select("virtual_tags.id")
+        scope = policy_scope(entity_model).unsnoozed
+        scope = params[:archived] ? scope.archived.joins(:entity).where('entities.archived' => true) : scope.unarchived
+        scope.eager_load(:virtual_tags).select("virtual_tags.id")
       end
 
       def index_filter(scope)

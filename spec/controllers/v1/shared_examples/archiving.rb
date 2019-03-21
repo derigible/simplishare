@@ -18,25 +18,65 @@ shared_examples_for 'an archivable entity' do
     end
 
     context 'with archived entity' do
-      it 'does not send archived entities'
+      before do
+        Entity.first.archive!
+      end
+
+      it 'does not send archived entities' do
+        subject
+        expect(json.size).to eq 2
+        expect(json.map { |e| e['shared_object_id'] }).to match_array(Entity.unarchived.pluck(:id).map(&:to_s))
+      end
 
       context 'when archived param sent' do
-        it 'only sends archived entities'
+        let(:params) { { archived: true } }
+
+        it 'only sends archived entities' do
+          subject
+          expect(json.size).to eq 1
+          expect(json.first['shared_object_id']).to eq Entity.archived.first.id.to_s
+        end
       end
     end
 
     context 'with archived virtual_entity' do
-      it 'does not send archived virtual_entities'
+      before do
+        VirtualEntity.first.archive!
+      end
 
-      it 'does not affect shared users of entity'
+      it 'does not send archived virtual_entities' do
+        subject
+        expect(json.size).to eq 2
+        expect(json.map { |e| e['id'] }).to match_array(VirtualEntity.unarchived.pluck(:id).map(&:to_s))
+      end
+
+      context 'with shared user on entity' do
+        let(:current_user) { create(:user) }
+
+        before do
+          VirtualEntity.create! user: current_user, entity: VirtualEntity.first.entity
+        end
+
+        it 'remains visible for other user' do
+          subject
+          expect(json.size).to eq 1
+          expect(json.first['shared_object_id']).to eq VirtualEntity.first.entity.id.to_s
+        end
+      end
 
       context 'when archived param sent' do
-        it 'only sends archived virtual_entities'
+        let(:params) { { archived: true } }
+
+        it 'only sends archived virtual_entities' do
+          subject
+          expect(json.size).to eq 1
+          expect(json.first['id']).to eq VirtualEntity.archived.first.id.to_s
+        end
       end
     end
   end
 
-  describe 'update' do
+  xdescribe 'archive' do
     subject { put :archive, params: params.merge(update_shared), as: :json }
 
     let(:params) { { id: ve.id } }
@@ -72,11 +112,11 @@ shared_examples_for 'an archivable entity' do
       end
 
       context 'when owner' do
-        it_behaves_like 'can_archive'
+        it_behaves_like 'can archive'
       end
 
       context 'when archive privileges granted' do
-        it_behaves_like 'can_archive'
+        it_behaves_like 'can archive'
       end
     end
   end

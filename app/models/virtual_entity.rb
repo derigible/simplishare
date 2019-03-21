@@ -21,6 +21,8 @@ class VirtualEntity < ApplicationRecord
   before_create :prepopulate_preference_hash
 
   scope :unsnoozed, -> { where('snooze_until < ?', Time.zone.now).or(where(snooze_until: nil)) }
+  scope :archived, -> { where(archived: true) }
+  scope :unarchived, -> { where(archived: [false, nil]) }
 
   def owner_ve?
     shared_on.nil?
@@ -43,6 +45,10 @@ class VirtualEntity < ApplicationRecord
 
   def permission?(perm)
     permissions.include? perm
+  end
+
+  def archive!
+    update!(archived: true)
   end
 
   private

@@ -10,6 +10,9 @@ class Entity < ApplicationRecord
   validate :priority_exists_and_correct
   validate :data_is_hash
 
+  scope :unarchived, -> { where(archived: [fals, nil]) }
+  scope :archived, -> { where(archived: true) }
+
   def shared_with_except_users(except_users)
     virtual_entities.where.not(user: except_users).includes(:user)
   end
@@ -20,6 +23,10 @@ class Entity < ApplicationRecord
 
   def owner_ve
     @owner_ve ||= virtual_entities.find_by(shared_on: nil)
+  end
+
+  def archive!
+    update!(archived: true)
   end
 
   # TODO: add validations

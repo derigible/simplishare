@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { navigateTo } from '../../../../actions'
-import { destroy, update } from '../../../../api'
+import { destroy, update, archive } from '../../../../api'
 import NoteInList from './presenter'
 
 function mapDispatchToProps (dispatch) {
@@ -9,6 +9,7 @@ function mapDispatchToProps (dispatch) {
     editNote: (id) => navigateTo(`/notes/edit/${id}`)(dispatch),
     readNote: (id) => navigateTo(`/notes/view/${id}`)(dispatch),
     deleteEntity: destroy('Note')(dispatch),
+    archiveEntity: archive('Note')(dispatch),
     updateEntity: update('Note')(dispatch)
   }
 }

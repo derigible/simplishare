@@ -44,6 +44,7 @@ import {
   setTodoShareableWith,
   updateTodoPreferences,
   snoozeTodo,
+  archiveTodo
 } from './todo'
 import {
   setTags,
@@ -69,7 +70,8 @@ import {
   fetchNoteSharedWith,
   fetchNoteShareableWith,
   updateNotePreferences,
-  snoozeNote
+  snoozeNote,
+  archiveNote
 } from './note'
 import {
   setContacts,
@@ -154,5 +156,7 @@ export {
   replacePath,
   setSelectedTags,
   snoozeTodo,
-  snoozeNote
+  snoozeNote,
+  archiveTodo,
+  archiveNote
 }

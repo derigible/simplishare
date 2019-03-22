@@ -26,15 +26,17 @@ module V1
       end
 
       def update
-        skip_authorization
-        perform_update unless archive_only?
-        update_archived_if_requested
-        send_update_notifications
+        perform_update
+        send_update_email
         respond_with @ve, serializer: serializer
       end
 
       def archive
-        raise 'Not implemented yet'
+        skip_authorization
+        policy = VirtualEntityPolicy.new(current_user, @ve)
+        perform_archive(policy)
+        send_archive_email
+        respond_with @ve, serializer: serializer
       end
 
       def destroy
@@ -62,6 +64,23 @@ module V1
       end
 
       private
+
+      def perform_update
+        authorize(@ve)
+        @ve.entity.update!(update_params)
+      end
+
+      def send_update_email
+        SharingMailer.send_update(current_user, @ve.entity)
+      end
+
+      def perform_archive(policy)
+        update_archived(policy, request_params[:archived], request_params[:update_shared])
+      end
+
+      def send_archive_email
+        SharingMailer.send_archive(current_user, @ve)
+      end
 
       def entity_model
         raise 'Must define on controller'
@@ -110,32 +129,6 @@ module V1
         params.require(:snooze).permit(:snooze_until)
       end
 
-      def perform_update
-        authorize(@ve)
-        @ve.entity.update!(update_params)
-      end
-
-      def update_archived_requested?
-        !request_params[:archived].nil?
-      end
-
-      def update_archived_on_shared_requested?
-        !request_params[:update_shared].nil?
-      end
-
-      def archive_only?
-        update_archived_requested? && (
-          request_params.keys.size == 1 ||
-          (request_params.keys.size == 2 && update_archived_on_shared_requested?)
-        )
-      end
-
-      def update_archived_if_requested
-        return unless update_archived_requested?
-        policy = VirtualEntityPolicy.new(current_user, @ve)
-        update_archived(policy, request_params[:archived], request_params[:update_shared])
-      end
-
       def update_archived(policy, new_archived, update_shared)
         if policy.archive_entity? && update_shared
           @ve.entity.update!(archived: new_archived)
@@ -143,16 +136,6 @@ module V1
           @ve.update!(archived: new_archived)
         else
           raise Pundit::NotAuthorizedError, query: :update?, record: @ve, policy: policy
-        end
-      end
-
-      def send_update_notifications
-        if archive_only?
-          SharingMailer.send_archive(current_user, @ve)
-        elsif update_archived_requested?
-          SharingMailer.send_archive_and_update(current_user, @ve)
-        else
-          SharingMailer.send_update(current_user, @ve.entity)
         end
       end
     end

@@ -110,6 +110,22 @@ export function update (entity, funcOpts = {}) {
   }
 }
 
+export function archive (entity, funcOpts = {}) {
+  return function (dispatch) {
+    return function (fetchParams, archiveOpts, opts = {}) {
+      const setFunc = funcOpts.setFunc || `set${entity}s`
+      const fetchFunc = funcOpts.fetchFunc || `archive${entity}`
+      const success = (data) => {
+        return typeof setFunc === 'function' ? setFunc() : dispatch(actions[setFunc]([data]))
+      }
+
+      return dispatch(
+        actions[fetchFunc](fetchParams, archiveOpts, success, baseErrorHandler(dispatch), opts)
+      )
+    }
+  }
+}
+
 export function destroy (entity, funcOpts = {}) {
   return function (dispatch) {
     return function (fetchParams, opts = {}) {

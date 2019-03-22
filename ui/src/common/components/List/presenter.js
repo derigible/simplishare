@@ -8,11 +8,10 @@ import View from '@instructure/ui-layout/lib/components/View'
 import IconAdd from '@instructure/ui-icons/lib/Line/IconAdd'
 
 import ListItem from '../ListItem'
-import SharedTagSelectionManager from '../SharedTagSelectionManager'
 import * as customPropTypes from '../../propTypes'
-import { OPEN, SHOW_ONLY_HIGH_PRIORITY, SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY} from '../../../constants/tagTypes'
+import { SHOW_ONLY_HIGH_PRIORITY, SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY} from '../../../constants/tagTypes'
 
-const NON_TAGS = [OPEN, SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY, SHOW_ONLY_HIGH_PRIORITY]
+const NON_TAGS = [SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY, SHOW_ONLY_HIGH_PRIORITY]
 
 export default class List extends Component {
   static propTypes = {
@@ -46,7 +45,7 @@ export default class List extends Component {
   }
 
   get hideCompleted () {
-    return this.props.selectedTags.includes(OPEN)
+    return true // TODO we will need to think of another way of showing completed
   }
 
   get tagIdsToFilterBy () {
@@ -75,7 +74,7 @@ export default class List extends Component {
 
   filterEntity = (entity) => {
     if (
-       (this.hideCompleted && (!!entity.archived || !!entity.archived))
+       (this.hideCompleted && !!entity.archived)
     || this.onlyLowPriority && entity.priority !== 'low'
     || this.onlyMedPriority && entity.priority !== 'medium'
     || this.onlyHighPriority && entity.priority !== 'high'

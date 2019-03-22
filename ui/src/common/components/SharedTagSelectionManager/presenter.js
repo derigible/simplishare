@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 
 import SelectionManager from '../SelectionManager'
 import * as customPropTypes from '../../propTypes'
-import { OPEN, SHOW_ONLY_HIGH_PRIORITY, SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY} from '../../../constants/tagTypes'
+import { SHOW_ONLY_HIGH_PRIORITY, SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY} from '../../../constants/tagTypes'
 
 const OTHER_OPTIONS = [
   {
     label: 'Other',
     options: [
-      {id: OPEN, name: 'Open'},
       {id: SHOW_ONLY_LOW_PRIORITY, name: 'Low Priority'},
       {id: SHOW_ONLY_MEDIUM_PRIORITY, name: 'Medium Priority'},
       {id: SHOW_ONLY_HIGH_PRIORITY, name: 'High Priority'}

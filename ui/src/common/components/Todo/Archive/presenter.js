@@ -7,7 +7,7 @@ import * as customPropTypes from '../../../propTypes'
 export default class Todo extends PureComponent {
   static propTypes = {
     entity: customPropTypes.todoProps.isRequired,
-    updateEntity: PropTypes.func.isRequired,
+    archiveEntity: PropTypes.func.isRequired,
     parentChain: customPropTypes.todoParentChainProps,
   }
 
@@ -18,7 +18,7 @@ export default class Todo extends PureComponent {
         updates.update_shared = true
       }
     }
-    this.props.updateEntity(this.props.entity.id, updates, {parentChain: this.props.parentChain })
+    this.props.archiveEntity(this.props.entity.id, updates, {parentChain: this.props.parentChain })
   }
 
   render () {

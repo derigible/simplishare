@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 
-import { update } from '../../../../api'
+import { archive } from '../../../../api'
 import Archive from './presenter'
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateEntity: update('Todo')(dispatch)
+    archiveEntity: archive('Todo')(dispatch)
   }
 }
 

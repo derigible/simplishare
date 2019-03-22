@@ -13,7 +13,6 @@ import Typography from '@instructure/ui-elements/lib/components/Text'
 import IconEdit from '@instructure/ui-icons/lib/Line/IconEdit'
 import IconEye from '@instructure/ui-icons/lib/Line/IconEye'
 
-import SelectionManager from '../../../../common/components/SelectionManager'
 import * as customPropTypes from '../../../../common/propTypes'
 import Note from '../../Note/presenter'
 import Delete from '../../../../common/components/Delete'
@@ -28,13 +27,13 @@ export default class NoteInList extends Component {
     entity: Note.propTypes.entity,
     possibleTags: customPropTypes.possibleTags,
     deleteEntity: PropTypes.func.isRequired,
+    archiveEntity: PropTypes.func.isRequired,
     updateEntity: PropTypes.func.isRequired,
     editNote: PropTypes.func.isRequired,
     readNote: PropTypes.func.isRequired,
     addTag: PropTypes.func.isRequired,
     removeTag: PropTypes.func.isRequired,
-    createAndAddTag: PropTypes.func.isRequired,
-    onSelectMenuOpenChange: PropTypes.func.isRequired
+    createAndAddTag: PropTypes.func.isRequired
   }
 
   handleNoteEdit = () => {
@@ -61,7 +60,7 @@ export default class NoteInList extends Component {
         updates.update_shared = true
       }
     }
-    this.props.updateEntity(this.props.entity.id, updates)
+    this.props.archiveEntity(this.props.entity.id, updates)
   }
 
   handleCreateAndAddTag = (name) => {
@@ -91,7 +90,7 @@ export default class NoteInList extends Component {
   }
 
   render () {
-    const { entity, possibleTags, onSelectMenuOpenChange } = this.props
+    const { entity, possibleTags } = this.props
 
     return (
       <div

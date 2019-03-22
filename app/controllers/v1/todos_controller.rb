@@ -34,7 +34,7 @@ module V1
     end
 
     def load_virtual_entity
-      @ve = if params[:action] = 'update'
+      @ve = if %w[update archive].include? params[:action]
               find_todo_for_update
             else
               VirtualEntity.find_by(id: params[:id])
@@ -44,6 +44,15 @@ module V1
     def perform_update
       authorize(@ve)
       todo_handler.update
+    end
+
+    def perform_archive(policy)
+      if todo_handler.not_subtask?
+        update_archived(policy, request_params[:archived], request_params[:update_shared])
+      else
+        raise Pundit::NotAuthorizedError, query: :archive?, record: @ve, policy: policy unless policy.update?
+        todo_handler.update
+      end
     end
 
     def create_params
@@ -67,10 +76,6 @@ module V1
 
     def serializer
       TodoSerializer
-    end
-
-    def update_archived_requested?
-      todo_handler.not_subtask? && super
     end
 
     # Delegate

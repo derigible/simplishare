@@ -42,7 +42,7 @@ export function setTodosRetrieved (retrieved) {
 
 export function fetchTodos (successCallBack, errorCallBack) {
   return function (dispatch) {
-    api_client.fetchAllGet('todos')
+    api_client.fetchAllGet('todos?per_page=150')
       .then(successCallBack, errorCallBack)
   }
 }
@@ -83,6 +83,22 @@ export function updateTodo (id, updates, successCallBack, errorCallBack, opts = 
       {
         requestBody: {
           todo: updates,
+          parent_chain: opts.parentChain
+        }
+      }
+    )
+    .then(successCallBack)
+    .catch(errorCallBack)
+  }
+}
+
+export function archiveTodo (id, archiveOpts, successCallBack, errorCallBack, opts = {}) {
+  return function (dispatch) {
+    return api_client.put(
+      `todos/${id}/archive`,
+      {
+        requestBody: {
+          todo: archiveOpts,
           parent_chain: opts.parentChain
         }
       }

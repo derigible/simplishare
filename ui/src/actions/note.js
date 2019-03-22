@@ -99,6 +99,21 @@ export function updateNote (id, updates, successCallBack, errorCallBack) {
   }
 }
 
+export function archiveNote (id, archiveOpts, successCallBack, errorCallBack) {
+  return function (dispatch) {
+    return api_client.put(
+      `notes/${id}/archive`,
+      {
+        requestBody: {
+          note: archiveOpts
+        }
+      }
+    )
+    .then(successCallBack)
+    .catch(errorCallBack)
+  }
+}
+
 export function deleteNote (id, successCallBack, errorCallBack) {
   return function (dispatch) {
     return api_client.delete(

@@ -7,6 +7,7 @@ shared_examples_for 'an archivable entity' do
   let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
+  let(:update_shared) { raise 'Override in spec' }
 
   describe 'index' do
     subject { get :index, params: params }
@@ -76,14 +77,18 @@ shared_examples_for 'an archivable entity' do
     end
   end
 
-  xdescribe 'archive' do
+  describe 'archive' do
     subject { put :archive, params: params.merge(update_shared), as: :json }
 
     let(:params) { { id: ve.id } }
-    let(:update_shared) { {} }
 
     context 'when only user' do
-      it 'archives virtual_entity only'
+      it 'archives virtual_entity only' do
+        expect(ve.archived).to be nil
+        subject
+        expect(ve.reload.archived).to eq true
+        expect(ve.entity.archived).to be_nil
+      end
 
       it 'does not send email'
     end
@@ -98,14 +103,22 @@ shared_examples_for 'an archivable entity' do
       shared_examples_for 'can archive' do
         it { is_expected.to have_http_status :ok }
 
-        it 'archives the virtual_entity'
+        it 'archives the virtual_entity' do
+          expect(ve.archived).to be nil
+          subject
+          expect(ve.reload.archived).to eq true
+          expect(ve.entity.archived).to be_nil
+        end
 
         context 'when update_shared is true' do
-          let(:update_shared) { { update_shared: true } }
+          let(:update_shared) { super().merge(super().keys.first => { archived: true, update_shared: true } ) }
 
-          it 'archives the entity'
-
-          it 'removes from all users index'
+          it 'archives the entity' do
+            expect(ve.entity.archived).to be nil
+            subject
+            expect(ve.reload.archived).to be nil
+            expect(ve.entity.archived).to eq true
+          end
 
           it 'sends an email to all users'
         end

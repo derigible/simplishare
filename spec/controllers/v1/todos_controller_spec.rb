@@ -37,6 +37,7 @@ describe V1::TodosController do
     it_behaves_like 'an archivable entity' do
       let(:factory) { model_factory }
       let(:json_schema) { model_schema }
+      let(:update_shared) { { todo: { update_shared: true } } }
     end
   end
 end

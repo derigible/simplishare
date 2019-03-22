@@ -37,7 +37,7 @@ module V1
       @ve = if %w[update archive].include? params[:action]
               find_todo_for_update
             else
-              VirtualEntity.find_by(id: params[:id])
+              VirtualEntity.find_by!(id: params[:id])
             end
     end
 
@@ -48,6 +48,7 @@ module V1
 
     def perform_archive(policy)
       if todo_handler.not_subtask?
+        authorize(@ve)
         update_archived(policy, request_params[:archived], request_params[:update_shared])
       else
         raise Pundit::NotAuthorizedError, query: :archive?, record: @ve, policy: policy unless policy.update?
@@ -87,7 +88,7 @@ module V1
     # Find methods
 
     def find_db_record_from_parent_chain
-      VirtualEntity.find params[:parent_chain].first
+      VirtualEntity.find params[:parent_chain]&.first
     end
 
     def find_todo_for_update

@@ -4,7 +4,7 @@ require 'spec_helper'
 
 shared_examples_for 'an archivable entity' do
   let(:overrides) { {} }
-  let(:ve) { factory.entity overrides: { virtual_entity: { user: user }.merge(overrides) } }
+  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
 
@@ -54,7 +54,7 @@ shared_examples_for 'an archivable entity' do
         let(:current_user) { create(:user) }
 
         before do
-          VirtualEntity.create! user: current_user, entity: VirtualEntity.first.entity
+          factory.add_user(entity: VirtualEntity.first.entity, user: current_user)
         end
 
         it 'remains visible for other user' do

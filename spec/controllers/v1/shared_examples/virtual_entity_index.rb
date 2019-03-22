@@ -20,6 +20,13 @@ shared_examples_for 'a virtual_entity index action' do
     expect(json.size).to be(3)
   end
 
+  it 'renders expected json' do
+    subject
+    json.each do |j|
+      expect(json_schema.simple_validation_errors(j)).to be_blank
+    end
+  end
+
   context 'with other users' do
     let(:current_user) { create :user }
 

@@ -7,8 +7,7 @@ shared_examples_for 'a virtual_entity destroy action' do
 
   let(:params) { { id: ve.id } }
   let(:overrides) { {} }
-  let(:ve) { factory.entity overrides: { virtual_entity: { user: user }.merge(overrides) } }
-  let(:json_schema) { raise 'Override in spec' }
+  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
   let(:factory) { raise 'Override in spec' }
 
   context 'with valid id' do

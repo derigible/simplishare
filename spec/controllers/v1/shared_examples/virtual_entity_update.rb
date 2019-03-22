@@ -8,7 +8,7 @@ shared_examples_for 'a virtual_entity update action' do
   let(:params) { { id: ve.id } }
   let(:updates) { raise 'Override in spec' }
   let(:overrides) { {} }
-  let(:ve) { factory.entity overrides: { virtual_entity: { user: user }.merge(overrides) } }
+  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
 

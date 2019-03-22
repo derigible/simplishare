@@ -5,7 +5,7 @@ module Factories
     class << self
       include Factories::Concerns::VirtualEntityFactory
 
-      def entity(action: :create!, attach_user: true, overrides: {})
+      def entity(action: :create!, attach_user: true, overrides: {}, return_ve: false)
         params = {
           type: 'Note',
           priority: 'medium',
@@ -17,14 +17,14 @@ module Factories
         e = Note.send(action, params)
         if attach_user
           opts = overrides.fetch(:virtual_entity, {})
-          add_user(
+          ve = add_user(
             action: action,
             entity: e,
             user: opts[:user],
             overrides: opts
           )
         end
-        e
+        attach_user && return_ve ? [e, ve] : e
       end
     end
   end

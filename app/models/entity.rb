@@ -10,7 +10,7 @@ class Entity < ApplicationRecord
   validate :priority_exists_and_correct
   validate :data_is_hash
 
-  scope :unarchived, -> { where(archived: [fals, nil]) }
+  scope :unarchived, -> { where(archived: [false, nil]) }
   scope :archived, -> { where(archived: true) }
 
   def shared_with_except_users(except_users)

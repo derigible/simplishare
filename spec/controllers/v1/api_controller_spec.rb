@@ -24,13 +24,33 @@ describe V1::ApiController do
     end
   end
 
-  describe '#in_user_timezone' do
-    context 'with authenticated request' do
-      it 'runs block in user timezone'
+  describe 'authenticate user before action' do
+    controller(described_class) do
+      def index
+        skip_policy_scope
+        render json: current_user
+      end
     end
 
-    context 'with unauthenticated request' do
-      it 'runs block in system timezone'
+    subject { get :index, format: :json }
+
+    before do
+      allow(controller).to receive(:decoded_jwt).and_return('sub' => current_user.id)
+      allow(controller).to receive(:jwt_verifier).and_return(double(verify_jwt: true, errors: ['I have errors']))
+      allow(controller).to receive(:authenticated?).and_return true
+    end
+
+    it 'uses the correct user' do
+      subject
+      expect(json['id']).to eq current_user.id
+    end
+
+    context 'with unauthenticated user' do
+      before do
+        allow(controller).to receive(:authenticated?).and_return false
+      end
+
+      it { is_expected.to have_http_status :unauthorized }
     end
   end
 end

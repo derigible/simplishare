@@ -47,4 +47,11 @@ describe V1::TodosController do
       let(:update_shared) { { todo: { archived: true } } }
     end
   end
+
+  describe '#snoozing' do
+    it_behaves_like 'a snoozable entity' do
+      let(:factory) { model_factory }
+      let(:json_schema) { model_schema }
+    end
+  end
 end

@@ -57,7 +57,7 @@ module V1
     before_action :authenticate_user!
 
     def authenticate_user!
-      if invalid_jwt?
+      unless authenticated?
         error_render(Exception.new(jwt_verifier.errors.join(';')), :unauthorized)
         return
       end
@@ -75,17 +75,6 @@ module V1
       current_user
     end
 
-    protected
-
-    # Set the timezone from the doorkeeper user.
-    def in_user_timezone(&block)
-      if current_user
-        Time.use_zone(current_user.timezone, &block)
-      else
-        yield
-      end
-    end
-
     private
 
     def decoded_jwt
@@ -100,7 +89,7 @@ module V1
       @jwt_verifier ||= Delegates::JwtVerifier.new(decoded_jwt)
     end
 
-    def invalid_jwt?
+    def authenticated?
       !jwt_verifier.verify_jwt
     end
 

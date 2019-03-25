@@ -48,4 +48,11 @@ describe V1::NotesController do
       let(:update_shared) { { note: { archived: true } } }
     end
   end
+
+  describe '#snoozing' do
+    it_behaves_like 'a snoozable entity' do
+      let(:factory) { model_factory }
+      let(:json_schema) { model_schema }
+    end
+  end
 end

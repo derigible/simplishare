@@ -57,8 +57,6 @@ module V1
     end
 
     def create_params
-      request_params = params.require(:todo)
-                             .permit(:description, :priority, :todos, :title)
       {
         priority: request_params[:priority],
         data: {
@@ -71,8 +69,16 @@ module V1
 
     def request_params
       @request_params ||= params
-        .require(:todo)
-        .permit(:description, :priority, :archived, :update_shared, :title, parent_chain: [])
+                          .require(:todo)
+                          .permit(
+                            :description,
+                            :priority,
+                            :archived,
+                            :update_shared,
+                            :title,
+                            :todos,
+                            parent_chain: []
+                          )
     end
 
     def serializer

@@ -95,6 +95,12 @@ shared_examples_for 'an archivable entity' do
 
     context 'when shared' do
       context 'when not owner and archive privileges denied' do
+        let(:current_user) { create :user }
+
+        before do
+          factory.add_user(entity: ve.entity, user: current_user)
+        end
+
         it { is_expected.to have_http_status(:forbidden) }
 
         it 'does not send email'

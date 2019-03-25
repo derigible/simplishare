@@ -33,11 +33,18 @@ describe V1::TodosController do
     end
   end
 
+  describe '#create' do
+    it_behaves_like 'a virtual_entity create action' do
+      let(:json_schema) { model_schema }
+      let(:create_params) { { todo: { title: 'truth', priority: Entity::PRIORITY_TYPES.sample } } }
+    end
+  end
+
   describe '#archiving' do
     it_behaves_like 'an archivable entity' do
       let(:factory) { model_factory }
       let(:json_schema) { model_schema }
-      let(:update_shared) { { todo: { update_shared: true } } }
+      let(:update_shared) { { todo: { archived: true } } }
     end
   end
 end

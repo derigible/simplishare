@@ -5,7 +5,7 @@ module Factories
     class << self
       include Factories::Concerns::VirtualEntityFactory
 
-      def entity(action: :create!, attach_user: true, overrides: {}, return_ve: false)
+      def entity(action: :create!, attach_user: true, overrides: {}, return_vo: false)
         params = {
           type: 'Todo',
           priority: 'medium',
@@ -13,10 +13,10 @@ module Factories
             title: Faker::Hipster.sentence,
             todos: []
           }
-        }.merge(overrides.except(:virtual_entity))
+        }.merge(overrides.except(:virtual_object))
         e = Todo.send(action, params)
         if attach_user
-          opts = overrides.fetch(:virtual_entity, {})
+          opts = overrides.fetch(:virtual_object, {})
           ve = add_user(
             action: action,
             entity: e,
@@ -24,7 +24,7 @@ module Factories
             overrides: opts
           )
         end
-        attach_user && return_ve ? [e, ve] : e
+        attach_user && return_vo ? [e, ve] : e
       end
 
       def sub_task(overrides = {})

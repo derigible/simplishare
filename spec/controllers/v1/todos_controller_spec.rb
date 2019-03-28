@@ -54,4 +54,8 @@ describe V1::TodosController do
       let(:json_schema) { model_schema }
     end
   end
+
+  describe '#sharing'
+
+  describe '#preferences'
 end

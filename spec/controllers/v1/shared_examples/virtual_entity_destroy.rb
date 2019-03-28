@@ -5,9 +5,10 @@ require 'spec_helper'
 shared_examples_for 'a virtual_entity destroy action' do
   subject { delete :destroy, params: params }
 
-  let(:params) { { id: ve.id } }
+  let(:params) { { id: id_to_use } }
+  let(:id_to_use) { ve.id }
   let(:overrides) { {} }
-  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
+  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
   let(:factory) { raise 'Override in spec' }
 
   context 'with valid id' do
@@ -26,14 +27,20 @@ shared_examples_for 'a virtual_entity destroy action' do
           }
         }
       end
+      let(:current_user) { create :user }
+      let(:other_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
+      let(:id_to_use) { other_ve.id }
+
+      before do
+        ve
+        other_ve
+      end
 
       it 'does not destroy entity' do
-        ve
         expect { subject }.to change(Entity, :count).by(0)
       end
 
       it 'does destroy virtual_entity' do
-        ve
         expect { subject }.to change(VirtualEntity, :count).by(-1)
       end
     end
@@ -58,14 +65,17 @@ shared_examples_for 'a virtual_entity destroy action' do
           }
         }
       end
+      let(:current_user) { create :user }
+      let(:other_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
+      let(:id_to_use) { other_ve.id }
+
+      before { ve }
 
       it 'does destroy entity' do
-        ve
         expect { subject }.to change(Entity, :count).by(-1)
       end
 
       it 'does destroy virtual_entity' do
-        ve
         expect { subject }.to change(VirtualEntity, :count).by(-1)
       end
     end

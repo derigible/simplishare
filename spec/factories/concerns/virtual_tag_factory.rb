@@ -1,12 +1,12 @@
 module Factories
   module Concerns
-    module VirtualEntityFactory
+    module VirtualTagFactory
       def add_user(action: :create!, entity:, user: nil, overrides: {})
         params = {
           user: user,
-          entity: entity
+          tag: entity
         }.merge(overrides)
-        VirtualEntity.send(action, params)
+        VirtualTag.send(action, params)
       end
 
       # overrides are the same as for entity (to pass in specific virtual_object

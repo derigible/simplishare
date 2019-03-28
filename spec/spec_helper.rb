@@ -84,6 +84,6 @@ RSpec.configure do |config|
 
   config.include SerializerExampleGroup::Helper, type: :controller
   config.include ActiveRecordHelper
+  config.include Onceler::BasicHelpers
   config.include ControllerMacros, type: :controller
-  config.include RequestMacros, type: :request
 end

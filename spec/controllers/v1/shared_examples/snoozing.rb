@@ -8,7 +8,7 @@ shared_examples_for 'a snoozable entity' do
   let(:snooze_until) { 1.day.from_now.iso8601 }
   let(:params) { { id: ve.id, snooze: { snooze_until: snooze_until } } }
   let(:json_schema) { raise 'Override in spec' }
-  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
+  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
   let(:factory) { raise 'Override in spec' }
   let(:overrides) { {} }
 

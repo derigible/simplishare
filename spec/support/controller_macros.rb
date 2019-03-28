@@ -5,7 +5,7 @@ module ControllerMacros
   extend ActiveSupport::Concern
 
   included do
-    let(:user) { create(:user) }
+    let_once(:user) { create(:user) }
     let(:current_user) { user }
 
     let(:jws) do

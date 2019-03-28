@@ -90,7 +90,7 @@ module V1
     end
 
     def authenticated?
-      !jwt_verifier.verify_jwt
+      jwt_verifier.verify_jwt
     end
 
     def error_render(error, status)

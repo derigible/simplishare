@@ -9,11 +9,6 @@ module V1
       respond_with tags, each_serializer: TagSerializer
     end
 
-    def update
-      @vtag.tag.update!(tag_params)
-      respond_with @vtag, status: :ok, serializer: TagSerializer
-    end
-
     def create
       tag = Tag.new(tag_params)
       vtag = VirtualTag.new user: current_user
@@ -22,15 +17,6 @@ module V1
       vtag.tag = tag
       vtag.save
       respond_with vtag, status: :created, serializer: TagSerializer
-    end
-
-    def show
-      respond_with @vtag, serializer: TagSerializer
-    end
-
-    def destroy
-      @vtag.tag.destroy
-      head :no_content
     end
 
     private

@@ -5,10 +5,11 @@ require 'spec_helper'
 shared_examples_for 'a virtual_entity update action' do
   subject { put :update, params: params.merge(updates), as: :json }
 
-  let(:params) { { id: ve.id } }
+  let(:params) { { id: id_to_use } }
+  let(:id_to_use) { ve.id }
   let(:updates) { raise 'Override in spec' }
   let(:overrides) { {} }
-  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
+  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
 
@@ -46,9 +47,9 @@ shared_examples_for 'a virtual_entity update action' do
   end
 
   context 'with an invalid id' do
-    before do
-      get :show, params: { id: next_unused_id(VirtualEntity) }
-    end
+    let(:id_to_use) { next_unused_id(VirtualEntity) + 1 }
+
+    before { subject }
 
     it 'returns status :not_found' do
       expect(response).to have_http_status(:not_found)

@@ -2,15 +2,14 @@
 
 module V1
   class TagSerializer < ActiveModel::Serializer
-    attribute :id
+    attribute :id do
+      object.id.to_s
+    end
     attribute :name do
       object.tag.name
     end
-    attribute :metadata do
-      object.metadata
-    end
     attribute :shared_object_id do
-      object.tag.id
+      object.tag.id.to_s
     end
   end
 end

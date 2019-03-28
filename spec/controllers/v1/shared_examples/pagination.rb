@@ -9,7 +9,7 @@ shared_examples 'a paginated resource' do
     @old_max_per_page = Pagy::VARS[:max_per_page] = 200
   end
 
-  before do
+  before :once do
     Pagy::VARS[:items] = 1
     Pagy::VARS[:max_per_page] = 3
 

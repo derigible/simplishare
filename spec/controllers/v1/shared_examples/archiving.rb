@@ -4,7 +4,6 @@ require 'spec_helper'
 
 shared_examples_for 'an archivable entity' do
   let(:overrides) { {} }
-  let(:ve) { factory.virtual_entity(overrides: { virtual_entity: { user: user }.merge(overrides) }) }
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
   let(:update_shared) { raise 'Override in spec' }
@@ -14,12 +13,12 @@ shared_examples_for 'an archivable entity' do
 
     let(:params) { {} }
 
-    before do
-      3.times.each { factory.entity overrides: { virtual_entity: { user: user } } }
+    before :once do
+      3.times.each { factory.entity overrides: { virtual_object: { user: user } } }
     end
 
     context 'with archived entity' do
-      before do
+      before :once do
         Entity.first.archive!
       end
 
@@ -41,7 +40,7 @@ shared_examples_for 'an archivable entity' do
     end
 
     context 'with archived virtual_entity' do
-      before do
+      before :once do
         VirtualEntity.first.archive!
       end
 
@@ -80,7 +79,9 @@ shared_examples_for 'an archivable entity' do
   describe 'archive' do
     subject { put :archive, params: params.merge(update_shared), as: :json }
 
-    let(:params) { { id: ve.id } }
+    let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
+    let(:id_to_use) { ve.id }
+    let(:params) { { id: id_to_use } }
 
     context 'when only user' do
       it 'archives virtual_entity only' do
@@ -107,23 +108,25 @@ shared_examples_for 'an archivable entity' do
       end
 
       shared_examples_for 'can archive' do
+        let(:ve_to_check) { raise 'Override in spec' }
+
         it { is_expected.to have_http_status :ok }
 
         it 'archives the virtual_entity' do
-          expect(ve.archived).to be nil
+          expect(ve_to_check.archived).to be nil
           subject
-          expect(ve.reload.archived).to eq true
-          expect(ve.entity.archived).to be_nil
+          expect(ve_to_check.reload.archived).to eq true
+          expect(ve_to_check.entity.archived).to be_nil
         end
 
         context 'when update_shared is true' do
           let(:update_shared) { super().merge(super().keys.first => { archived: true, update_shared: true } ) }
 
           it 'archives the entity' do
-            expect(ve.entity.archived).to be nil
+            expect(ve_to_check.entity.archived).to be nil
             subject
-            expect(ve.reload.archived).to be nil
-            expect(ve.entity.archived).to eq true
+            expect(ve_to_check.reload.archived).to be nil
+            expect(ve_to_check.entity.archived).to eq true
           end
 
           it 'sends an email to all users'
@@ -131,11 +134,26 @@ shared_examples_for 'an archivable entity' do
       end
 
       context 'when owner' do
-        it_behaves_like 'can archive'
+        it_behaves_like 'can archive' do
+          let(:ve_to_check) { ve }
+        end
       end
 
       context 'when archive privileges granted' do
-        it_behaves_like 'can archive'
+        let(:current_user) { create :user }
+        let(:overrides) do
+          {
+            metadata: {
+              permissions: %w[edit archive]
+            }
+          }
+        end
+        let(:current_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
+        let(:id_to_use) { current_ve.id }
+
+        it_behaves_like 'can archive' do
+          let(:ve_to_check) { current_ve }
+        end
       end
     end
   end

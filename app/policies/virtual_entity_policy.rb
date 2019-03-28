@@ -2,11 +2,11 @@
 
 class VirtualEntityPolicy < ApplicationPolicy
   def show?
-    owner_or_has_permission? 'read'
+    record_owner? && entity_owner_or_has_permission?('read')
   end
 
   def update?
-    owner_or_has_permission? 'edit'
+    record_owner? && entity_owner_or_has_permission?('edit')
   end
 
   def archive?
@@ -14,7 +14,7 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def archive_entity?
-    owner_or_has_permission? 'archive'
+    record_owner? && entity_owner_or_has_permission?('archive')
   end
 
   def destroy?
@@ -22,11 +22,11 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def destroy_entity?
-    owner_or_has_permission?('destroy')
+    record_owner? && entity_owner_or_has_permission?('destroy')
   end
 
   def share?
-    owner_or_has_permission? 'share'
+    record_owner? && entity_owner_or_has_permission?('share')
   end
 
   def shared_with?
@@ -55,10 +55,8 @@ class VirtualEntityPolicy < ApplicationPolicy
 
   private
 
-  def owner_or_has_permission?(perm)
-    record_owner? && (
-      record.metadata.fetch('permissions', []).include?('owner') ||
-      record.metadata.fetch('permissions', []).include?(perm)
-    )
+  def entity_owner_or_has_permission?(perm)
+    perms = record.metadata.fetch('permissions', [])
+    perms.include?('owner') || perms.include?(perm)
   end
 end

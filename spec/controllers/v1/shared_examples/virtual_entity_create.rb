@@ -10,7 +10,7 @@ shared_examples_for 'a virtual_entity create action' do
   let(:overrides) { {} }
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
-  let(:other_user) { create :user }
+  let_once(:other_user) { create :user }
 
   it { is_expected.to have_http_status :created }
 
@@ -27,7 +27,7 @@ shared_examples_for 'a virtual_entity create action' do
     expect(JSON.parse(response.body).size).to eq 1
   end
 
-  it 'does not show up in other users list' do
+  it 'does not show up in other users\' list' do
     subject
     expect(VirtualEntity.where(user: other_user).count).to eq 0
   end

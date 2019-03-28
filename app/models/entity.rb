@@ -29,6 +29,10 @@ class Entity < ApplicationRecord
     update!(archived: true)
   end
 
+  def unarchive!
+    update!(archived: false)
+  end
+
   # TODO: add validations
 
   private

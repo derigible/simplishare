@@ -29,7 +29,7 @@ let apiHost = null
 
 // both www.pinkairship.com and pinkairship.com point to same api, so prevent browser CORS check
 if (process.env.API_HOST === 'pinkairship.com' && window.location.hostname.includes('www')) {
-  apiHost = `www.${process.env.apiHost}`
+  apiHost = `www.${process.env.API_HOST}`
 } else {
   apiHost = process.env.API_HOST
 }

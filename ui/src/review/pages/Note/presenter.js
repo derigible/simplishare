@@ -227,15 +227,6 @@ export default class Note extends Component {
           </FlexItem>
           <FlexItem>
             <Flex>
-              {isEdit
-                ? <FlexItem margin="0 small 0 0">
-                      <Priority
-                        priority={this.state.priority}
-                        changePriority={this.changePriority}
-                      />
-                  </FlexItem>
-                : null
-              }
               {!this.isNewNote
                 ? (
                     <FlexItem grow shrink>

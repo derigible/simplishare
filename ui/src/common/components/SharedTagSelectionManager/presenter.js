@@ -5,16 +5,17 @@ import SelectionManager from '../SelectionManager'
 import * as customPropTypes from '../../propTypes'
 import { SHOW_ONLY_HIGH_PRIORITY, SHOW_ONLY_LOW_PRIORITY, SHOW_ONLY_MEDIUM_PRIORITY} from '../../../constants/tagTypes'
 
-const OTHER_OPTIONS = [
-  {
-    label: 'Other',
-    options: [
-      {id: SHOW_ONLY_LOW_PRIORITY, name: 'Low Priority'},
-      {id: SHOW_ONLY_MEDIUM_PRIORITY, name: 'Medium Priority'},
-      {id: SHOW_ONLY_HIGH_PRIORITY, name: 'High Priority'}
-    ]
-  }
-]
+// May use this in the future if priority can be made more useful
+// const OTHER_OPTIONS = [
+//   {
+//     label: 'Other',
+//     options: [
+//       {id: SHOW_ONLY_LOW_PRIORITY, name: 'Low Priority'},
+//       {id: SHOW_ONLY_MEDIUM_PRIORITY, name: 'Medium Priority'},
+//       {id: SHOW_ONLY_HIGH_PRIORITY, name: 'High Priority'}
+//     ]
+//   }
+// ]
 
 export default class SharedTagSelectionManager extends Component {
   static propTypes = {
@@ -43,7 +44,7 @@ export default class SharedTagSelectionManager extends Component {
   }
 
   get filterOptions () {
-    return OTHER_OPTIONS.concat(this.props.possibleTags).concat(this.props.filterOptions)
+    return this.props.possibleTags.concat(this.props.filterOptions)
   }
 
   handleNewTagDefined = (name) => {

@@ -1,29 +1,27 @@
-import PropTypes from 'prop-types'
-import React, { PureComponent } from 'react'
+import Header from './presenter'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../../../actions'
 
-import View from '@instructure/ui-layout/lib/components/View'
+function mapStateToProps (state) {
+  const isOpen = state.sidebar.isOpen
+  const login = state.login
+  const { username } = state.auth.user
+  const windowPathname = window.location.hash.split('!')[1]
+  return { login, isOpen, username, windowPathname }
+}
 
-import Header from '../Header'
-
-export default class Chrome extends PureComponent {
-  render() {
-    return (
-      <View as='div'>
-        <Header>
-          {this.props.sidebarChildren}
-        </Header>
-        <View>
-          {this.props.children}
-        </View>
-      </View>
-    )
+function mapDispatchToProps (dispatch) {
+  return {
+    closeSidebar: bindActionCreators(actions.closeSidebar, dispatch),
+    openSidebar: bindActionCreators(actions.openSidebar, dispatch),
+    navigateTo: bindActionCreators(actions.navigateTo, dispatch),
+    logout: () => {
+      window.localStorage.clear()
+      dispatch(actions.logout())
+      dispatch(actions.navigateTo('/auth'))
+    }
   }
 }
 
-Chrome.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object
-  ]),
-  sidebarChildren: PropTypes.element
-}
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

@@ -117,13 +117,6 @@ export default class NoteInList extends Component {
               <FlexItem>
                 <Actions>
                   <View as="div" margin="0 0 small 0">
-                    <Priority
-                      priority={entity.priority}
-                      changePriority={this.changePriority}
-                      ref={this.setPriorityRef}
-                    />
-                  </View>
-                  <View as="div" margin="0 0 small 0">
                     <Button variant="icon" icon={IconEye} size="small" onClick={this.handleNoteRead}>
                       <ScreenReaderContent>Read Note</ScreenReaderContent>
                     </Button>

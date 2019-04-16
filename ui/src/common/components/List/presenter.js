@@ -55,32 +55,17 @@ export default class List extends Component {
     return this.props.entities.filter(this.filterEntity)
   }
 
-  get onlyLowPriority () {
-    return this.props.selectedTags.includes(SHOW_ONLY_LOW_PRIORITY)
-  }
-
-  get onlyMedPriority () {
-    return this.props.selectedTags.includes(SHOW_ONLY_MEDIUM_PRIORITY)
-  }
-
-  get onlyHighPriority () {
-    return this.props.selectedTags.includes(SHOW_ONLY_HIGH_PRIORITY)
-  }
-
   selectedUserDefinedTags = () => {
     return this.props.selectedTags.filter((t) => this.props.possibleTags[0].options.find((tag) => tag.id === t))
   }
 
   filterEntity = (entity) => {
     if (
-       (this.hideCompleted && !!entity.archived)
-    || this.onlyLowPriority && entity.priority !== 'low'
-    || this.onlyMedPriority && entity.priority !== 'medium'
-    || this.onlyHighPriority && entity.priority !== 'high'
-    || (
-          this.tagIdsToFilterBy.length > 0
-          && !(entity.tags.length > 0 && difference(this.tagIdsToFilterBy, entity.tags).length === 0)
-        )
+      (this.hideCompleted && !!entity.archived)
+      || (
+            this.tagIdsToFilterBy.length > 0
+            && !(entity.tags.length > 0 && difference(this.tagIdsToFilterBy, entity.tags).length === 0)
+          )
       ) {
       return false
     }

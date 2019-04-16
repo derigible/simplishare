@@ -16,7 +16,7 @@ export default class Page extends PureComponent {
     const { children, pageName } = this.props
     return (
       <Chrome>
-        <View as="div" margin="xx-large none none none">
+        <View as="div">
           { pageName
             ? <Heading margin="small" border="bottom">{pageName}</Heading>
             : null

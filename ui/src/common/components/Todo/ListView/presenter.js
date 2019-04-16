@@ -6,13 +6,9 @@ import Flex, { FlexItem } from '@instructure/ui-layout/lib/components/Flex'
 
 import View from '@instructure/ui-layout/lib/components/View'
 
-import Actions from '../../Actions'
-import Snooze from '../../Snooze'
 import Archive from '../Archive'
-import Destroy from '../Destroy'
 import Summary from '../Summary'
 import Body from '../Body'
-import Priority from '../../Priority'
 import * as customPropTypes from '../../../propTypes'
 
 export default class ListView extends PureComponent {
@@ -92,44 +88,18 @@ export default class ListView extends PureComponent {
     return (
       <View as="div">
         <Flex alignItems="stretch">
-          <FlexItem padding="xxx-small 0 0 0">
-            <Priority
-              priority={entity.priority}
-              changePriority={this.changePriority}
-              ref={this.setPriorityRef}
-            />
-          </FlexItem>
           <FlexItem grow shrink>
             <Button fluidWidth size="small" variant="light" onClick={this.handleBodyShow}>
               <Summary entity={entity} hideCompleted={hideCompleted}/>
             </Button>
           </FlexItem>
           <FlexItem>
-            <Actions>
-              {this.parentChain.length === 1
-                ? (
-                    <View as="div" margin="small none">
-                      <Snooze
-                        entityId={entity.id}
-                        entityType="Todo"
-                      />
-                    </View>
-                  )
-                : null
-              }
-              <View as="div" margin="small none">
-                <Archive
-                  entity={entity}
-                  parentChain={this.parentChain}
-                />
-              </View>
-              <View as="div">
-                <Destroy
-                  entity={entity}
-                  parentChain={this.parentChain}
-                />
-              </View>
-            </Actions>
+            <View as="div" margin="none small">
+              <Archive
+                entity={entity}
+                parentChain={this.parentChain}
+              />
+            </View>
           </FlexItem>
         </Flex>
         <div style={{display: this.state.showBody ? 'block' : 'none'}}>

@@ -40,7 +40,6 @@ export default class NotesList extends Component {
       startAddEntityLabel="Add Note"
       componentType={NoteInList}
       tagEntityActionType={NOTES_SET_NOTES}
-      quickCreateEntity={()=>{}}
     />
   </WithSidebar>
   }

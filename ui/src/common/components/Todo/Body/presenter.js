@@ -13,6 +13,8 @@ import Share from '../../Share'
 import * as customPropTypes from '../../../propTypes'
 
 import Preferences from '../../Preferences'
+import Snooze from '../../Snooze'
+import Destroy from '../Destroy'
 import ShareableLink from '../../ShareableLink'
 
 export default class Body extends Component {
@@ -85,6 +87,28 @@ export default class Body extends Component {
               <Description
                 description={entity.description}
                 submit={submitDescriptionChange}
+              />
+            </FlexItem>
+          </Flex>
+          <Flex margin="small none">
+            <FlexItem margin="0 small 0 0">
+              <Typography>Actions:</Typography>
+            </FlexItem>
+            {!this.hasParentChain
+              ? (
+                <FlexItem margin="0 small 0 0">
+                  <Snooze
+                    entityId={entity.id}
+                    entityType="Todo"
+                  />
+                </FlexItem>
+                )
+              : null
+            }
+            <FlexItem>
+              <Destroy
+                entity={entity}
+                parentChain={this.props.parentChain}
               />
             </FlexItem>
           </Flex>

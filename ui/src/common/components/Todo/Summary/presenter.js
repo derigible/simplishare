@@ -10,27 +10,27 @@ import { todoProps, deletedTodosProps } from "../../../propTypes"
 
 export default function Summary ({entity, hideCompleted, deletedTodos}) {
 
-  function hasSubTodos () {
-    const filtered = entity.todos.filter((t) => !deletedTodos.has(t.id))
-    if (hideCompleted) {
-      return filtered.filter((t) => t.archived !== true )
-    }
-    return filtered.length > 0
-  }
-  function hasDetails () {
-    return (entity.description && entity.description.length > 0)
-      || hasSubTodos().length > 0
-  }
+  // function hasSubTodos () {
+  //   const filtered = entity.todos.filter((t) => !deletedTodos.has(t.id))
+  //   if (hideCompleted) {
+  //     return filtered.filter((t) => t.archived !== true )
+  //   }
+  //   return filtered.length > 0
+  // }
+  // function hasDetails () {
+  //   return (entity.description && entity.description.length > 0)
+  //     || hasSubTodos().length > 0
+  // }
 
   return (
     <span>
       <Typography>{entity.archived ? <s>{entity.title}</s> : entity.title}</Typography>
-      {hasDetails()
+      {/* {hasDetails()
         ? <Tooltip tip="Contains additional details">
             <Link margin="0 0 0 small" as="a"><IconTextStart /></Link>
           </Tooltip>
         : null
-      }
+      } */}
     </span>
   )
 }

@@ -22,7 +22,6 @@ export default class List extends Component {
     startAddEntityLabel: PropTypes.string.isRequired,
     componentType: PropTypes.func.isRequired,
     tagEntityActionType: PropTypes.string.isRequired,
-    quickCreateEntity: PropTypes.func,
     hideBorder: PropTypes.bool,
 
     // Should come from the connected component
@@ -157,9 +156,6 @@ export default class List extends Component {
               }
             />
           })
-        }
-        {
-          this.props.quickCreateEntity(this.selectedUserDefinedTags)
         }
       </View>
     )

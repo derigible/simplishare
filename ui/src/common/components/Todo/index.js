@@ -20,7 +20,7 @@ export default class Todo extends PureComponent {
   }
 
   focus () {
-    this.listViewRef.focus()
+    this.listViewRef.getWrappedInstance().focus()
   }
 
   setTitleRef = (node) => { this.titleRef = node }

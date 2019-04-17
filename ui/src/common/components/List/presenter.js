@@ -23,6 +23,7 @@ export default class List extends Component {
     componentType: PropTypes.func.isRequired,
     tagEntityActionType: PropTypes.string.isRequired,
     hideBorder: PropTypes.bool,
+    quickCreateEntity: PropTypes.func,
 
     // Should come from the connected component
     tagEntity: PropTypes.func.isRequired,
@@ -56,7 +57,7 @@ export default class List extends Component {
   }
 
   selectedUserDefinedTags = () => {
-    return this.props.selectedTags.filter((t) => this.props.possibleTags[0].options.find((tag) => tag.id === t))
+    return this.props.selectedTags.filter((t) => this.props.possibleTags[0].options.find((tag) => tag.id == t))
   }
 
   filterEntity = (entity) => {
@@ -92,8 +93,7 @@ export default class List extends Component {
   }
 
   focusLast = () => {
-    this[`entityRef${this.filteredEntities[this.filteredEntities.length -1].id}`]
-      .getWrappedInstance().focus()
+    this[`entityRef${this.filteredEntities[this.filteredEntities.length -1].id}`].focus()
   }
 
   setEntityRef = (id) => (node) => {
@@ -141,6 +141,9 @@ export default class List extends Component {
               }
             />
           })
+        }
+        {
+          this.props.quickCreateEntity(this.selectedUserDefinedTags)
         }
       </View>
     )

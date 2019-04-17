@@ -92,6 +92,10 @@ export default class ToDos extends PureComponent {
     this.props.navigateTo('/todos')
   }
 
+  quickCreateEntity = (tags) => {
+    return <AddNew addNew={this.createTodo(true)(tags)} />
+  }
+
   filterTodo = (todo) => {
     return !this.props.deletedTodos.has(todo.id)
   }
@@ -124,6 +128,7 @@ export default class ToDos extends PureComponent {
           componentType={Todo}
           tagEntityActionType={TODOS_SET_TODOS}
           ref={this.setListRef}
+          quickCreateEntity={this.quickCreateEntity}
           hideBorder
         />
       </WithSidebar>

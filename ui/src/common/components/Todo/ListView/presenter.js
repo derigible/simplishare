@@ -41,12 +41,12 @@ export default class ListView extends PureComponent {
     return this.props.parentChain
   }
 
-  setPriorityRef = (node) => {
-    this.priorityRef = node
+  setArchiveRef = (node) => {
+    this.archiveRef = node
   }
 
   focus () {
-    this.priorityRef.focus()
+    this.archiveRef.getWrappedInstance().focus()
   }
 
   changePriority = (priority) => {
@@ -96,6 +96,7 @@ export default class ListView extends PureComponent {
           <FlexItem>
             <View as="div" margin="none small">
               <Archive
+                ref={this.setArchiveRef}
                 entity={entity}
                 parentChain={this.parentChain}
               />

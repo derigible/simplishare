@@ -25,6 +25,8 @@ export default class NotesList extends Component {
     return this.props.notes.filter(note => !this.props.deletedNotes.includes(note.id))
   }
 
+  noop = () => {}
+
   render () {
     const { startNoteCreate, notesRetrieved, populateNotes } = this.props
     return <WithSidebar
@@ -40,6 +42,7 @@ export default class NotesList extends Component {
       startAddEntityLabel="Add Note"
       componentType={NoteInList}
       tagEntityActionType={NOTES_SET_NOTES}
+      quickCreateEntity={this.noop}
     />
   </WithSidebar>
   }

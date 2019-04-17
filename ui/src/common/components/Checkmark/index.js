@@ -12,9 +12,15 @@ export default class Checkmark extends PureComponent {
     this.props.callback(e)
   }
 
+  focus () {
+    this.buttonRef.focus();
+  }
+
+  setButtonRef = node => this.buttonRef = node;
+
   render () {
     return (
-      <Button onClick={this.handleCallback} variant="icon" size="small" as="span">
+      <Button buttonRef={this.setButtonRef} onClick={this.handleCallback} variant="icon" size="small" as="span">
         <ScreenReaderContent>{this.props.label}</ScreenReaderContent>
         <IconCheck />
       </Button>

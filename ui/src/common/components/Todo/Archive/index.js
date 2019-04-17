@@ -9,4 +9,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(Archive)
+export default connect(undefined, mapDispatchToProps, null, { withRef: true })(Archive)

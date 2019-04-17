@@ -11,6 +11,10 @@ export default class Todo extends PureComponent {
     parentChain: customPropTypes.todoParentChainProps,
   }
 
+  focus () {
+    this.checkmarkRef.focus();
+  }
+
   markCompleted = () => {
     const updates = { archived: !this.props.entity.archived }
     if (!this.props.entity.sharedOn && this.props.entity.shared) {
@@ -21,9 +25,11 @@ export default class Todo extends PureComponent {
     this.props.archiveEntity(this.props.entity.id, updates, {parentChain: this.props.parentChain })
   }
 
+  setCheckmarkRef = node => this.checkmarkRef = node
+
   render () {
     return (
-      <Checkmark callback={this.markCompleted} />
+      <Checkmark ref={this.setCheckmarkRef} callback={this.markCompleted} />
     )
   }
 }

@@ -3,7 +3,7 @@
 module V1
   class SharedWithSerializer < ActiveModel::Serializer
     attribute :id do
-      object.user_id
+      object.user_id.to_s
     end
     attribute :email do
       object.user.email

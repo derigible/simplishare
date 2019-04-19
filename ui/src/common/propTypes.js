@@ -22,9 +22,9 @@ export const selectionManagerProps = {
 }
 
 export const todoProps = PropTypes.shape({
-  id: PropTypes.string.isRequired,
+  id,
   description: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.number),
+  tags: PropTypes.arrayOf(id),
   todos: PropTypes.array,
   archived: PropTypes.bool,
   priority: PropTypes.oneOf(['low', 'medium', 'high']).isRequired,

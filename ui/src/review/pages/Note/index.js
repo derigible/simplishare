@@ -13,7 +13,7 @@ import Note from './presenter'
 
 function mapStateToProps (state, props) {
   return {
-    entity: state.note.entities[parseInt(props.id, 10)] || { id: props.id, needToLoad: true },
+    entity: state.note.entities[props.id] || { id: props.id, needToLoad: true },
     possibleTags: [{label: 'Tags', options: Object.values(state.tag.tags)}],
     selectedTags: state.tag.selectedTags
   }

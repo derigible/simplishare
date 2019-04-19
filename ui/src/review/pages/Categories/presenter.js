@@ -46,7 +46,7 @@ class Categories extends Component {
   }
 
   handleCategoryChange = (event) => {
-    const categoryId = parseInt(event.target.value)
+    const categoryId = event.target.value
     this.setState({
       selectedCategoryId: categoryId
     })

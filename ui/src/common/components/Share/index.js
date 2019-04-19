@@ -9,7 +9,7 @@ import {
 import Share from './presenter'
 
 function mapStateToProps (state, props) {
-  const entity = state[props.shareType.toLowerCase()].entities[parseInt(props.shareId, 10)] || {}
+  const entity = state[props.shareType.toLowerCase()].entities[props.shareId] || {}
   const sharedWith = entity.sharedWith
   const shareableWith = entity.shareableWith
 

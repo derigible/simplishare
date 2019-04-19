@@ -38,10 +38,7 @@ class SelectionManager extends Component {
   handleSelection = (e, tags) => {
     if (e === null) { return }
     this.props.onSelectTag(
-      tags.map((tag) => {
-        if (isNaN(tag.id)) { return tag.id }
-        return parseInt(tag.id, 10)
-      })
+      tags.map((tag) =>  tag.id)
     )
   }
 

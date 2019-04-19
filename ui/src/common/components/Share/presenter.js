@@ -49,11 +49,11 @@ export default class Share extends Component {
   componentDidMount () {
     const promises = []
     if (!this.props.shareableWith && !this.stopTryingShareableFetch) {
-      promises.push(this.props.fetchShareableWith({id: parseInt(this.props.shareId, 10)}))
+      promises.push(this.props.fetchShareableWith({id: this.props.shareId}))
       this.stopTryingShareableFetch = true
     }
     if (this.needsLoading) {
-      promises.push(this.props.fetchSharedWith({id: parseInt(this.props.shareId, 10)}))
+      promises.push(this.props.fetchSharedWith({id: this.props.shareId}))
       this.stopTryingSharedFetch = true
     }
     Promise.all(promises)

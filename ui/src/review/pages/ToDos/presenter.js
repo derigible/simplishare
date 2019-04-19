@@ -33,7 +33,7 @@ export default class ToDos extends PureComponent {
     const parts =  window.location.hash.split('/')
     const id = parts[parts.length - 1]
     const todoId = window.location.hash.includes('view') && id !== 'new'
-      ? parseInt(id, 10)
+      ? id
       : null
 
     this.state = {
@@ -47,7 +47,7 @@ export default class ToDos extends PureComponent {
     const parts =  window.location.hash.split('/')
     const id = parts[parts.length - 1]
     const todoId = window.location.hash.includes('view') && id !== 'new'
-      ? parseInt(id, 10)
+      ? id
       : null
 
     return {

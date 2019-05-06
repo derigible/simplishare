@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Table from '@instructure/ui-elements/lib/components/Table'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
+import Table from '@instructure/ui-elements/lib/Table'
+import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
 
 import Event from '../Event'
 import styles from './styles.css'

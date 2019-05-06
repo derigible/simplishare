@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Avatar from '@instructure/ui-elements/lib/components/Avatar'
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import Link from '@instructure/ui-elements/lib/components/Link'
-import Tray from '@instructure/ui-overlays/lib/components/Tray'
-import View from '@instructure/ui-layout/lib/components/View'
-import Flex from '@instructure/ui-layout/lib/components/Flex';
-import FlexItem from '@instructure/ui-layout/lib/components/Flex/FlexItem';
-import Heading from '@instructure/ui-elements/lib/components/Heading';
+import Avatar from '@instructure/ui-elements/lib/Avatar'
+import Button from '@instructure/ui-buttons/lib/Button'
+import Link from '@instructure/ui-elements/lib/Link'
+import Tray from '@instructure/ui-overlays/lib/Tray'
+import View from '@instructure/ui-layout/lib/View'
+import Flex from '@instructure/ui-layout/lib/Flex';
+import FlexItem from '@instructure/ui-layout/lib/Flex/FlexItem';
+import Heading from '@instructure/ui-elements/lib/Heading';
 
-import IconCheckPlus from '@instructure/ui-icons/lib/Solid/IconCheckPlus'
-import IconCompose from '@instructure/ui-icons/lib/Solid/IconCompose'
+import IconCheckPlus from '@instructure/ui-icons/lib/IconCheckPlusSolid'
+import IconCompose from '@instructure/ui-icons/lib/IconComposeSolid'
 
 export default class Chrome extends PureComponent {
   navigateToTodos = () => {
@@ -50,12 +50,9 @@ export default class Chrome extends PureComponent {
         </View>
         <Tray
           label="Pertinent Information"
-          closeButtonLabel="Close"
           open={isOpen}
           onDismiss={closeSidebar}
-          size="small"
-          applicationElement={() => document.getElementById('app') }
-        >
+          size="small">
           <View as="div" margin="xx-small small">
             <Heading level="h2" margin="x-small xxx-small">Navigation</Heading>
             <Button fluidWidth icon={IconCheckPlus} onClick={this.navigateToTodos}>
@@ -82,7 +79,7 @@ export default class Chrome extends PureComponent {
           </View>
         </Tray>
       </View>
-    )
+    );
   }
 }
 

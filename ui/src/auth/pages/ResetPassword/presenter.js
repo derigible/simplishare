@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Heading from '@instructure/ui-elements/lib/components/Heading'
-import Typography from '@instructure/ui-elements/lib/components/Text'
+import Heading from '@instructure/ui-elements/lib/Heading'
+import Typography from '@instructure/ui-elements/lib/Text'
 import LoginFields from '../../components/LoginFields'
-import View from '@instructure/ui-layout/lib/components/View'
+import View from '@instructure/ui-layout/lib/View'
 
 export default class ResetPassword extends Component {
   static propTypes = {

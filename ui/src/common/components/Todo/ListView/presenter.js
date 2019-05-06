@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import Flex, { FlexItem } from '@instructure/ui-layout/lib/components/Flex'
+import Button from '@instructure/ui-buttons/lib/Button'
+import Flex, { FlexItem } from '@instructure/ui-layout/lib/Flex'
 
-import View from '@instructure/ui-layout/lib/components/View'
+import View from '@instructure/ui-layout/lib/View'
 
 import Archive from '../Archive'
 import Summary from '../Summary'

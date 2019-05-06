@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Typography from '@instructure/ui-elements/lib/components/Text'
+import Typography from '@instructure/ui-elements/lib/Text'
 import themeable from '@instructure/ui-themeable/lib/themeable'
 
 import styles from './styles.css'

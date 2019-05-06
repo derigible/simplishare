@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Flex, {FlexItem} from '@instructure/ui-layout/lib/components/Flex'
+import Flex, {FlexItem} from '@instructure/ui-layout/lib/Flex'
 
 export default class SharedWith extends Component {
   static propTypes = {

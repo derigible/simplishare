@@ -2,11 +2,11 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import ActiveStorageProvider from 'react-activestorage-provider'
 
-import Billboard from '@instructure/ui-billboard/lib/components/Billboard'
-import FileDrop from '@instructure/ui-forms/lib/components/FileDrop'
-import Heading from '@instructure/ui-elements/lib/components/Heading'
+import Billboard from '@instructure/ui-billboard/lib/Billboard'
+import FileDrop from '@instructure/ui-forms/lib/FileDrop'
+import Heading from '@instructure/ui-elements/lib/Heading'
 
-import IconPlusSolid from '@instructure/ui-icons/lib/Solid/IconPlus'
+import IconPlusSolid from '@instructure/ui-icons/lib/IconPlusSolid'
 import themeable from '@instructure/ui-themeable'
 
 import styles from './styles.css'

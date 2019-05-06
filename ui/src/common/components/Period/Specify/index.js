@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Select from '@instructure/ui-forms/lib/components/Select'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
+import Select from '@instructure/ui-forms/lib/Select'
+import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
 
 const monthNames = [
   'January', 'February', 'March',

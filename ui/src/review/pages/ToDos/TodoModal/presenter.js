@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Modal, { ModalHeader, ModalBody, ModalFooter } from '@instructure/ui-overlays/lib/components/Modal'
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import Heading from '@instructure/ui-elements/lib/components/Heading'
+import Modal, { ModalHeader, ModalBody, ModalFooter } from '@instructure/ui-overlays/lib/Modal'
+import Button from '@instructure/ui-buttons/lib/Button'
+import Heading from '@instructure/ui-elements/lib/Heading'
 
 import Body from '../../../../common/components/Todo/Body'
 import SubTask from '../../../../common/components/Todo/SubTask'
 import { id, todoProps, fetchRetrievalStatusProps } from '../../../../common/propTypes'
-import Spinner from '@instructure/ui-elements/lib/components/Spinner'
+import Spinner from '@instructure/ui-elements/lib/Spinner'
 
 const baseTodo = (tags) => ({
   id: 'tempId',

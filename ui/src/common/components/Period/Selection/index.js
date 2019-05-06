@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
-import Text from '@instructure/ui-elements/lib/components/Text'
+import {Text} from '@instructure/ui-elements'
 import themeable from '@instructure/ui-themeable/lib/themeable'
 
 import styles from './styles.css'

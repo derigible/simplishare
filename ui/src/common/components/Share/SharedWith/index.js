@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Checkbox from '@instructure/ui-forms/lib/components/Checkbox'
-import Flex, {FlexItem} from '@instructure/ui-layout/lib/components/Flex'
-import Text from '@instructure/ui-elements/lib/components/Text'
+import Checkbox from '@instructure/ui-forms/lib/Checkbox'
+import Flex, {FlexItem} from '@instructure/ui-layout/lib/Flex'
+import {Text} from '@instructure/ui-elements'
 
 export default class SharedWith extends Component {
   static propTypes = {

@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import View from '@instructure/ui-layout/lib/components/View'
-import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/components/Popover'
-import RadioInput from '@instructure/ui-forms/lib/components/RadioInput'
-import RadioInputGroup from '@instructure/ui-forms/lib/components/RadioInputGroup'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
-import Typography from '@instructure/ui-elements/lib/components/Text'
+import Button from '@instructure/ui-buttons/lib/Button'
+import View from '@instructure/ui-layout/lib/View'
+import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/Popover'
+import RadioInput from '@instructure/ui-forms/lib/RadioInput'
+import RadioInputGroup from '@instructure/ui-forms/lib/RadioInputGroup'
+import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import Typography from '@instructure/ui-elements/lib/Text'
 
-import IconHighPriority from '@instructure/ui-icons/lib/Line/IconArrowUp'
-import IconMediumPriority from '@instructure/ui-icons/lib/Line/IconArrowEnd'
-import IconLowPriority from '@instructure/ui-icons/lib/Line/IconArrowDown'
+import IconHighPriority from '@instructure/ui-icons/lib/IconArrowUpLine'
+import IconMediumPriority from '@instructure/ui-icons/lib/IconArrowEndLine'
+import IconLowPriority from '@instructure/ui-icons/lib/IconArrowDownLine'
 
 export default class Priority extends PureComponent {
   static propTypes = {

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import FormFieldGroup from '@instructure/ui-forms/lib/components/FormFieldGroup'
-import TextInput from '@instructure/ui-forms/lib/components/TextInput'
+import {Button} from '@instructure/ui-buttons'
+import {FormFieldGroup} from '@instructure/ui-form-field'
+import {TextInput} from '@instructure/ui-forms'
 import themeable from '@instructure/ui-themeable'
 
 import styles from './styles.css'

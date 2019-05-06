@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/components/Popover'
-import View from '@instructure/ui-layout/lib/components/View'
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
+import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/Popover'
+import View from '@instructure/ui-layout/lib/View'
+import Button from '@instructure/ui-buttons/lib/Button'
+import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
 
-import IconMore from '@instructure/ui-icons/lib/Line/IconMore'
+import IconMore from '@instructure/ui-icons/lib/IconMoreLine'
 
 export default class Todo extends PureComponent {
   static propTypes = {

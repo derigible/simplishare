@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Alert from '@instructure/ui-alerts/lib/components/Alert'
-import Link from '@instructure/ui-elements/lib/components/Link'
-import Typography from '@instructure/ui-elements/lib/components/Text'
+import Alert from '@instructure/ui-alerts/lib/Alert'
+import Link from '@instructure/ui-elements/lib/Link'
+import Typography from '@instructure/ui-elements/lib/Text'
 import themeable from '@instructure/ui-themeable'
 
 import styles from './styles.css'

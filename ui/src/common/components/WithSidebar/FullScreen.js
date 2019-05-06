@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import View from '@instructure/ui-layout/lib/components/View'
-import Grid, { GridCol, GridRow } from '@instructure/ui-layout/lib/components/Grid'
+import View from '@instructure/ui-layout/lib/View'
+import Grid, { GridCol, GridRow } from '@instructure/ui-layout/lib/Grid'
 
 export default function FullScreen ({children, content, sidebarWidth = '22.5rem', contentOffset = '23rem'}) {
   return (

@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types'
 import React, {PureComponent} from 'react'
-import View from '@instructure/ui-layout/lib/components/View'
-import Tray from '@instructure/ui-overlays/lib/components/Tray'
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import IconExpandStart from '@instructure/ui-icons/lib/Line/IconExpandStart'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
-import Flex from '@instructure/ui-layout/lib/components/Flex'
-import FlexItem from '@instructure/ui-layout/lib/components/Flex/FlexItem'
-import PresentationContent from '@instructure/ui-a11y/lib/components/PresentationContent'
+import View from '@instructure/ui-layout/lib/View'
+import Tray from '@instructure/ui-overlays/lib/Tray'
+import Button from '@instructure/ui-buttons/lib/Button'
+import IconExpandStart from '@instructure/ui-icons/lib/IconExpandStartLine'
+import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import Flex from '@instructure/ui-layout/lib/Flex'
+import FlexItem from '@instructure/ui-layout/lib/Flex/FlexItem'
+import PresentationContent from '@instructure/ui-a11y/lib/PresentationContent'
 
 export default class SmallScreen extends PureComponent {
   state = {
@@ -35,11 +35,9 @@ export default class SmallScreen extends PureComponent {
         </Flex>
         <Tray
           label="Content Controls"
-          closeButtonLabel="Close Content Controls"
           onDismiss={this.toggleOpen}
           open={open}
-          size="large"
-        >
+          size="large">
           <View
             as="div"
             padding="x-large small"
@@ -49,7 +47,7 @@ export default class SmallScreen extends PureComponent {
         </Tray>
         {children}
       </View>
-    )
+    );
   }
 }
 

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import Tooltip from '@instructure/ui-overlays/lib/components/Tooltip'
-import Typography from '@instructure/ui-elements/lib/components/Text'
-import IconTextStart from '@instructure/ui-icons/lib/Line/IconTextStart'
-import Link from '@instructure/ui-elements/lib/components/Link'
+import Tooltip from '@instructure/ui-overlays/lib/Tooltip'
+import Typography from '@instructure/ui-elements/lib/Text'
+import IconTextStart from '@instructure/ui-icons/lib/IconTextStartLine'
+import Link from '@instructure/ui-elements/lib/Link'
 
 import { todoProps, deletedTodosProps } from "../../../propTypes"
 

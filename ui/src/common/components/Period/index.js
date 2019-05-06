@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import Text from '@instructure/ui-elements/lib/components/Text'
+import {Text} from '@instructure/ui-elements'
 import themeable from '@instructure/ui-themeable/lib/themeable'
 
 import Selection from './Selection'

@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/components/Button'
-import DateTimeInput from '@instructure/ui-forms/lib/components/DateTimeInput'
-import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/components/Popover'
-import View from '@instructure/ui-layout/lib/components/View'
-import IconClock from '@instructure/ui-icons/lib/Line/IconClock'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/components/ScreenReaderContent'
+import Button from '@instructure/ui-buttons/lib/Button'
+import DateTimeInput from '@instructure/ui-forms/lib/DateTimeInput'
+import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/Popover'
+import View from '@instructure/ui-layout/lib/View'
+import IconClock from '@instructure/ui-icons/lib/IconClockLine'
+import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
 
 import * as customPropTypes from '../../propTypes'
 

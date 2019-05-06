@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import theme from '@instructure/ui-themes/lib/canvas'
+import theme from '@instructure/canvas-theme'
 
 theme.use()
 

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import Select from '@instructure/ui-forms/lib/components/Select'
+import Select from '@instructure/ui-forms/lib/Select'
 import themeable from '@instructure/ui-themeable/lib/themeable'
 
 import Chrome from '../../../common/components/Chrome'

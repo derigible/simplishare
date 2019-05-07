@@ -3,23 +3,20 @@ import PropTypes from 'prop-types'
 import difference from 'lodash/difference'
 import keycode from 'keycode'
 
-import Button from '@instructure/ui-buttons/lib/Button'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import Flex, { FlexItem } from '@instructure/ui-layout/lib/Flex'
-import Heading from '@instructure/ui-elements/lib/Heading'
-import Pill from '@instructure/ui-elements/lib/Pill'
-import Typography from '@instructure/ui-elements/lib/Text'
+import {Button} from '@instructure/ui-buttons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import {Flex} from '@instructure/ui-layout'
+import {Heading, Pill, Text as Typography} from '@instructure/ui-elements'
 
-import IconEdit from '@instructure/ui-icons/lib/IconEditLine'
-import IconEye from '@instructure/ui-icons/lib/IconEyeLine'
+import {IconEdit} from '@instructure/ui-icons'
+import {IconEye} from '@instructure/ui-icons'
 
 import * as customPropTypes from '../../../../common/propTypes'
 import Note from '../../Note/presenter'
 import Delete from '../../../../common/components/Delete'
 import Checkmark from '../../../../common/components/Checkmark'
-import Priority from '../../../../common/components/Priority'
 import Actions from '../../../../common/components/Actions'
-import View from '@instructure/ui-layout/lib/View'
+import {View} from '@instructure/ui-layout'
 import Snooze from '../../../../common/components/Snooze'
 
 export default class NoteInList extends Component {
@@ -101,20 +98,20 @@ export default class NoteInList extends Component {
         style={{cursor: 'pointer'}}
       >
         <Flex direction="column">
-          <FlexItem padding="x-small xxx-small">
+          <Flex.Item padding="x-small xxx-small">
             { entity.archived
               ? <Heading><s>{entity.title || 'Untitled Note'}</s></Heading>
               : <Heading>{entity.title || 'Untitled Note'}</Heading>
             }
-          </FlexItem>
-          <FlexItem padding="xxx-small small">
+          </Flex.Item>
+          <Flex.Item padding="xxx-small small">
             <Flex padding="xxx-small none">
-              <FlexItem shrink grow>
+              <Flex.Item shrink grow>
                 <Typography>
                   {entity.body.length > 100 ? `${entity.body.slice(0, 100)} ...` : entity.body}
                 </Typography>
-              </FlexItem>
-              <FlexItem>
+              </Flex.Item>
+              <Flex.Item>
                 <Actions>
                   <View as="div" margin="0 0 small 0">
                     <Button variant="icon" icon={IconEye} size="small" onClick={this.handleNoteRead}>
@@ -145,10 +142,10 @@ export default class NoteInList extends Component {
                     />
                   </View>
                 </Actions>
-              </FlexItem>
+              </Flex.Item>
             </Flex>
-          </FlexItem>
-          <FlexItem padding={entity.tags.length > 0 ? "small" : 'none'}>
+          </Flex.Item>
+          <Flex.Item padding={entity.tags.length > 0 ? "small" : 'none'}>
             {
               entity.tags.map((t) => {
                 const tag = possibleTags[0].options.find((pt) => pt.id === t)
@@ -157,7 +154,7 @@ export default class NoteInList extends Component {
                 }
               })
             }
-          </FlexItem>
+          </Flex.Item>
         </Flex>
       </div>
     )

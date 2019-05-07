@@ -3,13 +3,13 @@ import React, { Component, Fragment } from 'react'
 
 import {Text} from '@instructure/ui-elements'
 import {FormFieldGroup} from '@instructure/ui-form-field'
-import Flex, { FlexItem } from '@instructure/ui-layout'
-import Heading from '@instructure/ui-elements/lib/Heading'
-import RadioInputGroup from '@instructure/ui-forms/lib/RadioInputGroup'
-import RadioInput from '@instructure/ui-forms/lib/RadioInput'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import View from '@instructure/ui-layout/lib/View'
-import uc from '@instructure/ui-utils/lib/capitalizeFirstLetter'
+import {Flex} from '@instructure/ui-layout'
+import {Heading} from '@instructure/ui-elements'
+import {RadioInputGroup} from '@instructure/ui-forms'
+import {RadioInput} from '@instructure/ui-forms'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import {View} from '@instructure/ui-layout'
+import {capitalizeFirstLetter as uc} from '@instructure/ui-utils'
 
 export default class Preference extends Component {
   static propTypes = {
@@ -28,8 +28,8 @@ export default class Preference extends Component {
     const setting = action || 'not_set'
     return (
       <Flex key={actionType} justifyItems="space-between">
-        <FlexItem margin="none small none none">{actionType}:</FlexItem>
-        <FlexItem>
+        <Flex.Item margin="none small none none">{actionType}:</Flex.Item>
+        <Flex.Item>
           <View background="default" as="div" shadow="resting">
             <RadioInputGroup
               size="medium"
@@ -46,7 +46,7 @@ export default class Preference extends Component {
               <RadioInput label="Never" value="never" context="danger" />
             </RadioInputGroup>
           </View>
-        </FlexItem>
+        </Flex.Item>
       </Flex>
     )
   }
@@ -65,10 +65,10 @@ export default class Preference extends Component {
           justifyItems="space-between"
           margin="small"
         >
-          <FlexItem>
+          <Flex.Item>
             <Text>{showRecordType ? uc(recordType) : label}</Text>
-          </FlexItem>
-          <FlexItem>
+          </Flex.Item>
+          <Flex.Item>
             <FormFieldGroup
               layout="stacked"
               description={<ScreenReaderContent>Toggle Settings</ScreenReaderContent>}
@@ -78,7 +78,7 @@ export default class Preference extends Component {
                 Object.keys(record).map((actionType) => this.renderAction(record[actionType], actionType, recordType))
               }
             </FormFieldGroup>
-          </FlexItem>
+          </Flex.Item>
         </Flex>
       </View>
     )

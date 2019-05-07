@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import View from '@instructure/ui-layout/lib/View'
-import IconCopy from '@instructure/ui-icons/lib/IconCopyLine'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import Button from '@instructure/ui-buttons/lib/Button'
+import {View} from '@instructure/ui-layout'
+import {IconCopyLine as IconCopy} from '@instructure/ui-icons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import {Button} from '@instructure/ui-buttons'
 import { id } from '../../propTypes'
 
 export default class ShareableLink extends Component {

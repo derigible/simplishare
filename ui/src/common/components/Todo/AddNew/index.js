@@ -2,18 +2,18 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import classnames from 'classnames'
 
-import TextInput from '@instructure/ui-forms/lib/TextInput'
-import Button from '@instructure/ui-buttons/lib/Button'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import Typography from '@instructure/ui-elements/lib/Text'
-import IconPlusLine from '@instructure/ui-icons/lib/IconPlusLine'
+import {TextInput} from '@instructure/ui-forms'
+import {Button} from '@instructure/ui-buttons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import { Text as Typography} from '@instructure/ui-elements'
+import {IconPlusLine} from '@instructure/ui-icons'
 
 import Checkmark from '../../Checkmark'
 import Priority from '../../Priority'
 
 import styles from './styles.css'
 import theme from './theme'
-import themeable from '@instructure/ui-themeable/lib/themeable'
+import {themeable} from '@instructure/ui-themeable'
 
 class AddNew extends Component {
   static propTypes = {
@@ -60,8 +60,8 @@ class AddNew extends Component {
   render () {
     return (
       <div className={styles.addNew}>
-        <Button variant="icon" onClick={this.startNew} margin="none x-small none none">
-          <span className={styles.iconWrapper}><IconPlusLine /></span>
+        <Button icon={IconPlusLine} variant="icon" onClick={this.startNew} margin="none x-small none none">
+          <ScreenReaderContent>Add new</ScreenReaderContent>
         </Button>
         <div
           className={classnames({ [styles.hidden]: this.state.adding })}

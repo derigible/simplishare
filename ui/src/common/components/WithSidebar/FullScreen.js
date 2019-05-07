@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import View from '@instructure/ui-layout/lib/View'
-import Grid, { GridCol, GridRow } from '@instructure/ui-layout/lib/Grid'
+import {View} from '@instructure/ui-layout'
+import {Grid} from '@instructure/ui-layout'
 
 export default function FullScreen ({children, content, sidebarWidth = '22.5rem', contentOffset = '23rem'}) {
   return (
     <View as="div" margin="none small none none">
       <Grid>
-        <GridRow colSpacing="small">
-          <GridCol width="auto">
+        <Grid.Row colSpacing="small">
+          <Grid.Col width="auto">
             <View
               as="div"
               width={sidebarWidth}
@@ -22,11 +22,11 @@ export default function FullScreen ({children, content, sidebarWidth = '22.5rem'
                 {content}
               </View>
             </View>
-          </GridCol>
-          <GridCol>
+          </Grid.Col>
+          <Grid.Col>
             {children}
-          </GridCol>
-        </GridRow>
+          </Grid.Col>
+        </Grid.Row>
       </Grid>
     </View>
   )

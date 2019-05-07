@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import keycode from 'keycode'
 import isEqual from 'lodash/isEqual'
 
-import Select from '@instructure/ui-forms/lib/Select'
+import {Select} from '@instructure/ui-forms'
 import { selectionManagerProps } from '../../propTypes'
 
 class SelectionManager extends Component {

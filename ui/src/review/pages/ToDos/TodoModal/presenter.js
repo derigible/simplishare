@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Modal, { ModalHeader, ModalBody, ModalFooter } from '@instructure/ui-overlays/lib/Modal'
-import Button from '@instructure/ui-buttons/lib/Button'
-import Heading from '@instructure/ui-elements/lib/Heading'
+import {Modal} from '@instructure/ui-overlays'
+import {Button} from '@instructure/ui-buttons'
+import {Heading} from '@instructure/ui-elements'
 
 import Body from '../../../../common/components/Todo/Body'
 import SubTask from '../../../../common/components/Todo/SubTask'
 import { id, todoProps, fetchRetrievalStatusProps } from '../../../../common/propTypes'
-import Spinner from '@instructure/ui-elements/lib/Spinner'
+import {Spinner} from '@instructure/ui-elements'
 
 const baseTodo = (tags) => ({
   id: 'tempId',
@@ -164,7 +164,7 @@ export default class TodoModal extends Component {
     )
   }
 
-  renderModalBody () {
+  renderModal () {
     if (this.isLoadingError) {
       return <Heading level="h3">Problem loading entity</Heading>
     }
@@ -200,13 +200,13 @@ export default class TodoModal extends Component {
         size="large"
         shouldCloseOnDocumentClick
       >
-        <ModalHeader>
+        <Modal.Header>
           <Heading as="h2">{label}</Heading>
-        </ModalHeader>
-        <ModalBody>
-          {this.renderModalBody()}
-        </ModalBody>
-        <ModalFooter>
+        </Modal.Header>
+        <Modal.Body>
+          {this.renderModal()}
+        </Modal.Body>
+        <Modal.Footer>
           <Button onClick={this.handleClose}>
           {this.isReading ? 'Done' : 'Cancel'}
           </Button>
@@ -217,7 +217,7 @@ export default class TodoModal extends Component {
             </Button>
           }
 
-        </ModalFooter>
+        </Modal.Footer>
       </Modal>
     )
   }

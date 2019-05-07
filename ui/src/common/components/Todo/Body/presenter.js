@@ -2,10 +2,9 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import difference from 'lodash/difference'
 
-import Flex, { FlexItem } from '@instructure/ui-layout/lib/Flex'
-import Typography from '@instructure/ui-elements/lib/Text'
-import ToggleGroup from '@instructure/ui-toggle-details/lib/ToggleGroup'
-import View from '@instructure/ui-layout/lib/View'
+import { Text as Typography} from '@instructure/ui-elements'
+import {ToggleGroup} from '@instructure/ui-toggle-details'
+import {Flex, View} from '@instructure/ui-layout'
 
 import Description from '../../Description'
 import Details from '../../Details'
@@ -69,48 +68,48 @@ export default class Body extends Component {
     return (
       <View as="div" margin="xxx-small" shadow="resting" padding="xx-small">
         <Flex>
-            <FlexItem margin="0 small 0 0">
+            <Flex.Item margin="0 small 0 0">
               <Typography>Title:</Typography>
-            </FlexItem>
-            <FlexItem grow shrink>
+            </Flex.Item>
+            <Flex.Item grow shrink>
               <Description
                 description={entity.title}
                 submit={submitTitleChange}
               />
-            </FlexItem>
+            </Flex.Item>
           </Flex>
           <Flex>
-            <FlexItem margin="0 small 0 0">
+            <Flex.Item margin="0 small 0 0">
               <Typography>Description:</Typography>
-            </FlexItem>
-            <FlexItem grow shrink>
+            </Flex.Item>
+            <Flex.Item grow shrink>
               <Description
                 description={entity.description}
                 submit={submitDescriptionChange}
               />
-            </FlexItem>
+            </Flex.Item>
           </Flex>
           <Flex margin="small none">
-            <FlexItem margin="0 small 0 0">
+            <Flex.Item margin="0 small 0 0">
               <Typography>Actions:</Typography>
-            </FlexItem>
+            </Flex.Item>
             {!this.hasParentChain
               ? (
-                <FlexItem margin="0 small 0 0">
+                <Flex.Item margin="0 small 0 0">
                   <Snooze
                     entityId={entity.id}
                     entityType="Todo"
                   />
-                </FlexItem>
+                </Flex.Item>
                 )
               : null
             }
-            <FlexItem>
+            <Flex.Item>
               <Destroy
                 entity={entity}
                 parentChain={this.props.parentChain}
               />
-            </FlexItem>
+            </Flex.Item>
           </Flex>
           {renderSubTasks ? renderSubTasks(parentChain, entity) : null }
           {!this.hasParentChain && isUpdating

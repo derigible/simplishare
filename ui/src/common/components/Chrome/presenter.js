@@ -1,17 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Avatar from '@instructure/ui-elements/lib/Avatar'
-import Button from '@instructure/ui-buttons/lib/Button'
-import Link from '@instructure/ui-elements/lib/Link'
-import Tray from '@instructure/ui-overlays/lib/Tray'
-import View from '@instructure/ui-layout/lib/View'
-import Flex from '@instructure/ui-layout/lib/Flex';
-import FlexItem from '@instructure/ui-layout/lib/Flex/FlexItem';
-import Heading from '@instructure/ui-elements/lib/Heading';
+import {Button} from '@instructure/ui-buttons'
+import {Avatar, Link, Heading} from '@instructure/ui-elements'
+import {Tray} from '@instructure/ui-overlays'
+import {View, Flex} from '@instructure/ui-layout'
 
-import IconCheckPlus from '@instructure/ui-icons/lib/IconCheckPlusSolid'
-import IconCompose from '@instructure/ui-icons/lib/IconComposeSolid'
+import {IconCheckPlus} from '@instructure/ui-icons'
+import {IconCompose} from '@instructure/ui-icons'
 
 export default class Chrome extends PureComponent {
   navigateToTodos = () => {
@@ -65,16 +61,16 @@ export default class Chrome extends PureComponent {
           <View as="div" margin="xx-small small">
             <Heading level="h2" margin="x-small xxx-small">Account</Heading>
             <Flex direction="column">
-              <FlexItem>
+              <Flex.Item>
                 <Link href="#!admin">
                   Preferences
                 </Link>
-              </FlexItem>
-              <FlexItem>
+              </Flex.Item>
+              <Flex.Item>
                 <Link href="#!admin/contacts">
                   Contacts
                 </Link>
-              </FlexItem>
+              </Flex.Item>
             </Flex>
           </View>
         </Tray>

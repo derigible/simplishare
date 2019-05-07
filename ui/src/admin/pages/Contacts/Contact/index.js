@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Flex, {FlexItem} from '@instructure/ui-layout/lib/Flex'
+import {Flex} from '@instructure/ui-layout'
 
 export default class SharedWith extends Component {
   static propTypes = {
@@ -17,12 +17,12 @@ export default class SharedWith extends Component {
     const { contact } = this.props
     return (
       <Flex>
-        <FlexItem shrink grow>
+        <Flex.Item shrink grow>
           {contact.email}
-        </FlexItem>
-        <FlexItem>
+        </Flex.Item>
+        <Flex.Item>
           {contact.created_at}
-        </FlexItem>
+        </Flex.Item>
       </Flex>
     )
   }

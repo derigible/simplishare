@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Alert from '@instructure/ui-alerts/lib/Alert'
-import Button from '@instructure/ui-buttons/lib/Button'
-import Heading from '@instructure/ui-elements/lib/Heading'
-import CloseButton from '@instructure/ui-buttons/lib/CloseButton'
-import View from '@instructure/ui-layout/lib/View'
-import Modal, {ModalBody, ModalFooter, ModalHeader} from '@instructure/ui-overlays/lib/Modal'
-import TextInput from '@instructure/ui-forms/lib/TextInput'
+import {Alert} from '@instructure/ui-alerts'
+import {Button, CloseButton} from '@instructure/ui-buttons'
+import {Heading} from '@instructure/ui-elements'
+import {View} from '@instructure/ui-layout'
+import {Modal} from '@instructure/ui-overlays'
+import {TextInput} from '@instructure/ui-forms'
 
 import Contact from './Contact'
 import ListItem from '../../../common/components/ListItem'
@@ -123,22 +122,22 @@ export default class Contacts extends Component {
             label="Create Contact"
             shouldCloseOnDocumentClick
           >
-            <ModalHeader>
+            <Modal.Header>
               {this.renderCloseButton()}
               <Heading>Create Contact</Heading>
-            </ModalHeader>
-            <ModalBody>
+            </Modal.Header>
+            <Modal.Body>
               <TextInput
                 label="Email of Contact"
                 type="email"
                 required
                 inputRef={this.setTextInputRef}
               />
-            </ModalBody>
-            <ModalFooter>
+            </Modal.Body>
+            <Modal.Footer>
               <Button onClick={this.handleModalOpen}>Cancel</Button>&nbsp;
               <Button onClick={this.handleCreateContact} variant="primary">Connect</Button>
-            </ModalFooter>
+            </Modal.Footer>
           </Modal>
           {pendingContacts.length > 0 || contacts.length === 0
             ? <Heading level="h3" margin="small 0">Current</Heading>

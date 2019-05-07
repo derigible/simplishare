@@ -3,11 +3,11 @@ import React from 'react'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import parse from 'date-fns/parse'
 
-import Typography from '@instructure/ui-elements/lib/Text'
+import { Text as Typography} from '@instructure/ui-elements'
 import SelectionManager from '../SelectionManager'
 
 import * as customPropTypes from '../../propTypes'
-import View from '@instructure/ui-layout/lib/View'
+import {View} from '@instructure/ui-layout'
 
 function getDate(dateString) {
   return distanceInWordsToNow(parse(dateString), { includeSeconds: true, addSuffix: true })

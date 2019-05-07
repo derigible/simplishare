@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
-import DateTimeInput from '@instructure/ui-forms/lib/DateTimeInput'
-import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/Popover'
-import View from '@instructure/ui-layout/lib/View'
-import IconClock from '@instructure/ui-icons/lib/IconClockLine'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import {Button} from '@instructure/ui-buttons'
+import {DateTimeInput} from '@instructure/ui-forms'
+import {Popover} from '@instructure/ui-overlays'
+import {View} from '@instructure/ui-layout'
+import {IconClockLine as IconClock} from '@instructure/ui-icons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
 
 import * as customPropTypes from '../../propTypes'
 
@@ -64,7 +64,7 @@ export default class Snooze extends PureComponent {
         shouldCloseOnDocumentClick
         placement="start"
       >
-        <PopoverTrigger>
+        <Popover.Trigger>
           <Button
             onClick={this.showPopover}
             icon={IconClock}
@@ -74,8 +74,8 @@ export default class Snooze extends PureComponent {
           >
             <ScreenReaderContent>{this.props.label}</ScreenReaderContent>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent>
+        </Popover.Trigger>
+        <Popover.Content>
           <View padding="medium" as="div">
             <DateTimeInput
               description={<ScreenReaderContent>Pick a date and time</ScreenReaderContent>}
@@ -95,7 +95,7 @@ export default class Snooze extends PureComponent {
               Submit
             </Button>
           </View>
-        </PopoverContent>
+        </Popover.Content>
       </Popover>
     )
   }

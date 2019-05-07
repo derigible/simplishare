@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import Heading from '@instructure/ui-elements/lib/Heading'
-import View from '@instructure/ui-layout/lib/View'
+import {Heading} from '@instructure/ui-elements'
+import {View} from '@instructure/ui-layout'
 
 import Chrome from '../../../common/components/Chrome'
 

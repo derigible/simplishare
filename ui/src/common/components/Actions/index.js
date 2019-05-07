@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/Popover'
-import View from '@instructure/ui-layout/lib/View'
-import Button from '@instructure/ui-buttons/lib/Button'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import {Popover} from '@instructure/ui-overlays'
+import {View} from '@instructure/ui-layout'
+import {Button} from '@instructure/ui-buttons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
 
-import IconMore from '@instructure/ui-icons/lib/IconMoreLine'
+import {IconMore} from '@instructure/ui-icons'
 
 export default class Todo extends PureComponent {
   static propTypes = {
@@ -38,7 +38,7 @@ export default class Todo extends PureComponent {
         shouldCloseOnDocumentClick
         placement="start"
       >
-        <PopoverTrigger>
+        <Popover.Trigger>
           <Button
             onClick={this.showPopover}
             icon={IconMore}
@@ -49,12 +49,12 @@ export default class Todo extends PureComponent {
           >
             <ScreenReaderContent>Quick Actions</ScreenReaderContent>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent>
+        </Popover.Trigger>
+        <Popover.Content>
           <View padding="medium" as="div">
             {children}
           </View>
-        </PopoverContent>
+        </Popover.Content>
       </Popover>
     )
   }

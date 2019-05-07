@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import ToggleGroup from '@instructure/ui-toggle-details/lib/ToggleGroup'
+import {ToggleGroup} from '@instructure/ui-toggle-details'
 
 import AddNew from '../AddNew'
 import * as customPropTypes from '../../../propTypes'
 import ListView from '../ListView'
-import View from '@instructure/ui-layout/lib/View'
+import {View} from '@instructure/ui-layout'
 
 export default class SubTask extends Component {
   static propTypes = {

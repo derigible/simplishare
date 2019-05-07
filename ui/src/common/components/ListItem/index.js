@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import View from '@instructure/ui-layout/lib/View'
+import {View} from '@instructure/ui-layout'
 
 export default class ListItem extends Component {
   static propTypes = {

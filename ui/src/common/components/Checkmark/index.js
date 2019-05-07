@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
+import {Button} from '@instructure/ui-buttons'
 
-import IconCheck from '@instructure/ui-icons/lib/IconCheckLine'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import {IconCheck} from '@instructure/ui-icons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
 
 export default class Checkmark extends PureComponent {
   handleCallback = (e) => {
@@ -20,9 +20,8 @@ export default class Checkmark extends PureComponent {
 
   render () {
     return (
-      <Button buttonRef={this.setButtonRef} onClick={this.handleCallback} variant="icon" size="small" as="span">
+      <Button icon={IconCheck} buttonRef={this.setButtonRef} onClick={this.handleCallback} variant="icon" size="small" as="span">
         <ScreenReaderContent>{this.props.label}</ScreenReaderContent>
-        <IconCheck />
       </Button>
     )
   }

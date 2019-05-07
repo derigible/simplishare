@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import TextArea from '@instructure/ui-forms/lib/TextArea'
-import Typography from '@instructure/ui-elements/lib/Text'
-import themeable from '@instructure/ui-themeable'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import {TextArea} from '@instructure/ui-forms'
+import { Text as Typography} from '@instructure/ui-elements'
+import {themeable} from '@instructure/ui-themeable'
 
 import Checkmark from '../Checkmark'
 import Delete from '../Delete'

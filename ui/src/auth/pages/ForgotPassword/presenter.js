@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Heading from '@instructure/ui-elements/lib/Heading'
-import Typography from '@instructure/ui-elements/lib/Text'
+import {Heading} from '@instructure/ui-elements'
+import { Text as Typography} from '@instructure/ui-elements'
 import LoginFields from '../../components/LoginFields'
-import View from '@instructure/ui-layout/lib/View'
+import {View} from '@instructure/ui-layout'
 
 export default class ForgotPassword extends Component {
   static propTypes = {

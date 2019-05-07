@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import difference from 'lodash/difference'
 
-import Button from '@instructure/ui-buttons/lib/Button'
+import {Button} from '@instructure/ui-buttons'
 import {Text} from '@instructure/ui-elements'
-import Heading from '@instructure/ui-elements/lib/Heading'
-import Flex, { FlexItem } from '@instructure/ui-layout/lib/Flex'
-import Pill from '@instructure/ui-elements/lib/Pill'
-import TextArea from '@instructure/ui-forms/lib/TextArea'
-import TextInput from '@instructure/ui-forms/lib/TextInput'
-import View from '@instructure/ui-layout/lib/View'
+import {Heading} from '@instructure/ui-elements'
+import {Flex} from '@instructure/ui-layout'
+import {Pill} from '@instructure/ui-elements'
+import {TextInput, TextArea} from '@instructure/ui-forms'
+import {View} from '@instructure/ui-layout'
 
 import { NOTES_SET_NOTES } from '../../../constants/actionTypes'
 
@@ -178,7 +177,7 @@ export default class Note extends Component {
     return (
       <View as="div" margin="none small">
         <Flex direction="column">
-          <FlexItem padding="x-small xx-small">
+          <Flex.Item padding="x-small xx-small">
             {isEdit
               ? <TextInput
                   label="Note Title"
@@ -188,8 +187,8 @@ export default class Note extends Component {
                 />
               : <Heading level="h2">{this.state.title}</Heading>
             }
-          </FlexItem>
-          <FlexItem grow shrink padding="xxx-small xx-small">
+          </Flex.Item>
+          <Flex.Item grow shrink padding="xxx-small xx-small">
             {isEdit
               ? <TextArea
                   height={this.getRemHeight()}
@@ -203,7 +202,7 @@ export default class Note extends Component {
               : <p><Text as="pre">{this.state.body}</Text></p>
             }
             {/* Use Details here */}
-            {/* This is moved into the same flexitem for now due to instui bug */}
+            {/* This is moved into the same Flex.Item for now due to instui bug */}
             {isEdit
               ? <View as="div" margin="x-small xx-small">
                   <SelectionManager
@@ -221,26 +220,26 @@ export default class Note extends Component {
                   }
                 })
             }
-          </FlexItem>
-          <FlexItem margin="small 0 small 0">
+          </Flex.Item>
+          <Flex.Item margin="small 0 small 0">
             <Heading as={isEdit ? 'h3' : 'h2'} level="h4" border="bottom">Manage Attributes</Heading>
-          </FlexItem>
-          <FlexItem>
+          </Flex.Item>
+          <Flex.Item>
             <Flex>
               {!this.isNewNote
                 ? (
-                    <FlexItem grow shrink>
+                    <Flex.Item grow shrink>
                       <Share
                         shareId={entity.id}
                         shareType="Note"
                       />
-                    </FlexItem>
+                    </Flex.Item>
                   )
                 : null
               }
             </Flex>
-          </FlexItem>
-          <FlexItem padding="small xx-small">
+          </Flex.Item>
+          <Flex.Item padding="small xx-small">
             <hr />
             <Button variant="primary" onClick={isEdit ? this.saveNote : this.switchToEdit}>
               {isEdit ? 'Save Note' : 'Edit Note'}
@@ -248,7 +247,7 @@ export default class Note extends Component {
             <Button onClick={this.props.endNoteEdit} margin="none none none small">
               {isEdit ? 'Cancel' : 'Back'}
             </Button>
-          </FlexItem>
+          </Flex.Item>
         </Flex>
       </View>
     )

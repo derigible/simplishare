@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, {PureComponent} from 'react'
-import Responsive from '@instructure/ui-layout/lib/Responsive'
+import {Responsive} from '@instructure/ui-layout'
 
 import FullScreen from './FullScreen'
 import SmallScreen from './SmallScreen'

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
-import themeable from '@instructure/ui-themeable/lib/themeable'
+import {Button} from '@instructure/ui-buttons'
+import {themeable} from '@instructure/ui-themeable'
 
 import styles from './styles.css'
 import theme from './theme'

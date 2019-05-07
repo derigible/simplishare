@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import {Button} from '@instructure/ui-buttons'
 import {FormFieldGroup} from '@instructure/ui-form-field'
 import {TextInput} from '@instructure/ui-forms'
-import themeable from '@instructure/ui-themeable'
+import {themeable} from '@instructure/ui-themeable'
 
 import styles from './styles.css'
 import theme from './theme'

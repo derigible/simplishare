@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import themeable from '@instructure/ui-themeable/lib/themeable'
+import {themeable} from '@instructure/ui-themeable'
 
 import styles from './styles.css'
 import theme from './theme'

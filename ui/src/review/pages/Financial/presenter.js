@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import Heading from '@instructure/ui-elements/lib/Heading'
-import TextInput from '@instructure/ui-forms/lib/TextInput'
-import themeable from '@instructure/ui-themeable/lib/themeable'
+import {Heading} from '@instructure/ui-elements'
+import {TextInput} from '@instructure/ui-forms'
+import {themeable} from '@instructure/ui-themeable'
 
 import History from '../../../../common/components/History'
 import Summary from '../../../../common/components/Summary'

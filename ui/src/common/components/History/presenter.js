@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Table from '@instructure/ui-elements/lib/Table'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import {Table} from '@instructure/ui-elements'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
 
 import Event from '../Event'
 import styles from './styles.css'
 import theme from './theme'
-import themeable from '@instructure/ui-themeable/lib/themeable'
+import {themeable} from '@instructure/ui-themeable'
 
 const forwardSorter = (sortByKey) => (eventA, eventB) => {
   const eventAAttr = eventA[sortByKey]

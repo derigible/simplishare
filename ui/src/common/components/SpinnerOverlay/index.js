@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Mask from '@instructure/ui-overlays/lib/Mask'
-import Overlay from '@instructure/ui-overlays/lib/Overlay'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import Spinner from '@instructure/ui-elements/lib/Spinner'
+import {Mask} from '@instructure/ui-overlays'
+import {Overlay} from '@instructure/ui-overlays'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import {Spinner} from '@instructure/ui-elements'
 
 export default class Summary extends Component {
   static propTypes = {

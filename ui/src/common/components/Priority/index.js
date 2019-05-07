@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
-import View from '@instructure/ui-layout/lib/View'
-import Popover, { PopoverTrigger, PopoverContent } from '@instructure/ui-overlays/lib/Popover'
-import RadioInput from '@instructure/ui-forms/lib/RadioInput'
-import RadioInputGroup from '@instructure/ui-forms/lib/RadioInputGroup'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
-import Typography from '@instructure/ui-elements/lib/Text'
+import {Button} from '@instructure/ui-buttons'
+import {View} from '@instructure/ui-layout'
+import {Popover} from '@instructure/ui-overlays'
+import {RadioInput} from '@instructure/ui-forms'
+import {RadioInputGroup} from '@instructure/ui-forms'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
+import { Text as Typography} from '@instructure/ui-elements'
 
-import IconHighPriority from '@instructure/ui-icons/lib/IconArrowUpLine'
-import IconMediumPriority from '@instructure/ui-icons/lib/IconArrowEndLine'
-import IconLowPriority from '@instructure/ui-icons/lib/IconArrowDownLine'
+import {IconArrowUpLine as IconHighPriority} from '@instructure/ui-icons'
+import {IconArrowEndLine as IconMediumPriority} from '@instructure/ui-icons'
+import {IconArrowDownLine as IconLowPriority} from '@instructure/ui-icons/lib'
 
 export default class Priority extends PureComponent {
   static propTypes = {
@@ -70,14 +70,14 @@ export default class Priority extends PureComponent {
         shouldCloseOnDocumentClick
         label="Set Priority"
       >
-        <PopoverTrigger>
+        <Popover.Trigger>
           <Button size="small" variant="icon" as="span" buttonRef={this.setButtonRef} margin="none x-small none none">
             <Typography color={color}>
               <span style={{position: 'relative'}}><Icon /></span>
             </Typography>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent>
+        </Popover.Trigger>
+        <Popover.Content>
           <View padding="medium" display="block" as="form">
             <RadioInputGroup
               description={<ScreenReaderContent>Priority Selection Group</ScreenReaderContent>}
@@ -90,7 +90,7 @@ export default class Priority extends PureComponent {
               <RadioInput value="high" label={<Typography color="error"><IconHighPriority /></Typography>} />
             </RadioInputGroup>
           </View>
-        </PopoverContent>
+        </Popover.Content>
       </Popover>
     )
   }

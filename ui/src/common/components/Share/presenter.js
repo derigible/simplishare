@@ -1,15 +1,13 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
-import Heading from '@instructure/ui-elements/lib/Heading'
-import {Text} from '@instructure/ui-elements'
-import View from '@instructure/ui-layout/lib/View'
+import {Button} from '@instructure/ui-buttons'
+import {Heading, Link, Text, Spinner} from '@instructure/ui-elements'
+import {View} from '@instructure/ui-layout'
 
 import SelectionManager from '../SelectionManager'
 import SharedWith from './SharedWith'
-import Spinner from '@instructure/ui-elements/lib/Spinner'
-import Link from '@instructure/ui-elements/lib/Link'
+
 
 export default class Share extends Component {
   static propTypes = {

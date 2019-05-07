@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
+import {Button} from '@instructure/ui-buttons'
 
-import IconTrash from '@instructure/ui-icons/lib/IconTrashLine'
-import ScreenReaderContent from '@instructure/ui-a11y/lib/ScreenReaderContent'
+import {IconTrash} from '@instructure/ui-icons'
+import {ScreenReaderContent} from '@instructure/ui-a11y'
 
 export default class Delete extends PureComponent {
   handleCallback = (e) => {

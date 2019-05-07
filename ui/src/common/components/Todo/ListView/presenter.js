@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
-import Button from '@instructure/ui-buttons/lib/Button'
-import Flex, { FlexItem } from '@instructure/ui-layout/lib/Flex'
+import {Button} from '@instructure/ui-buttons'
+import {Flex} from '@instructure/ui-layout'
 
-import View from '@instructure/ui-layout/lib/View'
+import {View} from '@instructure/ui-layout'
 
 import Archive from '../Archive'
 import Summary from '../Summary'
@@ -88,12 +88,12 @@ export default class ListView extends PureComponent {
     return (
       <View as="div">
         <Flex alignItems="stretch">
-          <FlexItem grow shrink>
+          <Flex.Item grow shrink>
             <Button fluidWidth size="small" variant="light" onClick={this.handleBodyShow}>
               <Summary entity={entity} hideCompleted={hideCompleted}/>
             </Button>
-          </FlexItem>
-          <FlexItem>
+          </Flex.Item>
+          <Flex.Item>
             <View as="div" margin="none small">
               <Archive
                 ref={this.setArchiveRef}
@@ -101,7 +101,7 @@ export default class ListView extends PureComponent {
                 parentChain={this.parentChain}
               />
             </View>
-          </FlexItem>
+          </Flex.Item>
         </Flex>
         <div style={{display: this.state.showBody ? 'block' : 'none'}}>
           {this.state.showBody

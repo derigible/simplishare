@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import Checkbox from '@instructure/ui-forms/lib/Checkbox'
-import Flex, {FlexItem} from '@instructure/ui-layout/lib/Flex'
+import {Checkbox} from '@instructure/ui-forms'
+import {Flex} from '@instructure/ui-layout'
 import {Text} from '@instructure/ui-elements'
 
 export default class SharedWith extends Component {
@@ -51,7 +51,7 @@ export default class SharedWith extends Component {
   renderPerms () {
     const { user: { permissions } } = this.props
     return (
-      <FlexItem shrink grow textAlign="end">
+      <Flex.Item shrink grow textAlign="end">
         <Checkbox
           inline
           label="read"
@@ -86,21 +86,21 @@ export default class SharedWith extends Component {
           checked={permissions.includes('share')}
           onChange={this.setShare}
         />
-      </FlexItem>
+      </Flex.Item>
     )
   }
 
   renderOwner () {
-    return <FlexItem shrink grow textAlign="end"><Text>Owner</Text></FlexItem>
+    return <Flex.Item shrink grow textAlign="end"><Text>Owner</Text></Flex.Item>
   }
 
   render () {
     const { user, user: { permissions } } = this.props
     return (
       <Flex margin="medium 0">
-        <FlexItem>
+        <Flex.Item>
           <Text>{user.email}</Text>
-        </FlexItem>
+        </Flex.Item>
         {permissions.includes('owner')
           ? this.renderOwner()
           : this.renderPerms()

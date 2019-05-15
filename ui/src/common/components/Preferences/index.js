@@ -1,5 +1,5 @@
 import React from 'react'
-import Preference from '../Preference'
+import Preference from './Preference'
 
 export default function Preferences ({preferences, updatePreference, showRecordType = true, binary = false}) {
   return Object.keys(preferences).map((p) => {

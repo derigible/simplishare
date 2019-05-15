@@ -5,7 +5,6 @@ module Schemas
       'required' => %w[
         title
         description
-        todos
       ].freeze,
       'properties' => {
         'title' => {
@@ -13,33 +12,6 @@ module Schemas
         }.freeze,
         'description' => {
           'type' => %w[string null]
-        }.freeze,
-        'todos' => {
-          'type' => 'array',
-          'id' => 'sub_todo',
-          'items' => {
-            'type' => 'object',
-            'required' => %w[
-              id
-              title
-              todos
-            ],
-            'properties' => {
-              'id' => {
-                'type' => 'string'
-              },
-              'title' => {
-                'type' => 'string'
-              },
-              'todos' => {
-                'type' => 'array',
-                '$ref' => 'sub_todo'
-              },
-              'description' => {
-                'type' => %w[string null]
-              }
-            }
-          }
         }.freeze
       }.freeze
     }.freeze

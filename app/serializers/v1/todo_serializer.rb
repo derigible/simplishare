@@ -8,9 +8,6 @@ module V1
     attribute :description do
       object.entity.todo['description']
     end
-    attribute :todos do
-      object.entity.todo['todos']
-    end
     attribute :title do
       object.entity.todo['title']
     end

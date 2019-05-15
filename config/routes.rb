@@ -22,18 +22,7 @@ Rails.application.routes.draw do
   end
 
   concern :api_routes do
-    resources :categories do
-      resources :events, only: [:index], controller: 'categories/events'
-    end
     resources :contacts, only: [:index, :create, :show, :destroy]
-    resources :accounts do
-      resources :events, only: [:index], controller: 'accounts/events'
-    end
-    post 'events/bulk_create' => 'events#bulk_create'
-    resources :events do
-      resources :accounts, only: [:index, :create], controller: 'events/accounts'
-      resources :categories, only: [:index, :create], controller: 'events/categories'
-    end
     resources :notes do
       resource :tags, only: [:create, :destroy], controller: 'tags/notes'
       concerns :virtual_entity

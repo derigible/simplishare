@@ -10,16 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_26_123415) do
+ActiveRecord::Schema.define(version: 2019_05_15_045847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "accounts", force: :cascade do |t|
-    t.string "name", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_accounts_on_user_id"
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -40,12 +34,6 @@ ActiveRecord::Schema.define(version: 2019_01_26_123415) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "title", null: false
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -96,36 +84,6 @@ ActiveRecord::Schema.define(version: 2019_01_26_123415) do
     t.index ["type"], name: "index_entities_on_type"
   end
 
-  create_table "events", force: :cascade do |t|
-    t.bigint "account_id"
-    t.text "description"
-    t.float "amount"
-    t.boolean "is_debit"
-    t.text "notes"
-    t.datetime "date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
-    t.index ["account_id"], name: "index_events_on_account_id"
-    t.index ["user_id"], name: "index_events_on_user_id"
-  end
-
-  create_table "events_accounts", force: :cascade do |t|
-    t.bigint "account_id"
-    t.bigint "event_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_events_accounts_on_account_id"
-    t.index ["event_id"], name: "index_events_accounts_on_event_id"
-  end
-
-  create_table "events_categories", force: :cascade do |t|
-    t.bigint "category_id"
-    t.bigint "event_id"
-    t.index ["category_id"], name: "index_events_categories_on_category_id"
-    t.index ["event_id"], name: "index_events_categories_on_event_id"
-  end
-
   create_table "failed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
@@ -148,13 +106,6 @@ ActiveRecord::Schema.define(version: 2019_01_26_123415) do
 
   create_table "tags", force: :cascade do |t|
     t.string "name", null: false
-  end
-
-  create_table "tags_events", force: :cascade do |t|
-    t.bigint "tag_id"
-    t.bigint "event_id"
-    t.index ["event_id"], name: "index_tags_events_on_event_id"
-    t.index ["tag_id"], name: "index_tags_events_on_tag_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -212,18 +163,8 @@ ActiveRecord::Schema.define(version: 2019_01_26_123415) do
     t.index ["user_id"], name: "index_virtual_tags_on_user_id"
   end
 
-  add_foreign_key "accounts", "users"
-  add_foreign_key "categories", "users"
   add_foreign_key "contacts", "users"
   add_foreign_key "contacts", "users", column: "contact_id"
-  add_foreign_key "events", "accounts"
-  add_foreign_key "events", "users"
-  add_foreign_key "events_accounts", "accounts"
-  add_foreign_key "events_accounts", "events"
-  add_foreign_key "events_categories", "categories"
-  add_foreign_key "events_categories", "events"
-  add_foreign_key "tags_events", "events"
-  add_foreign_key "tags_events", "tags"
   add_foreign_key "virtual_entities", "entities"
   add_foreign_key "virtual_entities", "users"
   add_foreign_key "virtual_entities_tags", "virtual_entities"

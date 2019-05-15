@@ -38,8 +38,6 @@ export const todoProps = PropTypes.shape({
   shared: PropTypes.bool
 })
 
-export const todoParentChainProps = PropTypes.arrayOf(id)
-
 export const deletedTodosProps = PropTypes.instanceOf(Set)
 
 export const fetchRetrievalStatusProps = PropTypes.oneOf(['success', 'inProgress', 'pending', 'error'])

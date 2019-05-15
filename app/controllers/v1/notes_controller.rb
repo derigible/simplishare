@@ -16,10 +16,8 @@ module V1
       Note
     end
 
-    def create_params
-      to_create = { data: request_params.select { |k, _| %w[title body].include? k } }
-      to_create[:priority] = request_params[:priority]
-      to_create
+    def data_params
+      %w[title body]
     end
 
     def serializer
@@ -27,15 +25,15 @@ module V1
     end
 
     def request_params
-      @request_params ||= params.require(:note).permit(:title, :body, :archived, :update_shared, :priority)
-    end
-
-    def update_params
-      updates = {}
-      data = request_params.select { |k, _| %w[title body].include? k }
-      updates[:data] = @ve.entity.data.merge(data) unless data.empty?
-      updates[:priority] = request_params[:priority] if request_params[:priority]
-      updates
+      @request_params ||= params
+                          .require(:note)
+                          .permit(
+                            :title,
+                            :body,
+                            :archived,
+                            :update_shared,
+                            :priority
+                          )
     end
   end
 end

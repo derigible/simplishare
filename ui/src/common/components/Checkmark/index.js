@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 
 import {Button} from '@instructure/ui-buttons'
 
-import {IconCheck} from '@instructure/ui-icons'
+import {IconCheckMarkLine as IconCheck} from '@instructure/ui-icons'
 import {ScreenReaderContent} from '@instructure/ui-a11y'
 
 export default class Checkmark extends PureComponent {

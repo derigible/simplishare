@@ -55,4 +55,8 @@ describe V1::NotesController do
       let(:json_schema) { model_schema }
     end
   end
+
+  describe '#sharing'
+
+  describe '#preferences'
 end

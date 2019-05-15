@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
 import ListView from './ListView'
-import SubTask from './SubTask'
 import * as customPropTypes from '../../propTypes'
 
 export default class Todo extends PureComponent {
@@ -37,7 +36,6 @@ export default class Todo extends PureComponent {
         addTag={addTag}
         createAndAddTag={createAndAddTag}
         hideCompleted={hideCompleted}
-        renderSubTasks={this.renderSubTasks}
       />
     )
   }

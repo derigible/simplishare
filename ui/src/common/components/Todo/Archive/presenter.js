@@ -7,8 +7,7 @@ import * as customPropTypes from '../../../propTypes'
 export default class Todo extends PureComponent {
   static propTypes = {
     entity: customPropTypes.todoProps.isRequired,
-    archiveEntity: PropTypes.func.isRequired,
-    parentChain: customPropTypes.todoParentChainProps,
+    archiveEntity: PropTypes.func.isRequired
   }
 
   focus () {
@@ -22,7 +21,7 @@ export default class Todo extends PureComponent {
         updates.update_shared = true
       }
     }
-    this.props.archiveEntity(this.props.entity.id, updates, {parentChain: this.props.parentChain })
+    this.props.archiveEntity(this.props.entity.id, updates)
   }
 
   setCheckmarkRef = node => this.checkmarkRef = node

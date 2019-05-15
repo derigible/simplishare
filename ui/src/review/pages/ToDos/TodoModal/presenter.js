@@ -6,7 +6,6 @@ import {Button} from '@instructure/ui-buttons'
 import {Heading,Spinner} from '@instructure/ui-elements'
 
 import Body from '../../../../common/components/Todo/Body'
-import SubTask from '../../../../common/components/Todo/SubTask'
 import { id, todoProps, fetchRetrievalStatusProps } from '../../../../common/propTypes'
 
 
@@ -152,18 +151,6 @@ export default class TodoModal extends Component {
     return 'Create Todo'
   }
 
-  renderSubTasks = (parentChain, entity) => {
-    return (
-      <SubTask
-        todos={entity.todos}
-        onSelectMenuOpenChange={this.noop}
-        parentChain={parentChain}
-        hideCompleted={false}
-        renderSubTasks={this.renderSubTasks}
-      />
-    )
-  }
-
   renderModal () {
     if (this.isLoadingError) {
       return <Heading level="h3">Problem loading entity</Heading>
@@ -182,10 +169,8 @@ export default class TodoModal extends Component {
       createAndAddTag={this.handleNewTagDefined}
       submitDescriptionChange={this.handleDescriptionChange}
       submitTitleChange={this.handleTitleChange}
-      parentChain={[this.state.todo.id]}
       hideCompleted={false}
       isUpdating={this.isUpdating}
-      renderSubTasks={this.isUpdating ? this.renderSubTasks : null}
     />
   }
 

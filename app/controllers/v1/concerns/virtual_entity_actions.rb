@@ -86,10 +86,6 @@ module V1
         raise 'Must define on controller'
       end
 
-      def create_params
-        raise 'Must define on controller'
-      end
-
       def load_virtual_entity
         @ve = VirtualEntity.find(params[:id])
       end
@@ -115,19 +111,35 @@ module V1
         scope
       end
 
-      # Update functions
+      # params
+
+      def data_params
+        raise 'Must define on controller'
+      end
 
       def request_params
         raise 'Must define on controller'
       end
 
+      def create_params
+        to_create = { data: request_params.select { |k, _| data_params.include? k } }
+        to_create[:priority] = request_params[:priority]
+        to_create
+      end
+
       def update_params
-        raise 'Must define on controller'
+        updates = {}
+        data = request_params.select { |k, _| data_params.include? k }
+        updates[:data] = @ve.entity.data.merge(data) unless data.empty?
+        updates[:priority] = request_params[:priority] if request_params[:priority]
+        updates
       end
 
       def snooze_params
         params.require(:snooze).permit(:snooze_until)
       end
+
+      # Update functions
 
       def update_archived(policy, new_archived, update_shared)
         if policy.archive_entity? && update_shared

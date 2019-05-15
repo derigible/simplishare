@@ -7,12 +7,11 @@ import * as customPropTypes from '../../../propTypes'
 export default class Destroy extends PureComponent {
   static propTypes = {
     entity: customPropTypes.todoProps.isRequired,
-    deleteEntity: PropTypes.func.isRequired,
-    parentChain: customPropTypes.todoParentChainProps,
+    deleteEntity: PropTypes.func.isRequired
   }
 
   deleteSelf = () => {
-    this.props.deleteEntity(this.props.entity.id, {parentChain: this.props.parentChain })
+    this.props.deleteEntity(this.props.entity.id)
   }
 
   render () {

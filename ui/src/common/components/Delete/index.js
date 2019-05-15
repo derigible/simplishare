@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 
 import {Button} from '@instructure/ui-buttons'
 
-import {IconTrash} from '@instructure/ui-icons'
+import {IconTrashLine as IconTrash} from '@instructure/ui-icons'
 import {ScreenReaderContent} from '@instructure/ui-a11y'
 
 export default class Delete extends PureComponent {

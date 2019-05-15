@@ -26,18 +26,12 @@ export default class Body extends Component {
     createAndAddTag: PropTypes.func,
     submitTitleChange: PropTypes.func.isRequired,
     submitDescriptionChange: PropTypes.func.isRequired,
-    parentChain: customPropTypes.todoParentChainProps,
-    renderSubTasks: PropTypes.func,
     isUpdating: PropTypes.bool,
     updatePreference: PropTypes.func.isRequired
   }
 
   static defaultProps = {
     isUpdating: true
-  }
-
-  get hasParentChain () {
-    return this.props.parentChain.length > 1
   }
 
   handleAddTag = (tag_ids) => {
@@ -58,10 +52,8 @@ export default class Body extends Component {
       entity,
       possibleTags,
       onSelectMenuOpenChange,
-      parentChain,
       submitDescriptionChange,
       submitTitleChange,
-      renderSubTasks,
       isUpdating,
       updatePreference
     } = this.props
@@ -93,26 +85,19 @@ export default class Body extends Component {
             <Flex.Item margin="0 small 0 0">
               <Typography>Actions:</Typography>
             </Flex.Item>
-            {!this.hasParentChain
-              ? (
-                <Flex.Item margin="0 small 0 0">
-                  <Snooze
-                    entityId={entity.id}
-                    entityType="Todo"
-                  />
-                </Flex.Item>
-                )
-              : null
-            }
+            <Flex.Item margin="0 small 0 0">
+              <Snooze
+                entityId={entity.id}
+                entityType="Todo"
+              />
+            </Flex.Item>
             <Flex.Item>
               <Destroy
                 entity={entity}
-                parentChain={this.props.parentChain}
               />
             </Flex.Item>
           </Flex>
-          {renderSubTasks ? renderSubTasks(parentChain, entity) : null }
-          {!this.hasParentChain && isUpdating
+          {isUpdating
             ? <ToggleGroup
                 toggleLabel="Expand to see sharing information."
                 summary="Sharing"
@@ -126,7 +111,7 @@ export default class Body extends Component {
               </ToggleGroup>
             : null
           }
-          {!this.hasParentChain && isUpdating
+          {isUpdating
             ? <ToggleGroup
                 toggleLabel="Expand to see preferences information."
                 summary="Preferences"
@@ -152,7 +137,7 @@ export default class Body extends Component {
             addTag={this.handleAddTag}
             createAndAddTag={this.handleCreateAndAddTag}
             onSelectMenuOpenChange={onSelectMenuOpenChange}
-            showTags={!this.hasParentChain}
+            showTags
           />
       </View>
     )

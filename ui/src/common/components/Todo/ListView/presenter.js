@@ -19,26 +19,16 @@ export default class ListView extends PureComponent {
     removeTag: PropTypes.func,
     createAndAddTag: PropTypes.func,
     updateEntity: PropTypes.func.isRequired,
-    parentChain: customPropTypes.todoParentChainProps,
-    hideCompleted: PropTypes.bool.isRequired,
-    renderSubTasks: PropTypes.func
+    hideCompleted: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
     addTag: () => {},
-    createAndAddTag: () => {},
-    parentChain: []
+    createAndAddTag: () => {}
   }
 
   state = {
     showBody: false
-  }
-
-  get parentChain () {
-    if (this.props.parentChain.length === 0) {
-      return [this.props.entity.id]
-    }
-    return this.props.parentChain
   }
 
   setArchiveRef = (node) => {
@@ -50,22 +40,20 @@ export default class ListView extends PureComponent {
   }
 
   changePriority = (priority) => {
-    this.props.updateEntity(this.props.entity.id, { priority }, {parentChain: this.parentChain })
+    this.props.updateEntity(this.props.entity.id, { priority })
   }
 
   submitDescriptionChange = (description) => {
     this.props.updateEntity(
       this.props.entity.id,
-      { description },
-      {parentChain: this.parentChain }
+      { description }
     )
   }
 
   submitTitleChange = (title) => {
     this.props.updateEntity(
       this.props.entity.id,
-      { title },
-      {parentChain: this.parentChain }
+      { title }
     )
   }
 
@@ -82,7 +70,6 @@ export default class ListView extends PureComponent {
       removeTag,
       addTag,
       createAndAddTag,
-      renderSubTasks,
       hideCompleted
     } = this.props
     return (
@@ -98,7 +85,6 @@ export default class ListView extends PureComponent {
               <Archive
                 ref={this.setArchiveRef}
                 entity={entity}
-                parentChain={this.parentChain}
               />
             </View>
           </Flex.Item>
@@ -113,9 +99,7 @@ export default class ListView extends PureComponent {
                 createAndAddTag={createAndAddTag}
                 submitDescriptionChange={this.submitDescriptionChange}
                 submitTitleChange={this.submitTitleChange}
-                parentChain={this.parentChain}
                 hideCompleted={hideCompleted}
-                renderSubTasks={renderSubTasks}
               />
             : null
           }

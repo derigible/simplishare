@@ -1,20 +1,5 @@
-import { setEvents, fetchEventsByPeriod, eventShowMore } from './event'
-import { setSortByKey } from './history'
-import {
-  setFilterBy,
-  setEventsRetrieved,
-  setLookupTerm,
-  setLookupParam
-} from './dashboard'
 import { closeSidebar, openSidebar } from './sidebar'
 import { navigateTo, updatePath, replacePath } from './navigation'
-import {
-  setCategories,
-  fetchCategories,
-  setCategoriesRetrieved,
-  fetchCategoryEvents,
-  setCategoryEventsRetrieved
-} from './category'
 import {
   submitUserCredentials,
   submitForgotEmail,
@@ -25,10 +10,6 @@ import {
   logout,
   submitResetPassword
 } from './auth'
-import {
-  unsetSpinnerOverlay,
-  setSpinnerOverlay
-} from './fileUpload'
 import {
   setTodosRetrieved,
   createTodo,
@@ -86,29 +67,14 @@ import {
 } from './preferences'
 
 export {
-  setEvents,
-  fetchEventsByPeriod,
-  eventShowMore,
   navigateTo,
-  setEventsRetrieved,
-  setSortByKey,
-  setFilterBy,
-  setLookupTerm,
   closeSidebar,
   openSidebar,
   updatePath,
-  setCategoriesRetrieved,
-  setCategories,
-  fetchCategories,
-  fetchCategoryEvents,
-  setCategoryEventsRetrieved,
   createUser,
   submitUserCredentials,
   setAuthTokens,
-  setSpinnerOverlay,
   setUserInfo,
-  unsetSpinnerOverlay,
-  setLookupParam,
   createTodo,
   updateTodo,
   deleteTodo,

@@ -23,7 +23,7 @@ export default class Note extends Component {
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
       title: PropTypes.string,
       body: PropTypes.string,
-      tags: PropTypes.arrayOf(PropTypes.number),
+      tags: PropTypes.arrayOf(PropTypes.string),
       needToLoad: PropTypes.bool,
       priority: PropTypes.string
     }),

@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
 import auth from './auth'
 import sidebar from './sidebar'
-import navigation from './navigation'
 import todo from './todo'
 import tag from './tag'
 import note from './note'
@@ -21,7 +20,6 @@ export default (state, action) => {
 const appReducer = combineReducers({
   auth,
   sidebar,
-  navigation,
   todo,
   tag,
   note,

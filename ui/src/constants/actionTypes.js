@@ -2,9 +2,6 @@ export const CLOSE_SIDEBAR = 'CLOSE_SIDEBAR'
 export const OPEN_SIDEBAR = 'OPEN_SIDEBAR'
 
 export const NAVIGATE_TO = 'NAVIGATE_TO'
-export const NAVIGATE_WITHOUT_ROUTING = 'NAVIGATE_WITHOUT_ROUTING'
-export const GO_BACK = 'GO_BACK'
-export const UPDATE_PATH = 'UPDATE_PATH'
 
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN'
 export const SET_USER_INFO = 'SET_USER_INFO'

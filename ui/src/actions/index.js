@@ -1,5 +1,5 @@
 import { closeSidebar, openSidebar } from './sidebar'
-import { navigateTo, updatePath, replacePath } from './navigation'
+import { navigateTo } from './navigation'
 import {
   submitUserCredentials,
   submitForgotEmail,
@@ -70,7 +70,6 @@ export {
   navigateTo,
   closeSidebar,
   openSidebar,
-  updatePath,
   createUser,
   submitUserCredentials,
   setAuthTokens,
@@ -119,7 +118,6 @@ export {
   fetchPreference,
   updateTodoPreferences,
   updateNotePreferences,
-  replacePath,
   setSelectedTags,
   snoozeTodo,
   snoozeNote,

@@ -5,12 +5,7 @@ import theme from '@instructure/canvas-theme'
 
 theme.use()
 
-if (!window.location.href.includes('#!')) {
-  window.history.replaceState({}, 'placeHash', '#!')
-}
-
 import configureStore from './stores/configureStore'
-import { updatePath } from './actions'
 import { registerAuthorizationCheck, registerAuthorizationHeader, registerDefaultErrorHandler } from './api_client'
 import { getAuthorizationHeader, getAccessToken  } from './api_client/basicInterface'
 import getAppData, { registerState } from './api_client/hydrator'
@@ -47,7 +42,6 @@ getAppData(store.dispatch, path)
 router.on('route', async (_, routing) => {
   try {
     const view = await routing
-    store.dispatch(updatePath(path))
 
     ReactDOM.render(
       <Provider store={store}>

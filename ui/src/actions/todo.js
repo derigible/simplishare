@@ -1,21 +1,26 @@
 import * as actionTypes from '../constants/actionTypes'
 import api_client from '../api_client'
 
+export function setTodos (todos) {
+  return {
+    type: actionTypes.TODOS_SET_TODOS,
+    payload: todos
+  }
+}
+
 export function removeTodo (id, opts = {}) {
-  const { parentChain } = opts
   return {
     type: actionTypes.TODOS_REMOVE_TODO,
     payload: {
-      parentChain,
       id
     }
   }
 }
 
-export function setTodos (todos) {
+export function setTodosRetrieved (retrieved) {
   return {
-    type: actionTypes.TODOS_SET_TODOS,
-    payload: todos
+    type: actionTypes.TODOS_SET_RETRIEVED,
+    payload: retrieved
   }
 }
 
@@ -33,13 +38,6 @@ export function setTodoShareableWith (todos) {
   }
 }
 
-export function setTodosRetrieved (retrieved) {
-  return {
-    type: actionTypes.TODOS_SET_RETRIEVED,
-    payload: retrieved
-  }
-}
-
 export function fetchTodos (successCallBack, errorCallBack) {
   return function (dispatch) {
     api_client.fetchAllGet('todos?per_page=150')
@@ -47,16 +45,16 @@ export function fetchTodos (successCallBack, errorCallBack) {
   }
 }
 
-export function fetchTodoSharedWith (fetchParams, successCallBack, errorCallBack) {
+export function fetchTodoShareableWith (fetchParams, successCallBack, errorCallBack) {
   return function (dispatch) {
-    api_client.get(`todos/${fetchParams.id}/shared_with`)
+    api_client.get(`todos/${fetchParams.id}/shareable_with`)
       .then(successCallBack, errorCallBack)
   }
 }
 
-export function fetchTodoShareableWith (fetchParams, successCallBack, errorCallBack) {
+export function fetchTodoSharedWith (fetchParams, successCallBack, errorCallBack) {
   return function (dispatch) {
-    api_client.get(`todos/${fetchParams.id}/shareable_with`)
+    api_client.get(`todos/${fetchParams.id}/shared_with`)
       .then(successCallBack, errorCallBack)
   }
 }
@@ -82,8 +80,7 @@ export function updateTodo (id, updates, successCallBack, errorCallBack, opts = 
       `todos/${id}`,
       {
         requestBody: {
-          todo: updates,
-          parent_chain: opts.parentChain
+          todo: updates
         }
       }
     )
@@ -98,8 +95,7 @@ export function archiveTodo (id, archiveOpts, successCallBack, errorCallBack, op
       `todos/${id}/archive`,
       {
         requestBody: {
-          todo: archiveOpts,
-          parent_chain: opts.parentChain
+          todo: archiveOpts
         }
       }
     )
@@ -111,12 +107,7 @@ export function archiveTodo (id, archiveOpts, successCallBack, errorCallBack, op
 export function deleteTodo (id, successCallBack, errorCallBack, opts = {}) {
   return function (dispatch) {
     return api_client.delete(
-      `todos/${id}`,
-      {
-        requestBody: {
-          parent_chain: opts.parentChain
-        }
-      }
+      `todos/${id}`
     )
     .then(successCallBack)
     .catch(errorCallBack)

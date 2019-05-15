@@ -3,7 +3,6 @@ import Router from 'middle-router'
 
 import NotesList from './pages/NotesList'
 import Note from './pages/Note'
-// import Categories from './pages/Categories'
 import ToDos from './pages/ToDos'
 import Page from './pages/Page'
 

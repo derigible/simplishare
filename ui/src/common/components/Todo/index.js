@@ -25,19 +25,6 @@ export default class Todo extends PureComponent {
 
   setTitleRef = (node) => { this.titleRef = node }
 
-  renderSubTasks = (parentChain, entity) => {
-    const { onSelectMenuOpenChange, hideCompleted } = this.props
-
-    return (
-      <SubTask
-        todos={entity.todos}
-        onSelectMenuOpenChange={onSelectMenuOpenChange}
-        parentChain={parentChain}
-        hideCompleted={hideCompleted}
-        renderSubTasks={this.renderSubTasks}
-      />
-    )
-  }
 
   render () {
     const { entity, onSelectMenuOpenChange, removeTag, addTag, createAndAddTag, hideCompleted } = this.props

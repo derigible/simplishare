@@ -8,6 +8,15 @@ export function setNotes (notes) {
   }
 }
 
+export function removeNote (id) {
+  return {
+    type: actionTypes.NOTES_REMOVE_NOTE,
+    payload: {
+      id
+    }
+  }
+}
+
 export function setNotesRetrieved (retrieved) {
   return {
     type: actionTypes.NOTES_SET_RETRIEVED,
@@ -29,18 +38,9 @@ export function setNoteShareableWith (note) {
   }
 }
 
-export function removeNote (id) {
-  return {
-    type: actionTypes.NOTES_REMOVE_NOTE,
-    payload: {
-      id
-    }
-  }
-}
-
-export function fetchNoteSharedWith (fetchParams, successCallBack, errorCallBack) {
+export function fetchNotes (successCallBack, errorCallBack) {
   return function (dispatch) {
-    api_client.get(`notes/${fetchParams.id}/shared_with`)
+    api_client.fetchAllGet('notes')
       .then(successCallBack, errorCallBack)
   }
 }
@@ -52,20 +52,10 @@ export function fetchNoteShareableWith (fetchParams, successCallBack, errorCallB
   }
 }
 
-export function fetchNotes (successCallBack, errorCallBack) {
+export function fetchNoteSharedWith (fetchParams, successCallBack, errorCallBack) {
   return function (dispatch) {
-    api_client.fetchAllGet('notes')
+    api_client.get(`notes/${fetchParams.id}/shared_with`)
       .then(successCallBack, errorCallBack)
-  }
-}
-
-export function fetchNote (id, successCallBack, errorCallBack) {
-  return function (dispatch) {
-    return api_client.get(
-      `notes/${id}`
-    )
-    .then(successCallBack)
-    .catch(errorCallBack)
   }
 }
 
@@ -124,7 +114,6 @@ export function deleteNote (id, successCallBack, errorCallBack) {
   }
 }
 
-
 export function shareNote (id, users, successCallBack, errorCallBack) {
   return function () {
     return api_client.post(
@@ -168,6 +157,16 @@ export function snoozeNote (id, snooze_until, successCallBack, errorCallBack, op
           }
         }
       }
+    )
+    .then(successCallBack)
+    .catch(errorCallBack)
+  }
+}
+
+export function fetchNote (id, successCallBack, errorCallBack) {
+  return function (dispatch) {
+    return api_client.get(
+      `notes/${id}`
     )
     .then(successCallBack)
     .catch(errorCallBack)

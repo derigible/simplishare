@@ -4,14 +4,14 @@ import React, { PureComponent } from 'react'
 import {Button} from '@instructure/ui-buttons'
 import {View} from '@instructure/ui-layout'
 import {Popover} from '@instructure/ui-overlays'
-import {RadioInput} from '@instructure/ui-forms'
-import {RadioInputGroup} from '@instructure/ui-forms'
+import {RadioInput,RadioInputGroup} from '@instructure/ui-forms'
+
 import {ScreenReaderContent} from '@instructure/ui-a11y'
 import { Text as Typography} from '@instructure/ui-elements'
 
-import {IconArrowUpLine as IconHighPriority} from '@instructure/ui-icons'
-import {IconArrowEndLine as IconMediumPriority} from '@instructure/ui-icons'
-import {IconArrowDownLine as IconLowPriority} from '@instructure/ui-icons/lib'
+import {IconArrowUpLine as IconHighPriority,IconArrowEndLine as IconMediumPriority,IconArrowDownLine as IconLowPriority} from '@instructure/ui-icons'
+
+
 
 export default class Priority extends PureComponent {
   static propTypes = {

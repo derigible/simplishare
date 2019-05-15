@@ -2,9 +2,9 @@ import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 
 import {Button} from '@instructure/ui-buttons'
-import {Flex} from '@instructure/ui-layout'
+import {Flex,View} from '@instructure/ui-layout'
 
-import {View} from '@instructure/ui-layout'
+
 
 import Archive from '../Archive'
 import Summary from '../Summary'

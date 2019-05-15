@@ -5,18 +5,18 @@ import keycode from 'keycode'
 
 import {Button} from '@instructure/ui-buttons'
 import {ScreenReaderContent} from '@instructure/ui-a11y'
-import {Flex} from '@instructure/ui-layout'
+import {Flex,View} from '@instructure/ui-layout'
 import {Heading, Pill, Text as Typography} from '@instructure/ui-elements'
 
-import {IconEdit} from '@instructure/ui-icons'
-import {IconEye} from '@instructure/ui-icons'
+import {IconEdit,IconEye} from '@instructure/ui-icons'
+
 
 import * as customPropTypes from '../../../../common/propTypes'
 import Note from '../../Note/presenter'
 import Delete from '../../../../common/components/Delete'
 import Checkmark from '../../../../common/components/Checkmark'
 import Actions from '../../../../common/components/Actions'
-import {View} from '@instructure/ui-layout'
+
 import Snooze from '../../../../common/components/Snooze'
 
 export default class NoteInList extends Component {

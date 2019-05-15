@@ -3,12 +3,12 @@ import React, { Component } from 'react'
 
 import {Modal} from '@instructure/ui-overlays'
 import {Button} from '@instructure/ui-buttons'
-import {Heading} from '@instructure/ui-elements'
+import {Heading,Spinner} from '@instructure/ui-elements'
 
 import Body from '../../../../common/components/Todo/Body'
 import SubTask from '../../../../common/components/Todo/SubTask'
 import { id, todoProps, fetchRetrievalStatusProps } from '../../../../common/propTypes'
-import {Spinner} from '@instructure/ui-elements'
+
 
 const baseTodo = (tags) => ({
   id: 'tempId',

@@ -4,8 +4,8 @@ import {Flex, View} from '@instructure/ui-layout'
 import {Tray} from '@instructure/ui-overlays'
 import {Button} from '@instructure/ui-buttons'
 import {IconExpandStartLine as IconExpandStart} from '@instructure/ui-icons'
-import {ScreenReaderContent} from '@instructure/ui-a11y'
-import {PresentationContent} from '@instructure/ui-a11y'
+import {ScreenReaderContent,PresentationContent} from '@instructure/ui-a11y'
+
 
 export default class SmallScreen extends PureComponent {
   state = {

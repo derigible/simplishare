@@ -6,8 +6,8 @@ import {Avatar, Link, Heading} from '@instructure/ui-elements'
 import {Tray} from '@instructure/ui-overlays'
 import {View, Flex} from '@instructure/ui-layout'
 
-import {IconCheckPlus} from '@instructure/ui-icons'
-import {IconCompose} from '@instructure/ui-icons'
+import {IconCheckPlus,IconCompose} from '@instructure/ui-icons'
+
 
 export default class Chrome extends PureComponent {
   navigateToTodos = () => {

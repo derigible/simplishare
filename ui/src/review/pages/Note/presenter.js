@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import difference from 'lodash/difference'
 
 import {Button} from '@instructure/ui-buttons'
-import {Text} from '@instructure/ui-elements'
-import {Heading} from '@instructure/ui-elements'
-import {Flex} from '@instructure/ui-layout'
-import {Pill} from '@instructure/ui-elements'
+import {Text,Heading,Pill} from '@instructure/ui-elements'
+
+import {Flex,View} from '@instructure/ui-layout'
+
 import {TextInput, TextArea} from '@instructure/ui-forms'
-import {View} from '@instructure/ui-layout'
+
 
 import { NOTES_SET_NOTES } from '../../../constants/actionTypes'
 

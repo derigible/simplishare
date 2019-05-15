@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
 import React, { Component, Fragment } from 'react'
 
-import {Text} from '@instructure/ui-elements'
+import {Text,Heading} from '@instructure/ui-elements'
 import {FormFieldGroup} from '@instructure/ui-form-field'
-import {Flex} from '@instructure/ui-layout'
-import {Heading} from '@instructure/ui-elements'
-import {RadioInputGroup} from '@instructure/ui-forms'
-import {RadioInput} from '@instructure/ui-forms'
+import {Flex,View} from '@instructure/ui-layout'
+
+import {RadioInputGroup,RadioInput} from '@instructure/ui-forms'
+
 import {ScreenReaderContent} from '@instructure/ui-a11y'
-import {View} from '@instructure/ui-layout'
+
 import {capitalizeFirstLetter as uc} from '@instructure/ui-utils'
 
 export default class Preference extends Component {

@@ -2,8 +2,8 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 import {Alert} from '@instructure/ui-alerts'
-import {Link} from '@instructure/ui-elements'
-import { Text as Typography} from '@instructure/ui-elements'
+import {Link, Text as Typography} from '@instructure/ui-elements'
+
 import {themeable} from '@instructure/ui-themeable'
 
 import styles from './styles.css'

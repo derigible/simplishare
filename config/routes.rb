@@ -13,12 +13,18 @@ Rails.application.routes.draw do
   end
 
   concern :virtual_entity do
+    get 'share', on: :member, action: 'list_shared' #create action
     post 'share', on: :member
-    get 'shared_with', on: :member
-    get 'shareable_with', on: :member
+    delete 'share', on: :member, action: 'unshare' #create action
+    get 'shared_with', on: :member #deprecate!
+    get 'shareable_with', on: :member #deprecate!
     put 'preferences', on: :member
     put 'snooze', on: :member
+    delete 'snooze', on: :member, action: 'unsnooze' #create action
     put 'archive', on: :member
+    delete 'archive', on: :member, action: 'unarchive' #create action
+    post 'tag', on: :member #create action
+    delete 'tag', on: :member, action: 'untag' #create action
   end
 
   concern :api_routes do

@@ -29,6 +29,14 @@ class VirtualEntityPolicy < ApplicationPolicy
     record_owner? && entity_owner_or_has_permission?('share')
   end
 
+  def share_details?
+    record_owner? && entity_owner_or_has_permission?('share')
+  end
+
+  def unshare?
+    record_owner? && entity_owner_or_has_permission?('only owner can unshare')
+  end
+
   def shared_with?
     record_owner?
   end

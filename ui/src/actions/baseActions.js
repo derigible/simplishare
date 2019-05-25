@@ -1,36 +1,36 @@
 import api_client from '../api_client'
-import * as actionTypes from '../constants/actionTypes'
+import * as msgs from '../constants/actionTypes'
 
 class ActionHandler {
   success = actionType => data => {
     this.dispatch(
       {
-        action: actionTypes.ENTITY_ENTITY_API_ACTION_SUCCESS,
+        action: msgs.ENTITY_ENTITY_API_ACTION_SUCCESS,
         actionType,
         entityType: this.entityType,
         payload: data
       }
     )
-    this.setActionState(actionTypes.FETCH_STATE_SUCCESS, actionType)
+    this.setActionState(msgs.FETCH_STATE_SUCCESS, actionType)
     return data
   }
 
   error = actionType => e => {
     if (e.status !== 401) {
       this.dispatch(
-        {action: actionTypes.ALERT_ERROR_ALERT, entityType: this.entityType, payload: e}
+        {action: msgs.ALERT_ERROR_ALERT, entityType: this.entityType, payload: e}
       )
     } else {
-      this.dispatch({action: actionTypes.ALERT_LOGIN_ALERT, payload: e})
+      this.dispatch({action: msgs.ALERT_LOGIN_ALERT, payload: e})
     }
-    this.setActionState(actionTypes.FETCH_STATE_ERROR, actionType)
+    this.setActionState(msgs.FETCH_STATE_ERROR, actionType)
     return e
   }
 
   setActionState = (state, actionType) => {
     return this.dispatch(
       {
-        action: actionTypes.ENTITY_SET_ENTITY_API_ACTION_STATE,
+        action: msgs.ENTITY_SET_ENTITY_API_ACTION_STATE,
         entityType: this.entityType,
         actionType,
         payload: state
@@ -39,9 +39,45 @@ class ActionHandler {
   }
 
   startAction = actionType => this.setActionState(
-    actionTypes.FETCH_STATE_IN_PROGRESS,
+    msgs.FETCH_STATE_IN_PROGRESS,
     actionType
   )
+
+  url (opts) {
+    let url = this.entityType
+    if (opts.head) { url += `/${opts.head}` }
+    if (opts.id) { url += `/${opts.id}` }
+    if (opts.tail) { url += `/${opts.tail}` }
+    return url
+  }
+
+  requestBody (params) {
+    return params ? { requestBody: params } : {}
+  }
+
+  post = (action, {params, path = {}}) => {
+    this.startAction(action)
+    return this.client.post(this.url(path), this.requestBody(params))
+      .then(this.success(action), this.error(action))
+  }
+
+  get = (action, {id = null, path = {}}) => {
+    this.startAction(action)
+    return this.client.get(this.url({...path, id}))
+      .then(this.success(action), this.error(action))
+  }
+
+  put = (action, {id, params, path = {}}) => {
+    this.startAction(action)
+    return this.client.put(this.url({...path, id}), this.requestBody(params))
+      .then(this.success(action), this.error(action))
+  }
+
+  delete = (action, {id = null, path = {}}) => {
+    this.startAction(action)
+    return this.client.destroy(this.url({...path, id}))
+      .then(this.success(action), this.error(action))
+  }
 }
 
 export default class BaseActions extends ActionHandler {
@@ -52,105 +88,58 @@ export default class BaseActions extends ActionHandler {
     this.client = client
   }
 
-  create = (params) => {
-    const action = actionTypes.ENTITY_ACTION_CREATE
-    this.startAction(action)
-    return this.client.post(this.entityType, { requestBody: params })
-      .then(this.success(action), this.error(action))
-  }
+  create = (params) => this.post(msgs.ENTITY_ACTION_CREATE, {params})
 
-  read = (id) => {
-    const action = actionTypes.ENTITY_ACTION_READ
-    this.startAction(action)
-    return this.client.get(`${this.entityType}/${id}`)
-      .then(this.success(action), this.error(action))
-  }
+  read = (id) => this.get(msgs.ENTITY_ACTION_READ, {id})
 
-  update = (id, params) => {
-    const action = actionTypes.ENTITY_ACTION_UPDATE
-    this.startAction(action)
-    return this.client.put(`${this.entityType}/${id}`, { requestBody: params })
-      .then(this.success(action), this.error(action))
-  }
+  update = (id, params) => this.put(msgs.ENTITY_ACTION_UPDATE, {id, params})
 
-  destroy = (id) => {
-    const action = actionTypes.ENTITY_ACTION_DESTROY
-    this.startAction(action)
-    return this.client.destroy(`${this.entityType}/${id}`)
-      .then(this.success(action), this.error(action))
-  }
+  destroy = (id) => this.delete(msgs.ENTITY_ACTION_DESTROY, {id})
 
-  list = () => {
-    const action = actionTypes.ENTITY_ACTION_LIST
-    this.startAction(action)
-    return this.client.get(this.entityType)
-      .then(this.success(action), this.error(action))
-  }
+  list = () => this.get(msgs.ENTITY_ACTION_LIST)
 
-  archive = (id) => {
-    const action = actionTypes.ENTITY_ACTION_ARCHIVE
-    this.startAction(action)
-    return this.client.put(`${this.entityType}/${id}/archive`)
-      .then(this.success(action), this.error(action))
-  }
+  archive = (id) => this.put(
+    msgs.ENTITY_ACTION_ARCHIVE, {id, path: { tail: 'archive' }}
+  )
 
-  unarchive = (id) => {
-    const action = actionTypes.ENTITY_ACTION_UNARCHIVE
-    this.startAction(action)
-    return this.client.destroy(`${this.entityType}/${id}/archive`)
-      .then(this.success(action), this.error(action))
-  }
+  unarchive = (id) => this.delete(
+    msgs.ENTITY_ACTION_UNARCHIVE, {id, path: { tail: 'archive' }}
+  )
 
-  snooze = (id, params) => {
-    const action = actionTypes.ENTITY_ACTION_SNOOZE
-    this.startAction(action)
-    return this.client.put(`${this.entityType}/${id}/snooze`, { requestBody: params })
-      .then(this.success(action), this.error(action))
-  }
+  snooze = (id, params) => this.put(
+    msgs.ENTITY_ACTION_SNOOZE, {id, params, path: { tail: 'snooze' }}
+  )
 
-  unsnooze = (id) => {
-    const action = actionTypes.ENTITY_ACTION_UNSNOOZE
-    this.startAction(action)
-    return this.client.destroy(`${this.entityType}/${id}/snooze`)
-      .then(this.success(action), this.error(action))
-  }
+  unsnooze = (id) => this.delete(
+    msgs.ENTITY_ACTION_UNSNOOZE, {id, path: { tail: 'snooze' }}
+  )
 
-  tag = (id, tag_ids) => {
-    const action = actionTypes.ENTITY_ACTION_TAG
-    this.startAction(action)
-    return this.client.post(`${this.entityType}/${id}/tag`, { requestBody: {tag_ids}})
-      .then(this.success(action), this.error(action))
-  }
+  tag = (id, tag_ids) => this.post(
+    msgs.ENTITY_ACTION_TAG, {id, params: {tag_ids}, path: { tail: 'tag' }}
+  )
 
-  untag = (id, tag_ids) => {
-    const action = actionTypes.ENTITY_ACTION_UNTAG
-    this.startAction(action)
-    return this.client.destroy(`${this.entityType}/${id}/tag`, { requestBody: {tag_ids}})
-      .then(this.success(action), this.error(action))
-  }
+  untag = (id, tag_ids) => this.delete(
+    msgs.ENTITY_ACTION_UNTAG, {id, params: {tag_ids}, path: { tail: 'tag' }}
+  )
 
-  share = (id, users) => {
-    const action = actionTypes.ENTITY_ACTION_SHARE
-    this.startAction(action)
-    return this.client.post(`${this.entityType}/${id}/share`, { requestBody: {share: {users}}})
-      .then(this.success(action), this.error(action))
-  }
+  share = (id, users) => this.post(
+    msgs.ENTITY_ACTION_SHARE, {id, params: {share: {users}}, path: { tail: 'share' }}
+  )
 
-  unshare = (id, users) => {
-    const action = actionTypes.ENTITY_ACTION_UNSHARE
-    this.startAction(action)
-    return this.client.destroy(`${this.entityType}/${id}/share`, { requestBody: {share: {users}}})
-      .then(this.success(action), this.error(action))
-  }
+  unshare = (id, users) => this.delete(
+    msgs.ENTITY_ACTION_UNSHARE, {id, params: {share: {users}}, path: { tail: 'share' }}
+  )
 
-  sharedDetails = (id) => {
-    const action = actionTypes.ENTITY_ACTION_SHARE
-    this.startAction(action)
-    return this.client.get(`${this.entityType}/${id}/share`)
-      .then(this.success(action), this.error(action))
-  }
+  sharedWith = (id) => this.get(
+    msgs.ENTITY_ACTION_SHARED_WITH, {id, path: { tail: 'shared_with' }}
+  )
 
-  preferences = (id, params) => {
-    // implement
-  }
+  shareableWith = (id) => this.get(
+    msgs.ENTITY_ACTION_SHAREABLE_WITH, {id, path: { tail: 'shareable_with' }}
+  )
+
+  preferences = (id, params) => this.put(
+    msgs.ENTITY_ACTION_UPDATE_PREFERENCES,
+    {id, preferences: params, path: { tail: 'preferences' }}
+  )
 }

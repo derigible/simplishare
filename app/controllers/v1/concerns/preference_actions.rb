@@ -2,9 +2,8 @@
 
 module V1
   module Concerns
-    module VirtualEntityPreferences
+    module PreferenceActions
       def preferences
-        ve = VirtualEntity.find params[:id]
         authorize(ve)
         ve.update_preference(**preferences_params.to_h.symbolize_keys)
         respond_with ve, serializer: serializer

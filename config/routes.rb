@@ -13,11 +13,10 @@ Rails.application.routes.draw do
   end
 
   concern :virtual_entity do
-    get 'share', on: :member, action: 'list_shared' #create action
     post 'share', on: :member
-    delete 'share', on: :member, action: 'unshare' #create action
-    get 'shared_with', on: :member #deprecate!
-    get 'shareable_with', on: :member #deprecate!
+    delete 'share', on: :member, action: 'unshare'
+    get 'shared_with', on: :member
+    get 'shareable_with', on: :member
     put 'preferences', on: :member
     put 'snooze', on: :member
     delete 'snooze', on: :member, action: 'unsnooze' #create action
@@ -30,11 +29,11 @@ Rails.application.routes.draw do
   concern :api_routes do
     resources :contacts, only: [:index, :create, :show, :destroy]
     resources :notes do
-      resource :tags, only: [:create, :destroy], controller: 'tags/notes'
+      resource :tags, only: [:create, :destroy], controller: 'tags/notes' #deprecate!
       concerns :virtual_entity
     end
     resources :todos do
-      resource :tags, only: [:create, :destroy], controller: 'tags/todos'
+      resource :tags, only: [:create, :destroy], controller: 'tags/todos' #deprecate!
       concerns :virtual_entity
     end
     resources :tags

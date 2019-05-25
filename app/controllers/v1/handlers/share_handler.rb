@@ -41,6 +41,13 @@ module V1::Handlers
       end
     end
 
+    def unshare
+      @virtual_entity.entity
+                     .shared_with_except_users([current_user])
+                     .where(id: shared_users_ids)
+                     .destroy_all!
+    end
+
     private
 
     attr_reader :params, :current_user
@@ -55,7 +62,7 @@ module V1::Handlers
 
     def to_share_with
       User.where(
-        id: share_params[:users].map { |u| u[:id] }.reject { |u_id| u_id == current_user.id }
+        id: shared_users_ids.reject { |u_id| u_id == current_user.id }
       )
     end
 
@@ -98,6 +105,10 @@ module V1::Handlers
       ve.shared_on = Time.zone.now
       ve.save!
       SharingMailer.with(user: current_user, virtual_entity: ve).on_share.deliver_now
+    end
+
+    def shared_users_ids
+      share_params[:users].map { |u| u[:id] }
     end
 
     def update_permissions(entity, user_id, permissions)

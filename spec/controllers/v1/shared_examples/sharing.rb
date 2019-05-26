@@ -32,7 +32,7 @@ shared_examples_for 'a virtual_entity share action' do
 
       it 'renders expected json' do
         subject
-        expect(json_schema.simple_validation_errors(json)).to be_blank
+        expect(json_schema.simple_validation_errors(json.first)).to be_blank
       end
     end
 
@@ -71,15 +71,13 @@ shared_examples_for 'a virtual_entity share action' do
   describe 'shared_with' do
     subject { get :shared_with, params: params }
 
-    let(:json_schema) { raise 'Not implemented' }
-
     it_behaves_like 'a shared get request'
   end
 
   describe 'shareable_with' do
     subject { get :shareable_with, params: params }
 
-    let(:json_schema) { raise 'Not Implemented' }
+    let(:json_schema) { Schemas::Contact }
 
     it_behaves_like 'a shared get request'
   end
@@ -103,23 +101,22 @@ shared_examples_for 'a virtual_entity share action' do
 
     it 'creates the correct share object' do
       subject
-      get :share_details, params: { id: ve.id }
-      expect(json[:shared_with].size).to eq 1
-      expect(json[:shared_with].first['permissions']).to match_array(permissions)
-      expect(json[:shared_with].first['id']).to eq other_user.id.to_s
+      get :shared_with, params: { id: ve.id }
+      expect(json.size).to eq 1
+      expect(json.first['permissions']).to match_array(permissions)
+      expect(json.first['id']).to eq other_user.id.to_s
     end
 
     it 'updates permissions for already shared users' do
       subject
-      expect(json[:shared_with].first.permissions).to match_array(permissions)
+      expect(json.first.permissions).to match_array(permissions)
       new_share_params = { share: { users: [{id: id_to_use, permissions: other_permissions}] } }
       post :share, params: {id: ve.id}.merge(new_share_params), as: :json
       expect(response).to have_http_status(:ok)
-      get :share_details, params: { id: ve.id }
-      expect(json[:shared_with].size).to eq 1
-      expect(json[:shareable_with].size).to eq 0
-      expect(json[:shared_with].first['permissions']).to match_array(other_permissions)
-      expect(json[:shared_with].first['id']).to eq other_user.id.to_s
+      get :shared_with, params: { id: ve.id }
+      expect(json.size).to eq 1
+      expect(json.first['permissions']).to match_array(other_permissions)
+      expect(json.first['id']).to eq other_user.id.to_s
     end
   end
 
@@ -132,7 +129,7 @@ shared_examples_for 'a virtual_entity share action' do
       super().merge(
         share: {
           users: [
-            { id: other_user.id, permissions: permissions }
+            { id: other_user.id }
           ]
         }
       )
@@ -146,10 +143,8 @@ shared_examples_for 'a virtual_entity share action' do
 
     it 'is expected to remove user from shared_with' do
       subject
-      get :share_details, params: {id: ve.id}
-      expect(json[:shared_with].size).to eq 0
-      expect(json[:shareable_with].size).to eq 0
-      expect(json[:shareable_with].first['contact_id']).to eq other_user.id
+      get :shared_with, params: {id: ve.id}
+      expect(json.size).to eq 0
     end
   end
 end

@@ -12,6 +12,13 @@ module V1
         respond_with ve, serializer: serializer
       end
 
+      def unsnooze
+        authorize(ve)
+        ve.update(snooze_until: nil)
+        ve.save
+        respond_with ve, serializer: serializer
+      end
+
       private
 
       def snooze_params

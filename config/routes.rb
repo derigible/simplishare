@@ -19,21 +19,19 @@ Rails.application.routes.draw do
     get 'shareable_with', on: :member
     put 'preferences', on: :member
     put 'snooze', on: :member
-    delete 'snooze', on: :member, action: 'unsnooze' #create action
+    delete 'snooze', on: :member, action: 'unsnooze'
     put 'archive', on: :member
-    delete 'archive', on: :member, action: 'unarchive' #create action
-    post 'tag', on: :member #create action
-    delete 'tag', on: :member, action: 'untag' #create action
+    delete 'archive', on: :member, action: 'unarchive'
+    post 'tag', on: :member
+    delete 'tag', on: :member, action: 'untag'
   end
 
   concern :api_routes do
     resources :contacts, only: [:index, :create, :show, :destroy]
     resources :notes do
-      resource :tags, only: [:create, :destroy], controller: 'tags/notes' #deprecate!
       concerns :virtual_entity
     end
     resources :todos do
-      resource :tags, only: [:create, :destroy], controller: 'tags/todos' #deprecate!
       concerns :virtual_entity
     end
     resources :tags

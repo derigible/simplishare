@@ -8,8 +8,16 @@ module V1
       def archive
         skip_authorization
         policy = virtual_policy.new(current_user, ve)
-        perform_archive(policy)
-        send_archive_email
+        update_archived(policy, true, request_params[:update_shared])
+        send_archive_email(true)
+        respond_with ve, serializer: serializer
+      end
+
+      def unarchive
+        skip_authorization
+        policy = virtual_policy.new(current_user, ve)
+        update_archived(policy, true, request_params[:update_shared])
+        send_archive_email(false)
         respond_with ve, serializer: serializer
       end
 
@@ -19,8 +27,9 @@ module V1
         update_archived(policy, request_params[:archived], request_params[:update_shared])
       end
 
-      def send_archive_email
-        SharingMailer.send_archive(current_user, ve)
+      def send_archive_email(archive)
+        SharingMailer.send_archive(current_user, ve) if archive
+        SharingMailer.send_unarchive(current_user, ve) unless archive
       end
 
       def update_archived(policy, new_archived, update_shared)

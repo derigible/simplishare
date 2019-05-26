@@ -13,6 +13,10 @@ class VirtualEntityPolicy < ApplicationPolicy
     record_owner?
   end
 
+  def unarchive?
+    record_owner?
+  end
+
   def archive_entity?
     record_owner? && entity_owner_or_has_permission?('archive')
   end
@@ -26,10 +30,6 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def share?
-    record_owner? && entity_owner_or_has_permission?('share')
-  end
-
-  def share_details?
     record_owner? && entity_owner_or_has_permission?('share')
   end
 
@@ -50,6 +50,18 @@ class VirtualEntityPolicy < ApplicationPolicy
   end
 
   def snooze?
+    record_owner?
+  end
+
+  def unsnooze?
+    record_owner?
+  end
+
+  def tag?
+    record_owner?
+  end
+
+  def untag?
     record_owner?
   end
 

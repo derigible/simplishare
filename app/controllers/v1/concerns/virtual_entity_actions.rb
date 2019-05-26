@@ -14,6 +14,7 @@ module V1
       include SnoozeActions
       include PreferenceActions
       include ShareActions
+      include TagActions
 
       private
 

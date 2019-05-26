@@ -18,7 +18,7 @@ module V1::Concerns
     def shared_with
       if handler.cannot_view_shared_with?
         owner_ve.permissions = ['owner']
-        respond_with([owner_ve, ve], each_serializer: V1::Detailed::SharedWithSerializer) and return
+        respond_with([owner_ve, ve], each_serializer: V1::SharedWithSerializer) and return
       end
       respond_with handler.retrieve_shared_with, each_serializer: V1::SharedWithSerializer
     end
@@ -38,7 +38,7 @@ module V1::Concerns
     def serialize_shared_with
       entity_shared_with.map do |e|
         ActiveModelSerializers::SerializableResource.new(
-          e, serializer: V1::Detailed::SharedWithSerializer
+          e, serializer: V1::SharedWithSerializer
         ).as_json
       end
     end
@@ -59,16 +59,6 @@ module V1::Concerns
       handler.retrieve_shared_with
     end
 
-    def entity_shareable_with
-      if ve.owner_ve?
-        current_user.contacts_for_serialization
-      elsif ve.permission?('share')
-        current_user.shared_contacts(owner)
-      else
-        current_user.contacts.none
-      end
-    end
-
     def handler
       @handler ||= begin
         d = V1::Handlers::ShareHandler.new(params, current_user)
@@ -78,7 +68,9 @@ module V1::Concerns
     end
 
     def ve
-      handler.virtual_entity
+      v = handler.virtual_entity
+      authorize v
+      v
     end
 
     def owner

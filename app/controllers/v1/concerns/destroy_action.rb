@@ -2,7 +2,7 @@
 
 module V1
   module Concerns
-    module BasicActions
+    module DestroyAction
       extend ActiveSupport::Concern
 
       def destroy

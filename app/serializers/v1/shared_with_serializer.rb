@@ -11,5 +11,8 @@ module V1
     attribute :permissions do
       object.metadata.fetch('permissions', [])
     end
+    attribute :owner do
+      object.owner_ve?
+    end
   end
 end

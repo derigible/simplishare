@@ -55,7 +55,12 @@ describe V1::TodosController do
     end
   end
 
-  describe '#sharing'
+  describe '#sharing' do
+    it_behaves_like 'a virtual_entity share action' do
+      let(:factory) { model_factory }
+      let(:json_schema) { Schemas::SharedWith }
+    end
+  end
 
   describe '#preferences'
 end

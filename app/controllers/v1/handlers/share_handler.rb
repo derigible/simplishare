@@ -4,28 +4,28 @@ module V1::Handlers
   class ShareHandler
     attr_reader :virtual_entity
 
-    def initialize(parameters, current_user)
+    def initialize(ve, parameters, current_user)
       @params = parameters
       @current_user = current_user
-      load_virtual_entity
+      @ve = ve
     end
 
     def cannot_view_shared_with?
-      !@virtual_entity.owner_ve? && @virtual_entity.permissions.exclude?('share')
+      !@ve.owner_ve? && @ve.permissions.exclude?('share')
     end
 
     def mark_as_shared
-      @virtual_entity.metadata[:shared] = true and @virtual_entity.save! unless @virtual_entity.metadata[:shared]
+      @ve.metadata[:shared] = true and @ve.save! unless @ve.metadata[:shared]
     end
 
     def retrieve_shared_with
-      if !@virtual_entity.owner_ve?
+      if !@ve.owner_ve?
         shared_with = retrieve_shared_with_except_current_user_and_owner
         owner_ve.permissions = ['owner']
         shared_with << owner_ve
         filtered_by_shared_contacts(shared_with, owner_ve.user_id)
       else
-        @virtual_entity.entity.shared_with_except_users([current_user])
+        @ve.entity.shared_with_except_users([current_user])
       end
     end
 
@@ -34,27 +34,23 @@ module V1::Handlers
         already_shared_with_ve = find_shared_with_ve(user)
         permissions = extract_permissions(user)
         if already_shared_with_ve.present? && permissions.exclude?('owner')
-          update_permissions(@virtual_entity.entity, already_shared_with_ve.user_id, permissions)
+          update_permissions(@ve.entity, already_shared_with_ve.user_id, permissions)
         elsif permissions.exclude?('owner')
-          share_with_user(@virtual_entity.entity, user, permissions)
+          share_with_user(@ve.entity, user, permissions)
         end
       end
     end
 
     def unshare
-      @virtual_entity.entity
-                     .shared_with_except_users([current_user])
-                     .where(id: shared_users_ids)
-                     .destroy_all!
+      @ve.entity
+         .shared_with_except_users([current_user])
+         .where(user_id: shared_users_ids)
+         .destroy_all
     end
 
     private
 
     attr_reader :params, :current_user
-
-    def load_virtual_entity
-      @virtual_entity = VirtualEntity.find params[:id]
-    end
 
     def share_params
       params.require(:share).permit(users: [:id, permissions: []])
@@ -74,11 +70,11 @@ module V1::Handlers
     end
 
     def owner_ve
-      @owner_ve = @virtual_entity.entity.owner_ve
+      @owner_ve = @ve.entity.owner_ve
     end
 
     def retrieve_shared_with_except_current_user_and_owner
-      @virtual_entity.entity.shared_with_except_users([current_user, owner_ve.user]).to_a
+      @ve.entity.shared_with_except_users([current_user, owner_ve.user]).to_a
     end
 
     def extract_permissions(user)
@@ -90,7 +86,7 @@ module V1::Handlers
     end
 
     def already_shared_with_ves
-      @already_shared_with_ves = @virtual_entity.entity.shared_with_except_users(current_user).to_a
+      @already_shared_with_ves = @ve.entity.shared_with_except_users(current_user).to_a
     end
 
     def share_with_user(entity, user, permissions)

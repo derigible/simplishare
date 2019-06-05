@@ -5,13 +5,22 @@ module Schemas
     SCHEMA = {
       'type' => 'object',
       'required' => %w[
-        body
+        id
+        created_at
+        contact_id
+        email
       ].freeze,
       'properties' => {
-        'title' => {
-          'type' => %w[string null]
+        'id' => {
+          'type' => 'string'
         }.freeze,
-        'body' => {
+        'created_at' => {
+          'type' => 'string'
+        }.freeze,
+        'contact_id' => {
+          'type' => 'string'
+        }.freeze,
+        'email' => {
           'type' => 'string'
         }.freeze
       }.freeze
@@ -20,7 +29,7 @@ module Schemas
     private
 
     def schema
-      Schemas::VirtualEntity.merge_schema(SCHEMA)
+      SCHEMA
     end
   end
 end

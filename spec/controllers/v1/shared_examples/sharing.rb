@@ -12,7 +12,7 @@ shared_examples_for 'a virtual_entity share action' do
       }
     }
   end
-  let_once(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
+  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
   let_once(:other_user) { create :user }
   let(:factory) { raise 'Override in spec' }
 
@@ -51,25 +51,16 @@ shared_examples_for 'a virtual_entity share action' do
 
       it { is_expected.to have_http_status 403 }
     end
-
-    context 'with permissions revoked' do
-      let(:overrides) do
-        {
-          metadata: {
-            permissions: %w[]
-          }
-        }
-      end
-      let(:current_user) { other_user }
-      let(:other_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
-      let(:id_to_use) { other_ve.id }
-
-      it { is_expected.to have_http_status 403 }
-    end
   end
 
   describe 'shared_with' do
     subject { get :shared_with, params: params }
+
+    let(:json_schema) { Schemas::SharedWith }
+
+    before do
+      factory.add_user(entity: ve.entity, user: other_user)
+    end
 
     it_behaves_like 'a shared get request'
   end
@@ -107,24 +98,33 @@ shared_examples_for 'a virtual_entity share action' do
       expect(json.first['id']).to eq other_user.id.to_s
     end
 
-    it 'updates permissions for already shared users' do
-      subject
-      expect(json.first.permissions).to match_array(permissions)
-      new_share_params = { share: { users: [{id: id_to_use, permissions: other_permissions}] } }
-      post :share, params: {id: ve.id}.merge(new_share_params), as: :json
-      expect(response).to have_http_status(:ok)
-      get :shared_with, params: { id: ve.id }
-      expect(json.size).to eq 1
-      expect(json.first['permissions']).to match_array(other_permissions)
-      expect(json.first['id']).to eq other_user.id.to_s
+    context 'already shared users' do
+      before do
+        factory.add_user(entity: ve.entity, user: other_user, overrides: {metadata: {permissions: permissions}})
+      end
+
+      it 'updates permissions' do
+        new_share_params = { share: { users: [{id: other_user.id, permissions: other_permissions}] } }
+        post :share, params: {id: ve.id}.merge(new_share_params), as: :json
+        expect(response).to have_http_status(:ok)
+        get :shared_with, params: { id: ve.id }
+        expect(json.size).to eq 1
+        expect(json.first['permissions']).to match_array(other_permissions)
+        expect(json.first['id']).to eq other_user.id.to_s
+      end
     end
   end
 
   describe 'unshare entity' do
-    subject { delete :share, params: params, as: :json }
+    subject { delete :unshare, params: params, as: :json }
 
-    let(:other_user) { create :user }
-    let(:id_to_use) { other_user.id }
+    let(:overrides) do
+      {
+        metadata: {
+          permissions: %w[owner]
+        }
+      }
+    end
     let(:params) do
       super().merge(
         share: {
@@ -136,15 +136,14 @@ shared_examples_for 'a virtual_entity share action' do
     end
 
     before do
-      factory.add_user(entity: ve.entity, user: other_user)
+      factory.add_user(entity: ve.entity, user: other_user, overrides: {metadata: {permissions: ['read']}})
     end
 
     it { is_expected.to have_http_status(:no_content) }
 
     it 'is expected to remove user from shared_with' do
       subject
-      get :shared_with, params: {id: ve.id}
-      expect(json.size).to eq 0
+      expect(ve.entity.shared_with_except_users([user]).count).to eq 0
     end
   end
 end

@@ -6,10 +6,6 @@ module V1
 
     private
 
-    def load_virtual_entity
-      @ve = VirtualEntity.find(params[:id])
-    end
-
     def entity_model
       Todo
     end

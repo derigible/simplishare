@@ -24,6 +24,7 @@ module V1::Concerns
     end
 
     def shareable_with
+      authorize(ve)
       if ve.owner_ve?
         respond_with current_user.contacts_for_serialization, each_serializer: V1::ContactSerializer
       elsif ve.permission?('share')
@@ -61,16 +62,9 @@ module V1::Concerns
 
     def handler
       @handler ||= begin
-        d = V1::Handlers::ShareHandler.new(params, current_user)
-        authorize(d.virtual_entity)
-        d
+        authorize(ve)
+        V1::Handlers::ShareHandler.new(ve, params, current_user)
       end
-    end
-
-    def ve
-      v = handler.virtual_entity
-      authorize v
-      v
     end
 
     def owner

@@ -33,7 +33,7 @@ module Schemas
     private
 
     def schema
-      Schemas::VirtualEntity.merge_schema(SCHEMA)
+      SCHEMA
     end
   end
 end

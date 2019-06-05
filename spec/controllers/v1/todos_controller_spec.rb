@@ -61,5 +61,10 @@ describe V1::TodosController do
     end
   end
 
-  describe '#preferences'
+  describe '#preferences' do
+    it_behaves_like 'an entity with preferences' do
+      let(:factory) { model_factory }
+      let(:record_type) { 'todo' }
+    end
+  end
 end

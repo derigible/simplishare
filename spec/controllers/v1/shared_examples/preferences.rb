@@ -6,7 +6,7 @@ shared_examples_for 'an entity with preferences' do
   subject { put :preferences, params: params }
 
   let(:record_type) { raise 'Override in spec' }
-  let(:action) { 'udpate' }
+  let(:action) { 'update' }
   let(:preference_type) { 'email' }
   let(:preference) { 'always' }
   let(:id_to_use) { ve.id }
@@ -30,7 +30,7 @@ shared_examples_for 'an entity with preferences' do
 
   it 'renders expected json' do
     subject
-    expect(json['metadata']['permissions'].values.first).to eq 'always'
+    expect(json.dig('preferences', 'email', record_type, 'update')).to eq 'always'
   end
 
   context 'when not virtual owner' do

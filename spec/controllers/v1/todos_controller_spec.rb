@@ -3,68 +3,12 @@
 require 'spec_helper'
 
 describe V1::TodosController do
-  model_factory = Factories::TodoFactory
-  model_schema = Schemas::Todo
-  describe '#show' do
-    it_behaves_like 'a virtual_entity show action' do
-      let(:factory) { model_factory }
-      let(:json_schema) { model_schema }
-    end
-  end
-
-  describe '#index' do
-    it_behaves_like 'a virtual_entity index action' do
-      let(:factory) { model_factory }
-      let(:json_schema) { model_schema }
-    end
-  end
-
-  describe '#destroy' do
-    it_behaves_like 'a virtual_entity destroy action' do
-      let(:factory) { model_factory }
-    end
-  end
-
-  describe '#update' do
-    it_behaves_like 'a virtual_entity update action' do
-      let(:factory) { model_factory }
-      let(:json_schema) { model_schema }
-      let(:updates) { { todo: { title: 'truth' } } }
-    end
-  end
-
-  describe '#create' do
-    it_behaves_like 'a virtual_entity create action' do
-      let(:json_schema) { model_schema }
-      let(:create_params) { { todo: { title: 'truth', priority: Entity::PRIORITY_TYPES.sample } } }
-    end
-  end
-
-  describe '#archiving' do
-    it_behaves_like 'an archivable entity' do
-      let(:factory) { model_factory }
-      let(:json_schema) { model_schema }
-      let(:update_shared) { { todo: { archived: true } } }
-    end
-  end
-
-  describe '#snoozing' do
-    it_behaves_like 'a snoozable entity' do
-      let(:factory) { model_factory }
-      let(:json_schema) { model_schema }
-    end
-  end
-
-  describe '#sharing' do
-    it_behaves_like 'a virtual_entity share action' do
-      let(:factory) { model_factory }
-    end
-  end
-
-  describe '#preferences' do
-    it_behaves_like 'an entity with preferences' do
-      let(:factory) { model_factory }
-      let(:record_type) { 'todo' }
-    end
+  it_behaves_like 'a basic entity' do
+    let(:entity_factory) { Factories::TodoFactory }
+    let(:entity_json_schema) { Schemas::Todo }
+    let(:entity_updates) { { todo: { title: 'truth' } } }
+    let(:entity_create_params) { { todo: { title: 'truth', priority: Entity::PRIORITY_TYPES.sample } } }
+    let(:entity_update_shared) { { todo: { archived: true } } }
+    let(:entity_record_type) { 'todo' }
   end
 end

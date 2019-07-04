@@ -1,1 +1,1 @@
-module.exports = require('@instructure/ui-presets/postcss')()
+module.exports = require('@instructure/ui-postcss-config')()

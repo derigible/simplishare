@@ -1,5 +1,5 @@
 /* .eslintrc.js */
-const defaultEslint = require('@instructure/ui-presets/eslint')
+const defaultEslint = require('@instructure/ui-eslint-config')
 module.exports = Object.assign(
   {},
   defaultEslint,

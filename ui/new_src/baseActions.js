@@ -1,5 +1,5 @@
-import api_client from '../api_client'
-import * as msgs from '../constants/actionTypes'
+import api_client from './api_client'
+import * as msgs from './constants/actionTypes'
 
 class ActionHandler {
   success = actionType => data => {

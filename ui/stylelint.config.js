@@ -1,1 +1,1 @@
-module.exports = require('@instructure/ui-presets/stylelint')
+module.exports = require('@instructure/ui-stylelint-config')

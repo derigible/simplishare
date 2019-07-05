@@ -3,7 +3,7 @@ module.exports = {
   presets: [[ require('@instructure/ui-babel-preset'), {
     themeable: true,
     coverage: Boolean(process.env.COVERAGE)
-  }]],
+  }], "flow"],
   plugins: [
     'recharts'
   ],

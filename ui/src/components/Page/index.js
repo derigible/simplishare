@@ -22,7 +22,7 @@ export default function Page (
 
   return (
     <div>
-      <div style={{position: "fixed", top: "0", left: "0"}}>
+      <div style={{position: "fixed", top: "0", left: "0", height: "100%"}}>
         <Navigation
           label="Main navigation"
           toggleLabel={{
@@ -30,17 +30,16 @@ export default function Page (
             minimizedLabel: 'Expand Navigation'
           }}
           minimized={navOpen}
-          onMinimized={setNavOpen}
+          onMinimized={() => setNavOpen(!navOpen)}
         >
           <Navigation.Item
-            icon={IconEmailLine}
+            icon={<IconEmailLine />}
             label={<ScreenReaderContent>Home</ScreenReaderContent>}
             href="#home"
             theme={{
               backgroundColor: 'red',
               hoverBackgroundColor: 'blue'
             }}
-            selected={pageName == 'home'}
           />
           <Navigation.Item
             icon={<Avatar name={user.display_name} size="x-small"/>}

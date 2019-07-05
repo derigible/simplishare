@@ -24,7 +24,7 @@ const buildPlugins = [
     chunksSortMode: 'dependency',
     filename: 'index.html',
     inject: true,
-    template: 'new_src/index.html'
+    template: 'index.html'
   }),
   new webpack.HotModuleReplacementPlugin()
 ]
@@ -33,7 +33,7 @@ const buildConfig = {
   mode: 'development',
   devServer: {
     clientLogLevel: 'warning',
-    contentBase: './new_src/',
+    contentBase: './src/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     historyApiFallback: true,
     host: '0.0.0.0',

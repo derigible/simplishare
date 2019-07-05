@@ -24,7 +24,7 @@ const buildPlugins = [
     chunksSortMode: 'dependency',
     filename: 'index.html',
     inject: true,
-    template: 'index.html'
+    template: 'src/index.html'
   }),
   new webpack.HotModuleReplacementPlugin()
 ]

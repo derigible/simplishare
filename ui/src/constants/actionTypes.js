@@ -1,3 +1,10 @@
+// @flow
+
+export type ComponentActionType = {
+  type: string,
+  payload: string
+}
+
 export const ALERT_ERROR_ALERT = 'ALERT_ERROR_ALERT'
 export const ALERT_LOGIN_ALERT = 'ALERT_LOGIN_ALERT'
 

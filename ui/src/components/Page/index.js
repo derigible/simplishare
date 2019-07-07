@@ -10,8 +10,9 @@ import { IconComposeLine } from '@instructure/ui-icons'
 import { ScreenReaderContent } from '@instructure/ui-a11y'
 import { Avatar } from '@instructure/ui-elements'
 import { Badge } from '@instructure/ui-elements'
+import { capitalizeFirstLetter } from '@instructure/ui-utils'
 
-import type { UserType } from '../../resources/user/type'
+import type { UserType } from '../../resources/User/type'
 
 export default function Page (
   {user, children, pageName} :
@@ -67,7 +68,11 @@ export default function Page (
           />
         </Navigation>
       </div>
-      <div style={{display: "flex", flexDirection: "column", marginLeft }}>
+      <div
+        style={
+          {display: "flex", flexDirection: "column", marginLeft, padding: '0.75 rem' }
+        }
+      >
         {children}
       </div>
     </div>

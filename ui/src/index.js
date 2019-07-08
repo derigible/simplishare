@@ -7,7 +7,9 @@ import theme from '@instructure/canvas-theme'
 import Page from './components/Page'
 import Profile from './apps/Profile'
 import Todos from './apps/Todos'
+import Notes from './apps/Notes'
 import { defaultTodo } from './resources/Todo/type'
+import { defaultNote } from './resources/Note/type'
 
 theme.use()
 
@@ -47,7 +49,7 @@ const user = {
 
 if (app !== null) {
   ReactDOM.render(
-    <Todos user={user} todos={[defaultTodo, {...defaultTodo, id: '2'}]} />,
+    <Notes user={user} notes={[defaultNote, {...defaultNote, id: '2'}]} />,
     app
   )
 }

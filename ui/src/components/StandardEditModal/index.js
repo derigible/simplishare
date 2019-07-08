@@ -8,9 +8,11 @@ import { TextInput } from '@instructure/ui-text-input'
 import { Heading } from '@instructure/ui-elements'
 import { Button } from '@instructure/ui-buttons'
 
+type size = "auto" | "small" | "medium" | "large" | "fullscreen"
+
 export default function StandardEditModal (
-  {closeModal, modalOpen, onSave, children, modalTitle} :
-  {closeModal: any, modalOpen: boolean, onSave: any, children: React.Node, modalTitle: string}
+  {closeModal, modalOpen, onSave, children, modalTitle, size} :
+  {closeModal: any, modalOpen: boolean, onSave: any, children: React.Node, modalTitle: string, size?: size}
 ) {
   const closeButton = () => (
     <CloseButton
@@ -26,7 +28,7 @@ export default function StandardEditModal (
     <Modal
       open={modalOpen}
       onDismiss={closeModal}
-      size="auto"
+      size={size}
       label={modalTitle}
       shouldCloseOnDocumentClick
     >

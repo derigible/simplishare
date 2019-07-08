@@ -10,17 +10,17 @@ import { TextInput } from '@instructure/ui-text-input'
 
 import Page from '../../components/Page'
 import StandardEditModal from '../../components/StandardEditModal'
-import Todo from '../../resources/Todo'
+import Note from '../../resources/Note'
 
 import type { UserType } from '../../resources/User/type'
-import type { Todo as TodoType } from '../../resources/Todo/type'
+import type { Note as NoteType } from '../../resources/Note/type'
 import type { ComponentActionType } from '../../constants/actionTypes'
-import { defaultTodo } from '../../resources/Todo/type'
+import { defaultNote } from '../../resources/Note/type'
 
-function reducer(state: TodoType, action: ComponentActionType) {
+function reducer(state: NoteType, action: ComponentActionType) {
   switch (action.type) {
-    case 'description':
-      return {...state, description: action.payload};
+    case 'body':
+      return {...state, body: action.payload};
     case 'title':
       return {...state, title: action.payload}
     default:
@@ -28,44 +28,45 @@ function reducer(state: TodoType, action: ComponentActionType) {
   }
 }
 
-export default function Todos (
-  {user, todos} : {user: UserType, todos: Array<TodoType>}
+export default function Notes (
+  {user, notes} : {user: UserType, notes: Array<NoteType>}
 ) {
   const [modalOpen: boolean, setModalOpen] = React.useState(false)
-  const [todoObj: TodoType, setTodoChanges] = React.useReducer(reducer, defaultTodo)
+  const [noteObj: NoteType, setNoteChanges] = React.useReducer(reducer, defaultNote)
 
   const toggleModal = () => setModalOpen(!modalOpen)
 
   return (
     <Page
       user={user}
-      pageName="todos"
+      pageName="notes"
     >
       <Button variant="primary" icon={IconPlusLine}  margin="small" onClick={toggleModal}>
-        Add Todo
+        Add Note
       </Button>
       <StandardEditModal
         onSave={
           () => {
-            user.addEntity('todo', todoObj)
+            user.addEntity('note', noteObj)
             toggleModal()
           }
         }
         closeModal={toggleModal}
         modalOpen={modalOpen}
-        modalTitle="Add Todo"
+        modalTitle="Add Note"
+        size="fullscreen"
       >
-        <TextInput renderLabel="Title" value={todoObj.title} onChange={(_, value) => setTodoChanges({type: 'title', payload: value})} />
+        <TextInput renderLabel="Title" value={noteObj.title} onChange={(_, value) => setNoteChanges({type: 'title', payload: value})} />
         <TextArea
-          label="Description"
-          value={todoObj.description}
-          onChange={(_, value) => setTodoChanges({type: 'description', payload: value})}
+          label="Body"
+          value={noteObj.body}
+          onChange={(_, value) => setNoteChanges({type: 'body', payload: value})}
           autogrow
           resize="both"
         />
       </StandardEditModal>
-      <List variant="unstyled">
-        {todos.map(t => <List.Item key={t.id}><Todo todo={t} /></List.Item>)}
+      <List variant="unstyled" delimiter="dashed" >
+        {notes.map(t => <List.Item key={t.id}><Note note={t} /></List.Item>)}
       </List>
     </Page>
   )

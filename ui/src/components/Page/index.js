@@ -150,7 +150,7 @@ export default function Page (
                   {display: "flex", flexDirection: "column", marginLeft, padding: '0.75 rem' }
                 }
               >
-                <View as="div" margin="medium none none medium">
+                <View as="div" margin="medium small none medium">
                   <View as="div" margin="none none medium none">
                     {pageHeader ? pageHeader : <PageHeader pageName={capitalizeFirstLetter(pageName)} />}
                   </View>

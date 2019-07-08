@@ -37,7 +37,7 @@ export default function Note ({note} : {note: NoteType}) {
       onClick={toggleModal}
       role="button"
       tabIndex="0"
-      onKeyDown={(e) => { if (keycode.isEventKey(e, 'enter')) this.handleNoteRead() } }
+      onKeyDown={(e) => { if (keycode.isEventKey(e, 'enter')) toggleModal() } }
       style={{cursor: 'pointer'}}
     >
       <StandardEditModal
@@ -62,7 +62,8 @@ export default function Note ({note} : {note: NoteType}) {
           value={noteObj.body}
           onChange={(_, value) => setNoteChanges({type: 'body', payload: value})}
           autogrow
-          resize="both"
+          resize="vertical"
+          height="80vh"
         />
       </StandardEditModal>
       <Text size="xx-large">{note.title}</Text>

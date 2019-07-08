@@ -37,7 +37,8 @@ const user = {
       email: 'mphillips@instructure.com',
       username: null
     }
-  ]
+  ],
+  addContact: () => {}
 }
 
 if (app !== null) {

@@ -17,5 +17,6 @@ export type UserType = {
   email: string,
   username: string,
   action_items: Array<Notification>,
-  contacts: Array<Contact>
+  contacts: Array<Contact>,
+  addContact: any
 }

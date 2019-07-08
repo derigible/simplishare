@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { IconUserLine } from '@instructure/ui-icons'
+import { IconUserLine, IconGroupLine } from '@instructure/ui-icons'
 import { View } from '@instructure/ui-layout'
 import { Tabs } from '@instructure/ui-tabs'
 
@@ -23,6 +23,14 @@ const tabs = {
 // eslint-disable-next-line no-undef
 type TabTypes = $Keys<typeof tabs>;
 
+const breadCrumbs = (tab: number) => {
+  const crumbs = [{href: '#!user', linkText: 'User', icon: IconUserLine}]
+  if (tab === tabs.contacts) {
+    crumbs.push({href: '#!user/contacts', linkText: 'Contacts', icon: IconGroupLine})
+  }
+  return crumbs
+}
+
 export default function Profile (
   {user, tab = 'user_info'} : {user: UserType, tab?: TabTypes}
 ) {
@@ -33,7 +41,7 @@ export default function Profile (
       user={user}
       pageName="user"
       pageHeader={
-        <PageHeader breadCrumbs={[{href: '#!user', linkText: 'User', icon: IconUserLine}]} />
+        <PageHeader breadCrumbs={breadCrumbs(selected)} />
       }
     >
       <Tabs
@@ -54,7 +62,7 @@ export default function Profile (
           renderTitle="Contacts"
         >
           <View as="div">
-            <Contacts contacts={user.contacts}/>
+            <Contacts contacts={user.contacts} addContact={user.addContact} />
           </View>
         </Tabs.Panel>
       </Tabs>

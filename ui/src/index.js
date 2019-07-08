@@ -42,12 +42,7 @@ const user = {
 
 if (app !== null) {
   ReactDOM.render(
-    <Page
-      user={user}
-      pageName="home"
-    >
-      <Profile user={user}/>
-    </Page>,
+    <Profile user={user}/>,
     app
   )
 }

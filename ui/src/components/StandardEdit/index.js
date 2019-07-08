@@ -4,7 +4,9 @@ import React from 'react'
 
 import { InPlaceEdit } from '@instructure/ui-editable'
 import { Text } from '@instructure/ui-elements'
+import { Flex } from '@instructure/ui-layout'
 import { View } from '@instructure/ui-layout'
+import { Responsive } from '@instructure/ui-layout'
 
 // In the future we can extend this to do other types
 type valueTypes = string;
@@ -48,26 +50,68 @@ export default function StandardEdit (
   const [mode, setMode] = React.useState(false)
 
   return (
-    <>
-      <View
-        as="div"
-        display="inline-block"
-        margin="none small none none"
-        padding="small"
-        background="inverse"
-      >
-        {label}
-      </View>
-      <InPlaceEdit
-        renderViewer={renderView(value)}
-        renderEditor={renderEdit(label, value, onChange)}
-        renderEditButton={renderEditButton(label)}
+    <Responsive
+      match="media"
+      query={{
+        small: { maxWidth: 600 },
+        large: { minWidth: 600}
+      }}
+    >
+      {(props, matches) => {
+        if (matches.includes('large')) {
+          return (
+            <>
+              <View
+                as="div"
+                display="inline-block"
+                margin="none small none none"
+                padding="small"
+                background="inverse"
+              >
+                {label}
+              </View>
+              <InPlaceEdit
+                renderViewer={renderView(value)}
+                renderEditor={renderEdit(label, value, onChange)}
+                renderEditButton={renderEditButton(label)}
 
-        onChangeMode={() => setMode(!mode)}
-        mode={mode ? 'edit' : 'view'}
+                onChangeMode={() => setMode(!mode)}
+                mode={mode ? 'edit' : 'view'}
 
-        value={value}
-      />
-    </>
+                value={value}
+              />
+            </>
+          )
+        } else {
+          return (
+            <Flex direction="column">
+              <Flex.Item>
+                <View
+                  as="div"
+                  display="inline-block"
+                  margin="none small none none"
+                  padding="small"
+                  background="inverse"
+                >
+                  {label}
+                </View>
+              </Flex.Item>
+              <Flex.Item>
+                <InPlaceEdit
+                  renderViewer={renderView(value)}
+                  renderEditor={renderEdit(label, value, onChange)}
+                  renderEditButton={renderEditButton(label)}
+
+                  onChangeMode={() => setMode(!mode)}
+                  mode={mode ? 'edit' : 'view'}
+
+                  value={value}
+                />
+              </Flex.Item>
+            </Flex>
+          )
+        }
+      }}
+    </Responsive>
   )
 }

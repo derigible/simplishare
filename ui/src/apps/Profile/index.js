@@ -7,6 +7,7 @@ import { View } from '@instructure/ui-layout'
 import { Tabs } from '@instructure/ui-tabs'
 
 import PageHeader from '../../components/PageHeader'
+import Page from '../../components/Page'
 import User from '../../resources/User'
 import Contacts from '../../resources/User/Contacts'
 
@@ -28,13 +29,12 @@ export default function Profile (
   const [selected: string, setSelected] = React.useState(tabs[tab])
 
   return (
-    <>
-      <PageHeader
-        breadCrumbs={[{href: '#!profile', linkText: 'Profile', icon: <IconUserLine />}]}
-      />
+    <Page
+      user={user}
+      pageName="user"
+    >
       <Tabs
         onRequestTabChange={(_, { index }) => setSelected(index)}
-        margin="none large"
       >
         <Tabs.Panel
           id='user_info'
@@ -55,6 +55,6 @@ export default function Profile (
           </View>
         </Tabs.Panel>
       </Tabs>
-    </>
+    </Page>
   )
 }

@@ -32,6 +32,9 @@ export default function Profile (
     <Page
       user={user}
       pageName="user"
+      pageHeader={
+        <PageHeader breadCrumbs={[{href: '#!user', linkText: 'User', icon: IconUserLine}]} />
+      }
     >
       <Tabs
         onRequestTabChange={(_, { index }) => setSelected(index)}

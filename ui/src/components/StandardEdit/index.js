@@ -96,7 +96,7 @@ export default function StandardEdit (
                   {label}
                 </View>
               </Flex.Item>
-              <Flex.Item>
+              <Flex.Item margin="medium none">
                 <InPlaceEdit
                   renderViewer={renderView(value)}
                   renderEditor={renderEdit(label, value, onChange)}

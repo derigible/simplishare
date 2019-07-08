@@ -14,6 +14,8 @@ import { TextInput } from '@instructure/ui-text-input'
 
 import { IconPlusLine } from '@instructure/ui-icons'
 
+import StandardEditModal from '../../../components/StandardEditModal'
+
 import type { Contact as ContactType } from '../type'
 
 function AddButton ({openModal} : {openModal: any}) {
@@ -23,43 +25,6 @@ function AddButton ({openModal} : {openModal: any}) {
         Add Contact
       </Button>
     </View>
-  )
-}
-
-function AddContact ({addContact, closeModal, modalOpen} : {addContact: any, closeModal: any, modalOpen: boolean}) {
-  const [email: string, setEmail: any] = React.useState('')
-
-  const closeButton = () => (
-    <CloseButton
-      placement="end"
-      offset="medium"
-      variant="icon"
-      onClick={closeModal}
-    >
-      Close
-    </CloseButton>
-  )
-  return (
-    <Modal
-      open={modalOpen}
-      onDismiss={closeModal}
-      onSubmit={addContact}
-      size="auto"
-      label="Add Contact"
-      shouldCloseOnDocumentClick
-    >
-      <Modal.Header>
-        {closeButton()}
-        <Heading>Add Contact</Heading>
-      </Modal.Header>
-      <Modal.Body>
-        <TextInput renderLabel="Email" value={email} onChange={(_, value) => setEmail(value)} />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={closeModal}>Close</Button>&nbsp;
-        <Button variant="primary" type="submit" onClick={() => addContact(email)}>Submit</Button>
-      </Modal.Footer>
-    </Modal>
   )
 }
 
@@ -94,6 +59,7 @@ function ContactTable ({type, contacts} : {type: string, contacts: Array<Contact
 
 export default function Contacts ({contacts, addContact} : {contacts: Array<ContactType>, addContact: any}) {
   const [modalOpen: boolean, setModalOpen] = React.useState(false)
+  const [email: string, setEmail: any] = React.useState('')
 
   const toggleModal = () => setModalOpen(!modalOpen)
 
@@ -131,16 +97,20 @@ export default function Contacts ({contacts, addContact} : {contacts: Array<Cont
   return (
     <>
       <AddButton openModal={toggleModal} />
-      <AddContact
-        addContact={
-          (email : string) => {
+      <StandardEditModal
+        onSave={
+          () => {
             addContact(email)
+              .then(() => setEmail(''), () => {})
             toggleModal()
           }
         }
         closeModal={toggleModal}
         modalOpen={modalOpen}
-      />
+        modalTitle="Add Contact"
+      >
+        <TextInput renderLabel="Email" value={email} onChange={(_, value) => setEmail(value)} />
+      </StandardEditModal>
       {renderContacts()}
     </>
   )

@@ -6,6 +6,8 @@ import theme from '@instructure/canvas-theme'
 
 import Page from './components/Page'
 import Profile from './apps/Profile'
+import Todos from './apps/Todos'
+import { defaultTodo } from './resources/Todo/type'
 
 theme.use()
 
@@ -38,12 +40,14 @@ const user = {
       username: null
     }
   ],
-  addContact: () => {}
+  addContact: () => Promise.resolve(),
+  addEntity: (type, entity) => Promise.resolve(),
+  updateWith: () => Promise.resolve()
 }
 
 if (app !== null) {
   ReactDOM.render(
-    <Profile user={user}/>,
+    <Todos user={user} todos={[defaultTodo, {...defaultTodo, id: '2'}]} />,
     app
   )
 }

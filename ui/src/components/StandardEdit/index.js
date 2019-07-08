@@ -21,7 +21,7 @@ function renderView (value: valueTypes) {
   }
 }
 
-function renderEdit (label: string, value: valueTypes, onChange: any) {
+function renderEdit (label: string = 'value field', value: valueTypes, onChange: any, onSave: any) {
   return function RenderEdit ({onBlur, editorRef}) {
     return (
       <Text
@@ -31,21 +31,21 @@ function renderEdit (label: string, value: valueTypes, onChange: any) {
         value={value}
         onChange={onChange}
         aria-label={label}
-        onBlur={onBlur}
+        onBlur={function () {onBlur(...arguments); onSave()}}
         elementRef={editorRef}
       />
     )
   }
 }
 
-function renderEditButton (label: string){
+function renderEditButton (label: string = 'value field'){
   return function (props) {
     return InPlaceEdit.renderDefaultEditButton({...props, label: `Edit "${label}"`})
   }
 }
 
 export default function StandardEdit (
-  {label, value, onChange} : {label: string, value: valueTypes, onChange: any}
+  {label, value, onChange, onSave = () => {}} : {label?: string, value: valueTypes, onChange: any, onSave?: any}
 ) {
   const [mode, setMode] = React.useState(false)
 
@@ -61,18 +61,21 @@ export default function StandardEdit (
         if (matches.includes('large')) {
           return (
             <>
-              <View
-                as="div"
-                display="inline-block"
-                margin="none small none none"
-                padding="small"
-                background="inverse"
-              >
-                {label}
-              </View>
+              {label
+                ? <View
+                    as="div"
+                    display="inline-block"
+                    margin="none small none none"
+                    padding="small"
+                    background="inverse"
+                  >
+                    {label}
+                  </View>
+                : null
+              }
               <InPlaceEdit
                 renderViewer={renderView(value)}
-                renderEditor={renderEdit(label, value, onChange)}
+                renderEditor={renderEdit(label, value, onChange, onSave)}
                 renderEditButton={renderEditButton(label)}
 
                 onChangeMode={() => setMode(!mode)}
@@ -85,17 +88,20 @@ export default function StandardEdit (
         } else {
           return (
             <Flex direction="column">
-              <Flex.Item>
-                <View
-                  as="div"
-                  display="inline-block"
-                  margin="none small none none"
-                  padding="small"
-                  background="inverse"
-                >
-                  {label}
-                </View>
-              </Flex.Item>
+              {label
+                ? <Flex.Item>
+                    <View
+                      as="div"
+                      display="inline-block"
+                      margin="none small none none"
+                      padding="small"
+                      background="inverse"
+                    >
+                      {label}
+                    </View>
+                  </Flex.Item>
+                : null
+              }
               <Flex.Item margin="medium none">
                 <InPlaceEdit
                   renderViewer={renderView(value)}

@@ -1,7 +1,8 @@
 // @flow
 
 export type Notification = {
-  type: string
+  type: string,
+  id: string
 }
 
 export type Contact = {

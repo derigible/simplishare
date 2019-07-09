@@ -4,13 +4,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import theme from '@instructure/canvas-theme'
 
-import Page from './components/Page'
-import Profile from './apps/Profile'
-import Home from './apps/Home'
-import Todos from './apps/Todos'
-import Notes from './apps/Notes'
 import { defaultTodo } from './resources/Todo/type'
 import { defaultNote } from './resources/Note/type'
+
+import type { Note as NoteType } from './resources/Note/type'
+import type { Todo as TodoType } from './resources/Todo/type'
+import type { UserType } from './resources/User/type'
 
 import configureRouter from './router'
 
@@ -19,7 +18,7 @@ theme.use()
 const mountPoint = document.getElementById('app')
 const user = {
   display_name: 'Roger Rabbit',
-  action_items: [{type: 'a'}],
+  action_items: [{type: 'a', id: '1'}],
   email: 'derigible@gmail.com',
   username: 'derigible',
   contacts: [
@@ -50,9 +49,15 @@ const user = {
   updateWith: () => Promise.resolve()
 }
 
+type PropsType = {
+  user: UserType,
+  todos?: Array<TodoType>,
+  notes?: Array<NoteType>
+}
+
 const store = {
   getProps: function(app) {
-    const props = { user }
+    const props: PropsType = { user }
     if (app === 'todos') {
       props.todos = [defaultTodo, Object.assign({}, defaultTodo, {id: '2'})]
     }

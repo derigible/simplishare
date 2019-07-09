@@ -39,7 +39,7 @@ function LargePageNavigation (
         <Navigation.Item
           icon={<IconEmailLine />}
           label={<ScreenReaderContent>Home</ScreenReaderContent>}
-          href="#home"
+          href="#!home"
           theme={{
             backgroundColor: 'red',
             hoverBackgroundColor: 'blue'
@@ -54,19 +54,19 @@ function LargePageNavigation (
         <Navigation.Item
           icon={<Badge count={user.action_items.length}><IconInboxLine /></Badge>}
           label="Inbox"
-          href="#user/inbox"
+          href="#!user/inbox"
           selected={pageName == 'user/inbox'}
         />
         <Navigation.Item
           icon={<IconRubricLine />}
           label="Todos"
-          href="#todos"
+          href="#!todos"
           selected={pageName == 'todos'}
         />
         <Navigation.Item
           icon={<IconComposeLine />}
           label="Notes"
-          href="#notes"
+          href="#!notes"
           selected={pageName == 'notes'}
         />
       </Navigation>
@@ -113,7 +113,7 @@ function SmallPageNavigation (
         <Button fluidWidth icon={<Badge count={user.action_items.length}><IconInboxLine /></Badge>} href="#!user/inbox" margin="x-small">
           Inbox
         </Button>
-        <Button fluidWidth icon={IconRubricLine} href="#!todos" margin="x-small">
+        <Button fluidWidth icon={IconRubricLine} href="/#!todos" margin="x-small">
           Todos
         </Button>
         <Button fluidWidth icon={IconComposeLine} href="#!notes"  margin="x-small">

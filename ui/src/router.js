@@ -1,33 +1,29 @@
+// @flow
+
 import React from 'react'
 import Router from 'middle-router'
 
-import NotFound from './errors/NotFound'
+import NotFound from './apps/NotFound'
 
 const configureRouter = () => {
   return Router({ hash: '#!' })
-    .lazy(
-      '/',
-      () => {
-        return new Promise(
-          (resolve) => require.ensure(
-            [],
-            (require) => resolve(require('./review/router').default),
-            'review'
-          )
-        )
-      }
-    )
-    .lazy('/review', () => new Promise((resolve) => require.ensure(
-      [], (require) => resolve(require('./review/router').default), 'review'
+    .lazy('/', () => new Promise((resolve) => require.ensure(
+      [], (require) => resolve(require('./apps/Home/router').default), 'home'
     )))
-    .lazy('/auth', () => new Promise((resolve) => require.ensure(
-      [], (require) => resolve(require('./auth/router').default), 'auth'
+    .lazy('/home', () => new Promise((resolve) => require.ensure(
+      [], (require) => resolve(require('./apps/Home/router').default), 'home'
     )))
-    .lazy('/admin', () => new Promise((resolve) => require.ensure(
-      [], (require) => resolve(require('./admin/router').default), 'admin'
+    .lazy('/todos', () => new Promise((resolve) => require.ensure(
+      [], (require) => resolve(require('./apps/Todos/router').default), 'todos'
+    )))
+    .lazy('/notes', () => new Promise((resolve) => require.ensure(
+      [], (require) => resolve(require('./apps/Notes/router').default), 'notes'
+    )))
+    .lazy('/user', () => new Promise((resolve) => require.ensure(
+      [], (require) => resolve(require('./apps/Profile/router').default), 'user'
     )))
     .use('/*', ({ path, resolve, exiting }) => {
-      resolve({view: <NotFound />, app: 'notFound'})
+      resolve({view: NotFound, app: 'notFound'})
     })
 }
 

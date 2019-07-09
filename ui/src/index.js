@@ -6,14 +6,17 @@ import theme from '@instructure/canvas-theme'
 
 import Page from './components/Page'
 import Profile from './apps/Profile'
+import Home from './apps/Home'
 import Todos from './apps/Todos'
 import Notes from './apps/Notes'
 import { defaultTodo } from './resources/Todo/type'
 import { defaultNote } from './resources/Note/type'
 
+import configureRouter from './router'
+
 theme.use()
 
-const app = document.getElementById('app')
+const mountPoint = document.getElementById('app')
 const user = {
   display_name: 'Roger Rabbit',
   action_items: [{type: 'a'}],
@@ -47,9 +50,34 @@ const user = {
   updateWith: () => Promise.resolve()
 }
 
-if (app !== null) {
-  ReactDOM.render(
-    <Notes user={user} notes={[defaultNote, {...defaultNote, id: '2'}]} />,
-    app
-  )
+const store = {
+  getProps: function(app) {
+    const props = { user }
+    if (app === 'todos') {
+      props.todos = [defaultTodo, Object.assign({}, defaultTodo, {id: '2'})]
+    }
+    if (app === 'notes') {
+      props.notes = [defaultNote, Object.assign({}, defaultNote, {id: '2'})]
+    }
+
+    return props
+  }
+}
+
+function renderView(View, app) {
+  const props = store.getProps(app)
+  return <View {...props} />
+}
+
+const router = configureRouter()
+
+if (mountPoint !== null) {
+  router.on('route', async (_, routing) => {
+    const { view, app } = await routing
+
+    ReactDOM.render(
+      renderView(view, app),
+      mountPoint
+    )
+  }).start()
 }

@@ -1,5 +1,7 @@
 // @flow
 
+import type { SharedWithContact } from './User/type'
+
 export type Metadata = {
 
 }
@@ -19,5 +21,9 @@ export type VirtualEntity = {
   shared_object_id: string,
   updated_at: string,
   created_at: string,
-  priority: string
+  priority: string,
+  displayName: "Note" | "Todo",
+  archive: any,
+  shareWith: any,
+  sharedWith: Array<SharedWithContact>
 }

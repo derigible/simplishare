@@ -12,7 +12,7 @@ type size = "auto" | "small" | "medium" | "large" | "fullscreen"
 
 export default function StandardEditModal (
   {closeModal, modalOpen, onSave, children, modalTitle, size} :
-  {closeModal: any, modalOpen: boolean, onSave: any, children: React.Node, modalTitle: string, size?: size}
+  {closeModal: any, modalOpen: boolean, onSave?: any, children: React.Node, modalTitle: string, size?: size}
 ) {
   const closeButton = () => (
     <CloseButton
@@ -41,7 +41,7 @@ export default function StandardEditModal (
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={closeModal}>Close</Button>&nbsp;
-        <Button variant="primary" type="submit" onClick={onSave}>Submit</Button>
+        {onSave ? <Button variant="primary" type="submit" onClick={onSave}>Submit</Button> : null}
       </Modal.Footer>
     </Modal>
   )

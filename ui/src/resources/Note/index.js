@@ -11,6 +11,7 @@ import { TextArea } from '@instructure/ui-forms'
 import { TextInput } from '@instructure/ui-text-input'
 
 import StandardEditModal from '../../components/StandardEditModal'
+import ClickableDiv from '../../components/ClickableDiv'
 
 import type { Note as NoteType } from './type'
 import type { ComponentActionType } from '../../constants/actionTypes'
@@ -33,12 +34,8 @@ export default function Note ({note} : {note: NoteType}) {
   const toggleModal = () => { setModalOpen(!modalOpen) }
 
   return (
-    <div
+    <ClickableDiv
       onClick={toggleModal}
-      role="button"
-      tabIndex="0"
-      onKeyDown={(e) => { if (keycode.isEventKey(e, 'enter')) toggleModal() } }
-      style={{cursor: 'pointer'}}
     >
       <StandardEditModal
         onSave={
@@ -67,6 +64,6 @@ export default function Note ({note} : {note: NoteType}) {
         />
       </StandardEditModal>
       <Text size="xx-large">{note.title}</Text>
-    </div>
+    </ClickableDiv>
   )
 }

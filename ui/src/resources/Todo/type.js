@@ -2,6 +2,8 @@
 
 import type { VirtualEntity } from '../sharedTypes'
 
+import { defaultSharedWithContactGenerator } from '../User/type'
+
 export type Todo = VirtualEntity & {
   description: string,
   title: string,
@@ -24,5 +26,12 @@ export const defaultTodo = {
   shared_object_id: '1',
   updated_at: '2019-07-08T12:12:12.001Z',
   created_at: '2019-07-08T12:12:12.001Z',
-  priority: 'medium'
+  priority: 'medium',
+  displayName: 'Todo',
+  sharedWith: [
+    defaultSharedWithContactGenerator({email: 'derigible@outlook.com', username: 'lookme'}),
+    defaultSharedWithContactGenerator({email: 'pmarca@outlook.com', username: null, access: ['read', 'share']})
+  ],
+  archive: () => Promise.resolve,
+  shareWith: () => Promise.resolve,
 }

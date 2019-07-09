@@ -13,6 +13,28 @@ export type Contact = {
   created_at: string
 }
 
+export type SharedWithContact = Contact & {
+  access: Array<string>,
+  changeAcess: any
+}
+
+let _id = 0
+export function defaultSharedWithContactGenerator (
+  {email, username, access = ['read']} : {email: string, username: ?string, access?: Array<string>}
+) {
+  const id = _id
+  _id += 1
+  return {
+    email: email,
+    username: username,
+    contact_id: id.toString(),
+    id: id.toString(),
+    created_at: '2019-07-09T12:12:12.000Z',
+    access: access,
+    changeAcess: () => Promise.resolve()
+  }
+}
+
 export type UserType = {
   display_name: string,
   email: string,

@@ -7,6 +7,7 @@ import { ToggleGroup } from '@instructure/ui-toggle-details'
 import { IconXSolid, IconPlusSolid } from '@instructure/ui-icons'
 
 import StandardEdit from '../../components/StandardEdit'
+import StandardActions from '../../components/StandardActions'
 
 import type { Todo as TodoType } from './type'
 
@@ -39,6 +40,9 @@ export default function Todo ({todo} : {todo: TodoType}) {
           label="Description"
           onChange={(e) => setDescription((e.target.value))}
           onSave={() => todo.updateWith({description})}
+        />
+        <StandardActions
+          entity={todo}
         />
       </View>
     </ToggleGroup>

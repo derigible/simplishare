@@ -7,6 +7,7 @@ import { Heading } from '@instructure/ui-elements'
 
 import Archive from './Archive'
 import Share from './Share'
+import Preferences from './Preferences'
 
 import type { VirtualEntity } from '../../resources/sharedTypes'
 
@@ -24,6 +25,9 @@ export default function StandardActions(
             </Grid.Col>
             <Grid.Col>
               <Share entity={entity} />
+            </Grid.Col>
+            <Grid.Col>
+              <Preferences entity={entity} />
             </Grid.Col>
           </Grid.Row>
         </Grid>

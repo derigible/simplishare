@@ -21,12 +21,26 @@ export const defaultNote = {
   shared_on: null,
   shared: false,
   metadata: {},
-  preferences: [],
+  preferences: {
+    email: {
+      note: {
+        archive: {
+          type: 'not_set',
+          setPreference: () => Promise.resolve()
+        },
+        update: {
+          type: 'not_set',
+          setPreference: () => Promise.resolve()
+        }
+      }
+    }
+  },
   shared_object_id: '1',
   updated_at: '2019-07-08T12:12:12.001Z',
   created_at: '2019-07-08T12:12:12.001Z',
   priority: 'medium',
   displayName: 'Note',
+  type: 'note',
   sharedWith: [
     defaultSharedWithContactGenerator({email: 'derigible@outlook.com', username: 'lookme'}),
     defaultSharedWithContactGenerator({email: 'pmarca@outlook.com', username: null, access: ['read', 'share']})

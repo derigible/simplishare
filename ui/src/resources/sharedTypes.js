@@ -6,8 +6,23 @@ export type Metadata = {
 
 }
 
-export type Preference = {
+type action = {
+  type: "always" | "not_set" | "never",
+  setPreference: any
+}
 
+export type PreferenceAction = {
+  archive: action,
+  update: action
+}
+
+export type Preference = {
+  todo?: PreferenceAction,
+  note?: PreferenceAction
+}
+
+export type Preferences = {
+  email: Preference
 }
 
 export type VirtualEntity = {
@@ -17,12 +32,13 @@ export type VirtualEntity = {
   shared_on: ?string,
   shared: boolean,
   metadata: Metadata,
-  preferences: Array<Preference>,
+  preferences: Preferences,
   shared_object_id: string,
   updated_at: string,
   created_at: string,
   priority: string,
   displayName: "Note" | "Todo",
+  type: "note" | "todo",
   archive: any,
   shareWith: any,
   sharedWith: Array<SharedWithContact>

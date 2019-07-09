@@ -18,6 +18,17 @@ export type SharedWithContact = Contact & {
   changeAcess: any
 }
 
+export type UserType = {
+  display_name: string,
+  email: string,
+  username: string,
+  action_items: Array<Notification>,
+  contacts: Array<Contact>,
+  addContact: any,
+  addEntity: any,
+  updateWith: any
+}
+
 let _id = 0
 export function defaultSharedWithContactGenerator (
   {email, username, access = ['read']} : {email: string, username: ?string, access?: Array<string>}
@@ -33,15 +44,4 @@ export function defaultSharedWithContactGenerator (
     access: access,
     changeAcess: () => Promise.resolve()
   }
-}
-
-export type UserType = {
-  display_name: string,
-  email: string,
-  username: string,
-  action_items: Array<Notification>,
-  contacts: Array<Contact>,
-  addContact: any,
-  addEntity: any,
-  updateWith: any
 }

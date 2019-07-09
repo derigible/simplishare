@@ -41,5 +41,6 @@ export type VirtualEntity = {
   type: "note" | "todo",
   archive: any,
   shareWith: any,
+  snooze: any,
   sharedWith: Array<SharedWithContact>
 }

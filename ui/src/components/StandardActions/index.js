@@ -8,6 +8,7 @@ import { Heading } from '@instructure/ui-elements'
 import Archive from './Archive'
 import Share from './Share'
 import Preferences from './Preferences'
+import Snooze from './Snooze'
 
 import type { VirtualEntity } from '../../resources/sharedTypes'
 
@@ -28,6 +29,9 @@ export default function StandardActions(
             </Grid.Col>
             <Grid.Col>
               <Preferences entity={entity} />
+            </Grid.Col>
+            <Grid.Col>
+              <Snooze entity={entity} />
             </Grid.Col>
           </Grid.Row>
         </Grid>

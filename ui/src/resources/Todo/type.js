@@ -48,4 +48,5 @@ export const defaultTodo = {
   ],
   archive: () => Promise.resolve,
   shareWith: () => Promise.resolve,
+  snooze: () => Promise.resolve,
 }

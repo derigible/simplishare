@@ -8,6 +8,7 @@ import {Popover} from '@instructure/ui-overlays'
 import {View} from '@instructure/ui-layout'
 import {IconClockLine as IconClock} from '@instructure/ui-icons'
 import {ScreenReaderContent} from '@instructure/ui-a11y'
+import { Tooltip } from '@instructure/ui-overlays'
 
 import type { VirtualEntity } from '../../../resources/sharedTypes'
 
@@ -53,16 +54,21 @@ export default function Snooze({entity} : {entity: VirtualEntity}) {
       shouldContainFocus
       shouldReturnFocus
       shouldCloseOnDocumentClick
-      placement="start"
+      placement="top"
     >
       <Popover.Trigger>
-        <Button
-          onClick={() => setPopoverOpen(!popoverOpen)}
-          icon={IconClock}
-          variant="icon"
+        <Tooltip
+          tip={`Snooze ${entity.displayName}`}
+          placement="top"
         >
-          <ScreenReaderContent>{`Snooze ${entity.displayName}`}</ScreenReaderContent>
-        </Button>
+          <Button
+            onClick={() => setPopoverOpen(!popoverOpen)}
+            icon={IconClock}
+            variant="icon"
+          >
+            <ScreenReaderContent>{`Snooze ${entity.displayName}`}</ScreenReaderContent>
+          </Button>
+        </Tooltip>
       </Popover.Trigger>
       <Popover.Content>
         <View padding="medium" as="div">

@@ -18,7 +18,7 @@ export const defaultTodo = {
   expanded: false,
   id: '1',
   archived: false,
-  tags: [],
+  tags: [{id: '1', name: 'test', shared_object_id: '1', tag: () => Promise.resolve(), untag: () => Promise.resolve()}],
   shared_on: null,
   shared: false,
   metadata: {},

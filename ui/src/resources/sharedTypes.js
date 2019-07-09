@@ -25,10 +25,18 @@ export type Preferences = {
   email: Preference
 }
 
+export type Tag = {
+  id: string,
+  name: string,
+  shared_object_id: string,
+  tag: any,
+  untag: any
+}
+
 export type VirtualEntity = {
   id: string,
   archived: boolean,
-  tags: Array<string>,
+  tags: Array<Tag>,
   shared_on: ?string,
   shared: boolean,
   metadata: Metadata,

@@ -11,6 +11,7 @@ import { TextArea } from '@instructure/ui-forms'
 import { TextInput } from '@instructure/ui-text-input'
 
 import StandardEditModal from '../../components/StandardEditModal'
+import StandardActions from '../../components/StandardActions'
 import ClickableDiv from '../../components/ClickableDiv'
 
 import type { Note as NoteType } from './type'
@@ -30,6 +31,7 @@ function reducer(state: NoteType, action: ComponentActionType) {
 export default function Note ({note} : {note: NoteType}) {
   const [noteObj: NoteType, setNoteChanges] = React.useReducer(reducer, note)
   const [modalOpen: boolean, setModalOpen] = React.useState(false)
+  const [expanded, setExpanded] = React.useState(!!note.expanded)
 
   const toggleModal = () => { setModalOpen(!modalOpen) }
 
@@ -64,6 +66,27 @@ export default function Note ({note} : {note: NoteType}) {
         />
       </StandardEditModal>
       <Text size="xx-large">{note.title}</Text>
+       <div
+        onClick={e => e.stopPropagation()}
+        role="button"
+        tabIndex="-1"
+        onKeyDown={(e) => { } }
+      >
+        <ToggleGroup
+          toggleLabel="Toggle to edit details"
+          summary="Edit Note Details"
+          iconExpanded={IconXSolid}
+          icon={IconPlusSolid}
+          expanded={expanded}
+          onToggle={() => setExpanded(!expanded)}
+        >
+          <View as="div" margin="small">
+            <StandardActions
+              entity={note}
+            />
+          </View>
+        </ToggleGroup>
+      </div>
     </ClickableDiv>
   )
 }

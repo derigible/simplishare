@@ -65,7 +65,7 @@ export default function Todos (
         />
       </StandardEditModal>
       <List variant="unstyled">
-        {todos.map(t => <List.Item key={t.id}><Todo todo={t} /></List.Item>)}
+        {todos.map(t => <List.Item key={t.id}  margin="x-small none"><Todo todo={t} /></List.Item>)}
       </List>
     </Page>
   )

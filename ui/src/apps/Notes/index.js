@@ -66,7 +66,7 @@ export default function Notes (
         />
       </StandardEditModal>
       <List variant="unstyled" delimiter="dashed" >
-        {notes.map(t => <List.Item key={t.id}><Note note={t} /></List.Item>)}
+        {notes.map(t => <List.Item key={t.id} margin="small none"><Note note={t} /></List.Item>)}
       </List>
     </Page>
   )

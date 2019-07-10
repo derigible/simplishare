@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 gem 'active_model_serializers', '~> 0.10.6'
 gem 'api-pagination'
 gem "aws-sdk-s3", require: false
-gem 'devise', '~> 4.4.0'
 
 gem 'figaro', '~> 1.0.0'
 gem 'health_check'

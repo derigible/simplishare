@@ -68,7 +68,6 @@ GEM
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.0.3)
-    bcrypt (3.1.12)
     bindata (2.4.3)
     builder (3.2.3)
     byebug (10.0.2)
@@ -77,12 +76,6 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.4)
     database_cleaner (1.7.0)
-    devise (4.4.3)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 6.0)
-      responders
-      warden (~> 1.2.3)
     diff-lcs (1.3)
     docile (1.3.1)
     ecma-re-validator (0.1.2)
@@ -104,6 +97,7 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hana (1.3.4)
+    hashie (3.6.0)
     health_check (3.0.0)
       railties (>= 5.0)
     i18n (0.9.5)
@@ -150,10 +144,12 @@ GEM
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.13)
       nokogiri
+    omniauth (1.9.0)
+      hashie (>= 3.4.6, < 3.7.0)
+      rack (>= 1.6.2, < 3)
     once-ler (0.1.4)
       activerecord (>= 4.0)
       rspec (>= 3.0)
-    orm_adapter (0.5.0)
     pagy (0.19.0)
     parallel (1.12.1)
     parser (2.5.1.2)
@@ -274,8 +270,6 @@ GEM
       activesupport (>= 3)
       railties (>= 3)
       yard (~> 0.7)
-    warden (1.2.7)
-      rack (>= 1.0)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -290,7 +284,6 @@ DEPENDENCIES
   aws-sdk-s3
   byebug
   database_cleaner
-  devise (~> 4.4.0)
   factory_bot_rails
   faker (~> 1.6.2)
   figaro (~> 1.0.0)
@@ -300,6 +293,7 @@ DEPENDENCIES
   json-jwt (~> 1.9)
   json_schemer
   listen (~> 3.1.5)
+  omniauth
   once-ler
   pagy
   pg (~> 0.21.0)
@@ -321,4 +315,4 @@ DEPENDENCIES
   versionist (~> 1.4.1)
 
 BUNDLED WITH
-   1.16.6
+   1.17.2

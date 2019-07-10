@@ -61,6 +61,7 @@
     "@instructure/ui-layout": "^6.6.0",
     "@instructure/ui-navigation": "^6.6.0",
     "@instructure/ui-overlays": "^6.6.0",
+    "@instructure/ui-pages": "^6.6.0",
     "@instructure/ui-postcss-config": "^6.6.0",
     "@instructure/ui-select": "^6.6.0",
     "@instructure/ui-stylelint-config": "^6.6.0",

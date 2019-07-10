@@ -45,6 +45,12 @@ export const defaultNote = {
     defaultSharedWithContactGenerator({email: 'derigible@outlook.com', username: 'lookme'}),
     defaultSharedWithContactGenerator({email: 'pmarca@outlook.com', username: null, access: ['read', 'share']})
   ],
+  shareableWith: [
+    {
+      id: '11',
+      label: 'marc.alan.phillips@outlook.com'
+    }
+  ],
   archive: () => Promise.resolve(),
   shareWith: () => Promise.resolve(),
   snooze: () => Promise.resolve(),

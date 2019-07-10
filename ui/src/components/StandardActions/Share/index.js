@@ -14,6 +14,7 @@ import { CheckboxGroup, Checkbox } from '@instructure/ui-forms'
 import { Pages } from '@instructure/ui-pages'
 
 import StandardEditModal from '../../StandardEditModal'
+import StandardAutocomplete from '../../Select/StandardAutocomplete'
 import ClickableDiv from '../../ClickableDiv'
 
 import type { VirtualEntity } from '../../../resources/sharedTypes'
@@ -21,7 +22,7 @@ import type { SharedWithContact } from '../../../resources/User/type'
 
 const accessSettings = ['read', 'edit', 'archive', 'destroy', 'share']
 
-function renderAccess(contact: SharedWithContact) {
+function Access({contact} : {contact: SharedWithContact}) {
   const [showPopover, setShowPopover] = React.useState(false)
 
   const togglePopover = () => setShowPopover(!showPopover)
@@ -85,7 +86,9 @@ function PageOne ({entity, nextPage}, {entity: VirtualEntity, nextPage: any}) {
               <Table.Row key={sw.id}>
                 <Table.Cell>{sw.username || 'Pending'}</Table.Cell>
                 <Table.Cell>{sw.email}</Table.Cell>
-                <Table.Cell>{renderAccess(sw)}</Table.Cell>
+                <Table.Cell>
+                  <Access contact={sw} />
+                </Table.Cell>
               </Table.Row>
             ))
           }
@@ -102,7 +105,10 @@ function PageTwo ({entity, back}, {entity: VirtualEntity, back: any}) {
 
   return (
     <>
-      hello
+      <StandardAutocomplete
+        options={entity.shareableWith}
+        setSelected={setUserId}
+      />
       <View as="div" textAlign="end">
         <Button onClick={back} margin="small">Cancel</Button>
         <Button

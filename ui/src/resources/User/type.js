@@ -18,6 +18,12 @@ export type SharedWithContact = Contact & {
   changeAcess: any
 }
 
+export type ShareableContact = {
+  id: string,
+  label: string,
+  disabled?: boolean
+}
+
 export type UserType = {
   display_name: string,
   email: string,

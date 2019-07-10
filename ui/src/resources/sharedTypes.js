@@ -1,6 +1,6 @@
 // @flow
 
-import type { SharedWithContact } from './User/type'
+import type { SharedWithContact, ShareableContact } from './User/type'
 
 export type Metadata = {
 
@@ -50,5 +50,6 @@ export type VirtualEntity = {
   archive: any,
   shareWith: any,
   snooze: any,
-  sharedWith: Array<SharedWithContact>
+  sharedWith: Array<SharedWithContact>,
+  shareableWith: Array<ShareableContact>
 }

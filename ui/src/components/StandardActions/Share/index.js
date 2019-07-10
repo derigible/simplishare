@@ -138,6 +138,7 @@ export default function Share(
         closeModal={toggleModal}
         modalOpen={modalOpen}
         modalTitle={`Share ${entity.displayName}`}
+        size="medium"
       >
         <Pages
           activePageIndex={page}

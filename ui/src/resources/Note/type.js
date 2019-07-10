@@ -18,6 +18,7 @@ export const defaultNote = {
   id: '1',
   archived: false,
   tags: [],
+  tagsAsOptions: [{id: '11', label: 'test2'}],
   shared_on: null,
   shared: false,
   metadata: {},
@@ -54,4 +55,6 @@ export const defaultNote = {
   archive: () => Promise.resolve(),
   shareWith: () => Promise.resolve(),
   snooze: () => Promise.resolve(),
+  tag: (tagId: string) => Promise.resolve(),
+  untag: (tagId: string) => this.tags.find(t => t.id === tagId).untag()
 }

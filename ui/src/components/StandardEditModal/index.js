@@ -11,8 +11,8 @@ import { Button } from '@instructure/ui-buttons'
 type size = "auto" | "small" | "medium" | "large" | "fullscreen"
 
 export default function StandardEditModal (
-  {closeModal, modalOpen, onSave, children, modalTitle, size} :
-  {closeModal: any, modalOpen: boolean, onSave?: any, children: React.Node, modalTitle: string, size?: size}
+  {closeModal, modalOpen, onSave, children, modalTitle, size, submitDisabled} :
+  {closeModal: any, modalOpen: boolean, onSave?: any, children: React.Node, modalTitle: string, size?: size, submitDisabled?: boolean}
 ) {
   const closeButton = () => (
     <CloseButton
@@ -41,7 +41,7 @@ export default function StandardEditModal (
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={closeModal}>Close</Button>&nbsp;
-        {onSave ? <Button variant="primary" type="submit" onClick={onSave}>Submit</Button> : null}
+        {onSave ? <Button variant="primary" type="submit" onClick={onSave} disabled={!!submitDisabled}>Submit</Button> : null}
       </Modal.Footer>
     </Modal>
   )

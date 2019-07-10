@@ -33,10 +33,17 @@ export type Tag = {
   untag: any
 }
 
+export type TagOption = {
+  id: string,
+  label: string,
+  disabled?: boolean
+}
+
 export type VirtualEntity = {
   id: string,
   archived: boolean,
   tags: Array<Tag>,
+  tagsAsOptions: Array<TagOption>,
   shared_on: ?string,
   shared: boolean,
   metadata: Metadata,
@@ -51,5 +58,7 @@ export type VirtualEntity = {
   shareWith: any,
   snooze: any,
   sharedWith: Array<SharedWithContact>,
-  shareableWith: Array<ShareableContact>
+  shareableWith: Array<ShareableContact>,
+  tag: any,
+  untag: any
 }

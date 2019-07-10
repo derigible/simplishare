@@ -146,6 +146,7 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
       filteredOptions: this.props.options,
       announcement: `${option.label} selected. List collapsed.`
     })
+    this.props.setSelected(id)
   }
 
   handleInputChange = (event: any) => {

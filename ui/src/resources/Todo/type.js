@@ -19,6 +19,7 @@ export const defaultTodo = {
   id: '1',
   archived: false,
   tags: [{id: '1', name: 'test', shared_object_id: '1', tag: () => Promise.resolve(), untag: () => Promise.resolve()}],
+  tagsAsOptions: [{id: '11', label: 'test2'}],
   shared_on: null,
   shared: false,
   metadata: {},
@@ -52,7 +53,9 @@ export const defaultTodo = {
       label: 'marc.alan.phillips@outlook.com'
     }
   ],
-  archive: () => Promise.resolve,
-  shareWith: () => Promise.resolve,
-  snooze: () => Promise.resolve,
+  archive: () => Promise.resolve(),
+  shareWith: () => Promise.resolve(),
+  snooze: () => Promise.resolve(),
+  tag: (tagId: string) => Promise.resolve(),
+  untag: (tagId: string) => this.tags.find(t => t.id === tagId).untag()
 }

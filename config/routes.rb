@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   health_check_routes
 
+  get 'auth/failure', to: 'authentications#failure'
   get 'auth/:provider/callback', to: 'authentications#login'
   post 'auth/:provider/callback', to: 'authentications#login'
   delete 'logout' => 'authentications#logout'

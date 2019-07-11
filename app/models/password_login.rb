@@ -31,7 +31,7 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
       return params[:user] if params[:user].present?
       email = params[:email]
       u = User.find_by(email: email)
-      u = User.create(email: email, username: params.fetch(:nickname, email.split('@').first)) if u.blank?
+      u = User.create(email: email) if u.blank?
       u
     end
 

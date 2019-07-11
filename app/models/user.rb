@@ -19,7 +19,6 @@ class User < ApplicationRecord
   has_many :password_logins, dependent: :destroy
 
   validates :email, presence: true
-  validates :username, presence: true
 
   before_save :run_sanitizers
   before_create :prepopulate_preference_hash
@@ -73,7 +72,7 @@ class User < ApplicationRecord
   private
 
   def run_sanitizers
-    html_sanitize(%i[email full_name username])
+    html_sanitize(%i[email full_name])
   end
 
   def make_ready_for_serialization(contacts)

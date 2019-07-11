@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class AuthenticationsController < AdministrationController
-  respond_to :json
-
   def start() end
 
   def registrations() end
@@ -25,28 +23,5 @@ class AuthenticationsController < AdministrationController
   def failure
     flash[:error] = "Login failure. Make sure you used the correct credentials when logging in."
     render :start
-  end
-
-  private
-
-  def login_json(user)
-    {
-      token: token(user),
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      preferences: user.preferences
-    }
-  end
-
-  def token(user)
-    claims = {
-      iss: 'pinkairship',
-      sub: user.id,
-      exp: 1.week.from_now,
-      iat: Time.zone.now
-    }
-    jws = JSON::JWT.new(claims).sign(Delegates::AuthenticationMethods.private_key, :RS256)
-    jws.to_s
   end
 end

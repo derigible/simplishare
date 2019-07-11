@@ -8,17 +8,6 @@ module ControllerMacros
     let_once(:user) { create(:user) }
     let(:current_user) { user }
 
-    let(:jws) do
-      claims = {
-        iss: 'pinkairship',
-        sub: current_user.id,
-        exp: 1.week.from_now,
-        iat: Time.zone.now
-      }
-      jws = JSON::JWT.new(claims).sign(Delegates::AuthenticationMethods.private_key, :RS256)
-      jws.to_s
-    end
-
     let(:shard) do
       double(activate: true).tap do |shard_double|
         allow(shard_double).to receive(:activate).and_yield

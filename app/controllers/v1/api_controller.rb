@@ -9,13 +9,6 @@ module V1
     self.responder = Delegates::Responder
     respond_to :json
 
-    class AuthTokenMissingException < StandardError
-    end
-
-    rescue_from AuthTokenMissingException do |e|
-      error_render(e, :unauthorized)
-    end
-
     rescue_from ActionController::BadRequest do |e|
       error_render(e, :bad_request)
     end
@@ -47,23 +40,13 @@ module V1
       error_render(e, :bad_request)
     end
 
-    rescue_from JSON::JWT::Exception do |e|
-      error_render(e, :unauthorized)
-    end
-
     after_action :verify_authorized, except: :index
     after_action :verify_policy_scoped, only: :index
 
     before_action :authenticate_user!
 
     def authenticate_user!
-      unless authenticated?
-        error_render(Exception.new(jwt_verifier.errors.join(';')), :unauthorized)
-        return
-      end
-      @_current_user = User.find_by(
-        id: decoded_jwt['sub']
-      )
+      @_current_user = User.find_by(id: session['current_user_id'])
       error_render Exception.new('User is not authenticated.'), :unauthorized if current_user.blank?
     end
 
@@ -77,22 +60,6 @@ module V1
 
     private
 
-    def decoded_jwt
-      auth_header = request.headers['Authorization']&.split(' ')&.last
-      raise AuthTokenMissingException, 'User is not authenticated. Missing bearer token.' if auth_header.blank?
-      @decoded_jwt ||= JSON::JWT.decode(
-        auth_header, Delegates::AuthenticationMethods.public_key
-      ).with_indifferent_access
-    end
-
-    def jwt_verifier
-      @jwt_verifier ||= Delegates::JwtVerifier.new(decoded_jwt)
-    end
-
-    def authenticated?
-      jwt_verifier.verify_jwt
-    end
-
     def error_render(error, status)
       render json: { error: error.message }, status: status
     end
@@ -100,4 +67,4 @@ module V1
 end
 # loading order problems with STI in controllers, this should
 # prevent this being an issue
-require_dependency Rails.root.join('app/models/virtual_entity')
+require_dependency Rails.root.join('app', 'models', 'virtual_entity')

@@ -32,3 +32,6 @@ npm-debug.log
 .babel-cache
 stats.json
 prod-stats.json
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key

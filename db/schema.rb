@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_15_045847) do
+ActiveRecord::Schema.define(version: 2019_07_11_003507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,28 @@ ActiveRecord::Schema.define(version: 2019_05_15_045847) do
     t.datetime "expires_at"
   end
 
+  create_table "logins", force: :cascade do |t|
+    t.string "identifier", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
+    t.string "name", null: false
+    t.string "email"
+    t.string "nickname"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "location"
+    t.string "description"
+    t.string "url"
+    t.string "phone"
+    t.jsonb "urls", default: {}
+    t.jsonb "credentials", default: {}
+    t.jsonb "extra", default: {}
+    t.string "password_digest"
+    t.bigint "user_id", null: false
+    t.index ["identifier"], name: "index_logins_on_identifier", unique: true
+    t.index ["user_id"], name: "index_logins_on_user_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "name", null: false
   end
@@ -165,6 +187,7 @@ ActiveRecord::Schema.define(version: 2019_05_15_045847) do
 
   add_foreign_key "contacts", "users"
   add_foreign_key "contacts", "users", column: "contact_id"
+  add_foreign_key "logins", "users"
   add_foreign_key "virtual_entities", "entities"
   add_foreign_key "virtual_entities", "users"
   add_foreign_key "virtual_entities_tags", "virtual_entities"

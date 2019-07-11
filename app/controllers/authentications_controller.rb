@@ -8,9 +8,15 @@ class AuthenticationsController < AdministrationController
   end
 
   def login
-    user = User.authenticate(login_params[:email], login_params[:password])
-    render(json: login_json(user), status: :ok) && return if user.present?
-    render json: { error: 'Password and username combo did not match' }, status: :unauthorized
+    if (user = Login.login(request.env['omniauth.auth']))
+      reset_session
+      session['current_user_id'] = user.id
+      debugger
+      redirect_to '/'
+    elsif params[:provider] == 'identity'
+      flash[:error] = "Failed to login!"
+      redirect_to '/auth/identity'
+    end
   end
 
   private
@@ -34,9 +40,5 @@ class AuthenticationsController < AdministrationController
     }
     jws = JSON::JWT.new(claims).sign(Delegates::AuthenticationMethods.private_key, :RS256)
     jws.to_s
-  end
-
-  def login_params
-    params.require(:user).permit(:email, :password)
   end
 end

@@ -11,6 +11,7 @@ gem 'health_check'
 gem 'inst-jobs'
 gem 'json_schemer'
 gem 'omniauth'
+gem 'omniauth-identity'
 gem 'pagy'
 gem 'pg', '~> 0.21.0'
 gem 'pundit'
@@ -32,14 +33,14 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem 'once-ler'
   gem 'rails-controller-testing'
   gem 'rubocop', require: false
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', require: false
   gem 'timecop'
-  gem 'once-ler'
 end
 
 group :doc do

@@ -72,7 +72,7 @@ class User < ApplicationRecord
   private
 
   def run_sanitizers
-    html_sanitize(%i[email full_name])
+    html_sanitize(%i[email])
   end
 
   def make_ready_for_serialization(contacts)

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
+  include Rails.application.routes.url_helpers
+
   self.table_name = Login.table_name
   auth_key('identifier')
   has_secure_password
@@ -21,8 +23,15 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
         user: user,
         name: "#{params[:first_name]} - #{params[:last_name]}"
       )
-      create_username_login(create_attrs) if params[:nickname].present?
-      super(create_attrs)
+      if params[:nickname].present?
+        create_username_login(create_attrs)
+      else
+        create_attrs[:confirmation_token] = SecureRandom.uuid
+      end
+      l = super(create_attrs)
+      # only send if this is the email login being created
+      l.send_login_confirmation if params[:identifier].blank?
+      l
     end
 
     private
@@ -41,9 +50,18 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
     end
   end
 
+  def send_login_confirmation
+    update!(confirmation_sent_at: Time.zone.now)
+    UserMailer.with(user: self, url: url).welcome_email.deliver_now
+  end
+
   private
 
   def set_uid
     update!(uid: id.to_s)
+  end
+
+  def confirmation_url
+    "#{confirm_email_logins_url}?confirmation_token=#{@user.confirmation_token}"
   end
 end

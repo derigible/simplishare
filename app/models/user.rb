@@ -5,10 +5,8 @@ class User < ApplicationRecord
   include Preferences
 
   # # Include default devise modules. Others available are:
-  # # :lockable, :timeoutable and :omniauthable
-  # devise :database_authenticatable, :registerable,
-  #   :recoverable, :rememberable, :trackable, :validatable,
-  #   :confirmable
+  # # :lockable, :timeoutable
+  # devise :rememberable
 
   has_one_attached :csv_uploads
   has_many :virtual_entities, class_name: 'VirtualEntity', inverse_of: :user, dependent: :destroy
@@ -58,11 +56,6 @@ class User < ApplicationRecord
 
   def upload_events
     CsvImporter.new(self, csv_uploads.read).import
-  end
-
-  def self.authenticate(email, password)
-    user = User.find_for_authentication(email: email)
-    user&.valid_password?(password) && user&.active_for_authentication? ? user : nil
   end
 
   def send_confirmation_notification?

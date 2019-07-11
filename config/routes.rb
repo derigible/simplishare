@@ -14,6 +14,11 @@ Rails.application.routes.draw do
     get 'authorize_contact', on: :collection
   end
 
+  resources :logins do
+    post 'resend_confirmation', on: :collection
+    get 'confirm_email', on: :collection
+  end
+
   concern :virtual_entity do
     post 'share', on: :member
     delete 'share', on: :member, action: 'unshare'

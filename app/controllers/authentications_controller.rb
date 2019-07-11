@@ -10,13 +10,14 @@ class AuthenticationsController < AdministrationController
   end
 
   def login
-    if (user = Login.login(request.env['omniauth.auth']))
-      reset_session
-      session['current_user_id'] = user.id
-      redirect_to '/'
-    elsif params[:provider] == 'identity'
-      flash[:error] = "Failed to login!"
+    l = Login.login(request.env['omniauth.auth'])
+    if l&.waiting_confirmation?
+      flash[:error] = "Awaiting confirmation of login!"
       redirect_to '/auth/identity'
+    else
+      reset_session
+      session['current_user_id'] = l.user.id
+      redirect_to '/'
     end
   end
 

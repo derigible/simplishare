@@ -5,7 +5,7 @@ class LoginsController < AdministrationController
 
   def resend_confirmation
     l = Login.find_by identifier: params[:identifier]
-    l.send_login_confirmation if l.authenticate(params[:password], skip_track: true)
+    l.send_login_confirmation if l&.authenticate(params[:password], skip_track: true)
   end
 
   def confirm_email

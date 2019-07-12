@@ -15,7 +15,7 @@ class Login < ApplicationRecord
     end
 
     def reset_password(params)
-      l = find_by(reset_password_token)
+      l = find_by(params[:reset_password_token])
       l&.update!(
         password: params[:password], password_confirmation: params[:password_confirmation]
       )

@@ -3,7 +3,7 @@
 class UserMailer < ApplicationMailer
   default from: 'noreply@pinkairship.com'
   PINKAIRSHIP = Rails.configuration.x.pinkairship
-  PINKAIRSHIP_ADDRESS = "#{PINKAIRSHIP[:protocol]}://#{PINKAIRSHIP[:host]}"
+  UNLOCK_TIME = Rails.configuration.x.pinkairship.unlock_after_time
 
   def welcome_email
     @user = params[:user]
@@ -13,7 +13,7 @@ class UserMailer < ApplicationMailer
 
   def reset_password
     @user = params[:user]
-    @url = "#{PINKAIRSHIP_ADDRESS}/?reset_token=#{params[:reset_token]}#!auth/resetPassword"
+    @url = params[:reset_url]
     mail(to: @user.email, subject: 'Reset Password to PinkAirship.com!')
   end
 
@@ -27,5 +27,12 @@ class UserMailer < ApplicationMailer
     @invitee_email = params[:invitee_email]
     @url = "#{PINKAIRSHIP_ADDRESS}/?registering=true&invitation_code=#{params[:invitation_code]}#!auth"
     mail(to: params[:invitation_email], subject: 'You have been invited to join PinkAirship.com!')
+  end
+
+  def unlock
+    @user = params[:user]
+    @url = params[:url]
+    @unlock_time = UNLOCK_TIME / 1.hour
+    mail(to: @user.email, subject: 'Your account has been locked')
   end
 end

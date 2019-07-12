@@ -41,4 +41,8 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.active_storage.service = :test
+  config.x.pinkairship.lock_after_attempts = 100
+  config.x.pinkairship.unlock_after_time = 1.minute
+  config.x.pinkairship.expire_session_after_time = 1.year
+  config.x.pinkairship.remember_me_expire_session_after_time = 1.month
 end

@@ -58,4 +58,8 @@ Rails.application.configure do
 
   config.x.pinkairship.host = ENV['PINKAIRSHIP_HOST'] || 'localhost:8081'
   config.x.pinkairship.protocol = ENV['PINKAIRSHIP_PROTOCOL'] || 'http'
+  config.x.pinkairship.lock_after_attempts = 100
+  config.x.pinkairship.unlock_after_time = 1.minute
+  config.x.pinkairship.expire_session_after_time = 1.year
+  config.x.pinkairship.remember_me_expire_session_after_time = 1.month
 end

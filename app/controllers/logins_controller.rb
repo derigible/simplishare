@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class LoginsController < AdministrationController
+  def begin_resend_confirmation() end
+
   def resend_confirmation
-    # check user creds
-    # do confirm email stuff here if valid
+    l = Login.find_by identifier: params[:identifier]
+    l.send_login_confirmation if l.authenticate(params[:password], skip_track: true)
   end
 
   def confirm_email
@@ -12,18 +14,24 @@ class LoginsController < AdministrationController
 
   def forgot_password
     @login = Login.find_by identifier: params[:identifier]
-    if @login
-      token = @login.set_reset_password_token
-      UserMailer.with(user: @login, reset_token: token).reset_password.deliver_now if user.present?
-    end
-    head :no_content
+    UserMailer.with(user: @login, reset_url: reset_url).reset_password.deliver_now if @login.present?
   end
 
+  def begin_forgot_password() end
+
   def reset_password
-    @login = Login.reset_password_by_token(reset_password_params)
+    @login = Login.reset_password(reset_password_params)
+  end
+
+  def begin_reset_password
+    @reset_password_token = params[:reset_password_token]
   end
 
   private
+
+  def reset_url
+    "#{reset_password_logins_url}?reset_password_token=#{@login.set_reset_password_token}"
+  end
 
   def reset_password_params
     params.require(:login).permit(:password, :password_confirmation, :reset_password_token)

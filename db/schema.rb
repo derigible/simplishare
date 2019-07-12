@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_203848) do
+ActiveRecord::Schema.define(version: 2019_07_12_130055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,7 +145,11 @@ ActiveRecord::Schema.define(version: 2019_07_11_203848) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "preferences", default: {}
+    t.datetime "locked_at"
+    t.integer "failed_attempts"
+    t.string "unlock_token"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "virtual_entities", force: :cascade do |t|

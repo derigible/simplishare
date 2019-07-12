@@ -93,4 +93,8 @@ Rails.application.configure do
 
   config.x.pinkairship.host = ENV['PINKAIRSHIP_HOST'] || 'www.pinkairship.com'
   config.x.pinkairship.protocol = ENV['PINKAIRSHIP_PROTOCOL'] || 'https'
+  config.x.pinkairship.lock_after_attempts = 10
+  config.x.pinkairship.unlock_after_time = 15.minute
+  config.x.pinkairship.expire_session_after_time = 1.day
+  config.x.pinkairship.remember_me_expire_session_after_time = 1.month
 end

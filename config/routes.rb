@@ -9,14 +9,18 @@ Rails.application.routes.draw do
   post 'reset_password' => 'users#reset_password'
 
   resources :users, only: [:create, :show] do
-    post 'resend_confirmation', on: :collection
-    get 'confirm_email', on: :collection
     get 'authorize_contact', on: :collection
+    get 'unlock', on: :collection
   end
 
   resources :logins do
+    get 'resend_confirmation', on: :collection, action: 'begin_resend_confirmation'
     post 'resend_confirmation', on: :collection
     get 'confirm_email', on: :collection
+    get 'forgot_password', on: :collection, action: 'begin_forgot_password'
+    post 'forgot_password', on: :collection
+    get 'reset_password', on: :collection, action: 'begin_reset_password'
+    post 'reset_password', on: :collection
   end
 
   concern :virtual_entity do

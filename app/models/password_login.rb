@@ -52,7 +52,15 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
 
   def send_login_confirmation
     update!(confirmation_sent_at: Time.zone.now)
-    UserMailer.with(user: self, url: url).welcome_email.deliver_now
+    UserMailer.with(user: self, url: confirmation_url).welcome_email.deliver_now
+  end
+
+  def authenticate(password, skip_track: false)
+    return super(password) if skip_track
+    return false if user.locked?
+    authenticated = super(password)
+    user.lock! if !authenticated && user.track_failed_attempt_and_check_if_should_lock
+    authenticated
   end
 
   private

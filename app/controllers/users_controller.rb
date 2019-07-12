@@ -58,6 +58,11 @@ class UsersController < AdministrationController
     respond_with user, serializer: UserSerializer
   end
 
+  def unlock
+    u = Users.find_by(unlock_token: params[:unlock_token])
+    u&.unlock!
+  end
+
   private
 
   def url

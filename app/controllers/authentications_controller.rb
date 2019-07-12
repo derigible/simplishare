@@ -3,20 +3,20 @@
 class AuthenticationsController < AdministrationController
   def start() end
 
-  def registrations() end
+  def registration() end
 
   def logout
     raise 'Action not supported'
   end
 
   def login
-    l = Login.login(request.env['omniauth.auth'])
-    if l&.waiting_confirmation?
+    login = Login.login(request.env['omniauth.auth'])
+    if login&.waiting_confirmation?
       flash[:error] = "Awaiting confirmation of login!"
-      redirect_to '/auth/identity'
+      render :start
     else
       reset_session
-      session['current_user_id'] = l.user.id
+      session['current_user_id'] = login.user.id
       redirect_to '/'
     end
   end
@@ -24,5 +24,10 @@ class AuthenticationsController < AdministrationController
   def failure
     flash[:error] = "Login failure. Make sure you used the correct credentials when logging in."
     render :start
+  end
+
+  def failed_registration
+    flash[:error] = "Registration failure. Likely your password and password confirmation did not match."
+    render :registration
   end
 end

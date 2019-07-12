@@ -21,17 +21,16 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
         uid: email,
         email: email,
         user: user,
-        name: "#{params[:first_name]} - #{params[:last_name]}"
+        name: "#{params[:first_name]} - #{params[:last_name]}",
+        confirmation_token: SecureRandom.uuid
       )
       if params[:nickname].present?
         create_username_login(create_attrs)
-      else
-        create_attrs[:confirmation_token] = SecureRandom.uuid
       end
-      l = super(create_attrs)
+      login = super(create_attrs)
       # only send if this is the email login being created
-      l.send_login_confirmation if params[:identifier].blank?
-      l
+      login.send_login_confirmation if params[:identifier].blank? && login.valid?
+      login
     end
 
     private
@@ -39,9 +38,9 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
     def find_or_create_user(params)
       return params[:user] if params[:user].present?
       email = params[:email]
-      u = User.find_by(email: email)
-      u = User.create(email: email) if u.blank?
-      u
+      user = User.find_by(email: email)
+      user = User.create(email: email) if user.blank?
+      user
     end
 
     def create_username_login(create_attrs)
@@ -52,6 +51,7 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
 
   def send_login_confirmation
     update!(confirmation_sent_at: Time.zone.now)
+    reload
     UserMailer.with(user: self, url: confirmation_url).welcome_email.deliver_now
   end
 
@@ -70,6 +70,6 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
   end
 
   def confirmation_url
-    "#{confirm_email_logins_url}?confirmation_token=#{@user.confirmation_token}"
+    "#{confirm_email_logins_url}?confirmation_token=#{confirmation_token}"
   end
 end

@@ -9,17 +9,17 @@ class Login < ApplicationRecord
     end
 
     def confirm(confirmation_token)
-      l = find_by(confirmation_token: confirmation_token)
-      l.update!(confirmed_at: Time.zone.now) if l&.waiting_confirmation?
-      l
+      login = find_by(confirmation_token: confirmation_token)
+      login.user.logins.each{ |l| l.update! confirmed_at: Time.zone.now } if login&.waiting_confirmation?
+      login
     end
 
     def reset_password(params)
-      l = find_by(params[:reset_password_token])
-      l&.update!(
+      login = find_by(params[:reset_password_token])
+      login&.update!(
         password: params[:password], password_confirmation: params[:password_confirmation]
       )
-      l
+      login
     end
   end
 

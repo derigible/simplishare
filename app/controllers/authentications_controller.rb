@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class AuthenticationsController < AdministrationController
-  def start() end
+  def start
+    redirect_to '/' if User.find_by(id: session['current_user_id']) && !params[:reauth]
+  end
 
   def registration() end
 
@@ -22,6 +24,7 @@ class AuthenticationsController < AdministrationController
   end
 
   def failure
+    redirect_to '/' and return if User.find_by(id: session['current_user_id']) && !params[:reauth]
     flash[:error] = "Login failure. Make sure you used the correct credentials when logging in."
     render :start
   end

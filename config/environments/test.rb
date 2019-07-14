@@ -45,4 +45,6 @@ Rails.application.configure do
   config.x.pinkairship.unlock_after_time = 1.minute
   config.x.pinkairship.expire_session_after_time = 1.year
   config.x.pinkairship.remember_me_expire_session_after_time = 1.month
+
+  config.session_store :cookie_store, key: '_pinkairship_session', httponly: true, expire_after: 1.day
 end

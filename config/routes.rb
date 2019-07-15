@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post 'reset_password' => 'users#reset_password'
 
   resources :users, only: [:create, :show] do
+    get 'info', on: :collection
     get 'authorize_contact', on: :collection
     get 'unlock', on: :collection
   end

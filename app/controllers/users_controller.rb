@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UsersController < AdministrationController
+  respond_to :json, :html
+
   def create
     @user = User.new(user_params.except(:invitation_code))
     UserMailer.with(user: @user, url: url).welcome_email.deliver_now if @user.save
@@ -61,6 +63,15 @@ class UsersController < AdministrationController
   def unlock
     u = Users.find_by(unlock_token: params[:unlock_token])
     u&.unlock!
+  end
+
+  def info
+    user = User.find_by(id: session['current_user_id'])
+    if user.present?
+      respond_with user, serializer: UserSerializer
+    else
+      render json: { error: 'User not authenticated' }, status: :unauthorized
+    end
   end
 
   private

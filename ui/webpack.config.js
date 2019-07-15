@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const baseConfig = require('@instructure/ui-webpack-config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 
 require('dotenv').config()
 
@@ -22,7 +23,7 @@ const buildPlugins = [
   }),
   new HtmlWebpackPlugin({
     chunksSortMode: 'dependency',
-    filename: 'index.html',
+    filename: path.join(__dirname, '..', 'public', 'index.html'),
     inject: true,
     template: 'src/index.html'
   }),
@@ -41,6 +42,7 @@ const buildConfig = {
     inline: true,
     noInfo: false,
     publicPath: webpackDevServerUrl,
+    public: 'localhost:8080',
     stats: {
       assets: true,
       cached: true,
@@ -60,6 +62,9 @@ const buildConfig = {
       timings: true,
       version: false,
       warnings: false
+    },
+    writeToDisk: (filePath) => {
+      return /index\.html$/.test(filePath);
     }
   }
 }

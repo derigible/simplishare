@@ -15,30 +15,8 @@ import StandardActions from '../../components/StandardActions'
 import ClickableDiv from '../../components/ClickableDiv'
 
 import type { Note as NoteType } from './record'
-import { Note as NoteRecord } from './record'
+import { Note as NoteRecord, recordParams } from './record'
 import type { ComponentActionType } from '../../constants/actionTypes'
-
-export function recordParams (state: NoteType, newParam: any) {
-  return Object.assign(
-    {},
-    {
-      body: state.body,
-      title: state.title,
-      id: state.id,
-      archived: state.archived,
-      tags: state.tags,
-      shared: state.shared,
-      shared_on: state.shared_on,
-      metadata: state.metadata,
-      preferences: state.preferences,
-      shared_object_id: state.shared_object_id,
-      updated_at: state.updated_at,
-      created_at: state.created_at,
-      priority: state.priority
-    },
-    newParam
-  )
-}
 
 function reducer(state: NoteType, action: ComponentActionType) {
   switch (action.type) {

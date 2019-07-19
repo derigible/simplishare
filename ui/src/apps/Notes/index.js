@@ -10,7 +10,8 @@ import { TextInput } from '@instructure/ui-text-input'
 
 import Page from '../../components/Page'
 import StandardEditModal from '../../components/StandardEditModal'
-import Note, { recordParams } from '../../resources/Note'
+import Note from '../../resources/Note'
+import { recordParams } from '../../resources/Note/record'
 
 import type { User as UserType } from '../../resources/User/record'
 import { Note as NoteRecord } from '../../resources/Note/record'

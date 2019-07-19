@@ -9,7 +9,7 @@ import { IconXSolid, IconPlusSolid } from '@instructure/ui-icons'
 import StandardEdit from '../../components/StandardEdit'
 import StandardActions from '../../components/StandardActions'
 
-import type { Todo as TodoType } from './type'
+import type { Todo as TodoType } from './record'
 
 export default function Todo ({todo} : {todo: TodoType}) {
   const [title, setTitle] = React.useState(todo.title)

@@ -19,7 +19,7 @@ import { Button } from '@instructure/ui-buttons'
 
 import PageHeader from '../PageHeader'
 
-import type { UserType } from '../../resources/User/type'
+import type { User as UserType } from '../../resources/User/record'
 
 function LargePageNavigation (
   {navOpen, setNavOpen, user, pageName} :
@@ -52,7 +52,7 @@ function LargePageNavigation (
           selected={pageName == 'user'}
         />
         <Navigation.Item
-          icon={<Badge count={user.action_items.length}><IconInboxLine /></Badge>}
+          icon={<Badge count={user.notifications.length}><IconInboxLine /></Badge>}
           label="Inbox"
           href="#!user/inbox"
           selected={pageName == 'user/inbox'}
@@ -110,7 +110,7 @@ function SmallPageNavigation (
             size="x-small"
           />
         </Button>
-        <Button fluidWidth icon={<Badge count={user.action_items.length}><IconInboxLine /></Badge>} href="#!user/inbox" margin="x-small">
+        <Button fluidWidth icon={<Badge count={user.notifications.length}><IconInboxLine /></Badge>} href="#!user/inbox" margin="x-small">
           Inbox
         </Button>
         <Button fluidWidth icon={IconRubricLine} href="/#!todos" margin="x-small">

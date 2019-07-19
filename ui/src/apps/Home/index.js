@@ -10,7 +10,7 @@ import { IconRubricLine, IconComposeLine } from '@instructure/ui-icons'
 
 import Page from '../../components/Page'
 
-import type { UserType } from '../../resources/User/type'
+import type { User as UserType } from '../../resources/User/record'
 
 function ActionCard ({type, Icon}: {type: string, Icon: any}) {
   return (

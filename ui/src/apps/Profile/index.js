@@ -11,7 +11,7 @@ import Page from '../../components/Page'
 import User from '../../resources/User'
 import Contacts from '../../resources/User/Contacts'
 
-import type { UserType } from '../../resources/User/type'
+import type { User as UserType } from '../../resources/User/record'
 import type { ComponentActionType } from '../../constants/actionTypes'
 
 const tabs = {

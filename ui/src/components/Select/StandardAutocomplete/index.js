@@ -6,14 +6,14 @@ import { IconUserLine, IconSearchLine, IconUserSolid } from '@instructure/ui-ico
 import { Select } from '@instructure/ui-select'
 import { Alert } from '@instructure/ui-alerts'
 
-type option = {
+export interface Option {
   id: string,
   label: string,
   disabled?: boolean
 }
 
 type expectedProps = {
-  options: Array<option>,
+  options: Array<Option>,
   setSelected: any
 }
 
@@ -22,7 +22,7 @@ type State = {
   isShowingOptions: boolean,
   highlightedOptionId: ?string,
   selectedOptionId: ?string,
-  filteredOptions: Array<option>,
+  filteredOptions: Array<Option>,
   announcement: ?string
 }
 
@@ -36,11 +36,11 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
     announcement: null
   }
 
-  getOptionById (queryId: string) : ?option {
+  getOptionById (queryId: string) : ?Option {
     return this.props.options.find(({ id }) => id === queryId)
   }
 
-  getOptionsChangedMessage (newOptions: Array<option>) {
+  getOptionsChangedMessage (newOptions: Array<Option>) {
     let message = newOptions.length !== this.state.filteredOptions.length
       ? `${newOptions.length} options available.` // options changed, announce new total
       : null // options haven't changed, don't announce
@@ -59,7 +59,7 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
   filterOptions = (value: string) => {
     return (this.props.options.filter(option => (
       option.label.toLowerCase().startsWith(value.toLowerCase())
-    )) : Array<option>)
+    )) : Array<Option>)
   }
 
   matchValue () {

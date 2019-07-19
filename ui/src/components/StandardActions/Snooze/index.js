@@ -10,7 +10,7 @@ import {IconClockLine as IconClock} from '@instructure/ui-icons'
 import {ScreenReaderContent} from '@instructure/ui-a11y'
 import { Tooltip } from '@instructure/ui-overlays'
 
-import type { VirtualEntity } from '../../../resources/sharedTypes'
+import type { VirtualEntity } from '../../../resources/baseRecords'
 
 function invalidDateTimeMessage (rawDateValue, rawTimeValue) {
   if (rawDateValue) {

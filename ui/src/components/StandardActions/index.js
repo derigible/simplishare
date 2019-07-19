@@ -11,7 +11,7 @@ import Preferences from './Preferences'
 import Snooze from './Snooze'
 import Tags from './Tags'
 
-import type { VirtualEntity } from '../../resources/sharedTypes'
+import type { VirtualEntity } from '../../resources/baseRecords'
 
 export default function StandardActions(
   {entity} : {entity: VirtualEntity}

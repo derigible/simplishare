@@ -11,18 +11,41 @@ import { TextInput } from '@instructure/ui-text-input'
 import Page from '../../components/Page'
 import StandardEditModal from '../../components/StandardEditModal'
 import Todo from '../../resources/Todo'
+import { Todo as TodoRecord } from '../../resources/Todo/record'
 
-import type { UserType } from '../../resources/User/type'
-import type { Todo as TodoType } from '../../resources/Todo/type'
+import type { User as UserType } from '../../resources/User/record'
+import type { Todo as TodoType } from '../../resources/Todo/record'
 import type { ComponentActionType } from '../../constants/actionTypes'
-import { defaultTodo } from '../../resources/Todo/type'
+import { defaultTodo } from '../../resources/Todo/record'
+
+function recordParams (state, newParam) {
+  return Object.assign(
+    {},
+    {
+      description: state.description,
+      title: state.title,
+      id: state.id,
+      archived: state.archived,
+      tags: state.tags,
+      shared: state.shared,
+      shared_on: state.shared_on,
+      metadata: state.metadata,
+      preferences: state.preferences,
+      shared_object_id: state.shared_object_id,
+      updated_at: state.updated_at,
+      created_at: state.created_at,
+      priority: state.priority
+    },
+    newParam
+  )
+}
 
 function reducer(state: TodoType, action: ComponentActionType) {
   switch (action.type) {
     case 'description':
-      return {...state, description: action.payload};
+      return new TodoRecord(recordParams(state, {description: action.payload}))
     case 'title':
-      return {...state, title: action.payload}
+      return new TodoRecord(recordParams(state, {description: action.payload}))
     default:
       throw new Error();
   }

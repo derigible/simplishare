@@ -14,11 +14,11 @@ import { IconAddLine } from '@instructure/ui-icons'
 import StandardAutocomplete from '../../Select/StandardAutocomplete'
 import StandardEditModal from '../../StandardEditModal'
 
-import type { VirtualEntity } from '../../../resources/sharedTypes'
+import type { VirtualEntity } from '../../../resources/baseRecords'
 
 function AddPopover ({entity} : {entity: VirtualEntity}) {
   const [popoverOpen: boolean, setPopoverOpen] = React.useState(false)
-  const [tagId: ?string, setTagId: any] = React.useState(null)
+  const [tagId: ?string, setTagId: any] = React.useState('')
 
   const togglePopover = () => setPopoverOpen(!popoverOpen)
 
@@ -63,7 +63,7 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
 
 export default function Tags({entity} : {entity: VirtualEntity}) {
   const [modalOpen, setModalOpen] = React.useState(false)
-  const [tagId, setTagId] = React.useState(null)
+  const [tagId, setTagId] = React.useState('')
 
   const toggleModal = () => setModalOpen(!modalOpen)
 

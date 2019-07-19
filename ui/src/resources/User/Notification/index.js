@@ -6,7 +6,7 @@ import { View } from '@instructure/ui-layout'
 import { ToggleGroup } from '@instructure/ui-toggle-details'
 import { IconXSolid, IconPlusSolid } from '@instructure/ui-icons'
 
-import type { Notification as NotificationType } from '../type'
+import type { Notification as NotificationType } from '../record'
 
 export default function Notification ({notification} : {notification: NotificationType}) {
   const [expanded, setExpanded] = React.useState(false)

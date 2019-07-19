@@ -15,7 +15,7 @@ import { RadioInputGroup,RadioInput } from '@instructure/ui-forms'
 import StandardEditModal from '../../StandardEditModal'
 import ClickableDiv from '../../ClickableDiv'
 
-import type { VirtualEntity, Preference } from '../../../resources/sharedTypes'
+import type { VirtualEntity, Preference } from '../../../resources/baseRecords'
 
 function renderPreference(type: string, preference: Preference, entityType: string) {
   const entityActionPreferences = preference[entityType]

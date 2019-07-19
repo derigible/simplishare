@@ -7,7 +7,7 @@ import { IconCollapseLine } from '@instructure/ui-icons'
 import { Tooltip } from '@instructure/ui-overlays'
 import { ScreenReaderContent } from '@instructure/ui-a11y'
 
-import type { VirtualEntity } from '../../../resources/sharedTypes'
+import type { VirtualEntity } from '../../../resources/baseRecords'
 
 export default function Archive(
   {entity} : {entity: VirtualEntity}

@@ -10,29 +10,32 @@ import { TextInput } from '@instructure/ui-text-input'
 
 import Page from '../../components/Page'
 import StandardEditModal from '../../components/StandardEditModal'
-import Note from '../../resources/Note'
+import Note, { recordParams } from '../../resources/Note'
 
-import type { UserType } from '../../resources/User/type'
-import type { Note as NoteType } from '../../resources/Note/type'
+import type { User as UserType } from '../../resources/User/record'
+import { Note as NoteRecord } from '../../resources/Note/record'
+import type { Note as NoteRecordType } from '../../resources/Note/record'
 import type { ComponentActionType } from '../../constants/actionTypes'
-import { defaultNote } from '../../resources/Note/type'
+import { defaultNote } from '../../resources/Note/record'
 
-function reducer(state: NoteType, action: ComponentActionType) {
+
+
+function reducer(state: NoteRecordType, action: ComponentActionType) {
   switch (action.type) {
     case 'body':
-      return {...state, body: action.payload};
+      return new NoteRecord(recordParams(state, {body: action.payload}));
     case 'title':
-      return {...state, title: action.payload}
+      return new NoteRecord(recordParams(state, {body: action.payload}))
     default:
       throw new Error();
   }
 }
 
 export default function Notes (
-  {user, notes} : {user: UserType, notes: Array<NoteType>}
+  {user, notes} : {user: UserType, notes: Array<NoteRecordType>}
 ) {
   const [modalOpen: boolean, setModalOpen] = React.useState(false)
-  const [noteObj: NoteType, setNoteChanges] = React.useReducer(reducer, defaultNote)
+  const [noteObj: NoteRecordType, setNoteChanges] = React.useReducer(reducer, defaultNote)
 
   const toggleModal = () => setModalOpen(!modalOpen)
 

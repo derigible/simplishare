@@ -16,7 +16,7 @@ import { IconPlusLine } from '@instructure/ui-icons'
 
 import StandardEditModal from '../../../components/StandardEditModal'
 
-import type { Contact as ContactType } from '../type'
+import type { Contact as ContactType } from '../record'
 
 function AddButton ({openModal} : {openModal: any}) {
   return (

@@ -5,6 +5,11 @@ import Router from 'middle-router'
 
 import NotFound from './apps/NotFound'
 
+declare var require: {
+	(id: string): any;
+	ensure(ids: Array<string>, callback?: { (require: typeof require): void }, chunk?: string): void
+}
+
 const configureRouter = () => {
   return Router({ hash: '#!' })
     .lazy('/', () => new Promise((resolve) => require.ensure(

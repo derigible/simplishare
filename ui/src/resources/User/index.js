@@ -9,17 +9,19 @@ import { IconSaveLine } from '@instructure/ui-icons'
 
 import StandardEdit from '../../components/StandardEdit'
 
-import type { UserType } from '../../resources/User/type'
+import type { User as UserType } from '../../resources/User/record'
 import type { ComponentActionType } from '../../constants/actionTypes'
+
+import { User as UserRecord } from '../../resources/User/record'
 
 function reducer(state: UserType, action: ComponentActionType) {
   switch (action.type) {
     case 'display_name':
-      return {...state, display_name: action.payload};
+      return new UserRecord({...state, display_name: action.payload});
     case 'email':
-      return {...state, email: action.payload}
+      return new UserRecord({...state, email: action.payload})
     case 'username':
-      return {...state, username: action.payload}
+      return new UserRecord({...state, username: action.payload})
     default:
       throw new Error();
   }

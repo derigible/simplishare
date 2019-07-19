@@ -17,8 +17,8 @@ import StandardEditModal from '../../StandardEditModal'
 import StandardAutocomplete from '../../Select/StandardAutocomplete'
 import ClickableDiv from '../../ClickableDiv'
 
-import type { VirtualEntity } from '../../../resources/sharedTypes'
-import type { SharedWithContact } from '../../../resources/User/type'
+import type { VirtualEntity } from '../../../resources/baseRecords'
+import type { SharedWithContact } from '../../../resources/User/record'
 
 const accessSettings = ['read', 'edit', 'archive', 'destroy', 'share']
 
@@ -56,7 +56,7 @@ function Access({contact} : {contact: SharedWithContact}) {
                 variant="toggle"
                 label={a}
                 checked={contact.access.includes(a)}
-                onChange={() => contact.changeAcess(a)}
+                onChange={() => contact.changeAccess(a)}
               />
             ))}
           </CheckboxGroup>
@@ -100,7 +100,7 @@ function PageOne ({entity, nextPage}, {entity: VirtualEntity, nextPage: any}) {
 }
 
 function PageTwo ({entity, back}, {entity: VirtualEntity, back: any}) {
-  const [userId: ?string, setUserId: any] = React.useState(null)
+  const [userId: string, setUserId: any] = React.useState('')
   const [perms: Array<string>, setPerms: any] = React.useState([])
 
   return (
@@ -113,7 +113,7 @@ function PageTwo ({entity, back}, {entity: VirtualEntity, back: any}) {
         <Button onClick={back} margin="small">Cancel</Button>
         <Button
           disabled={!!userId}
-          onClick={() => {entity.shareWith(userId, perms); setUserId(null); setPerms([]); back()}}
+          onClick={() => {entity.shareWith(userId, perms); setUserId(''); setPerms([]); back()}}
           variant="primary"
           margin="small none"
         >

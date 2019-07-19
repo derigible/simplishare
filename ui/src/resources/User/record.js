@@ -70,7 +70,7 @@ export class User {
     const url = userId ? `/users/${userId}` : '/users/info'
     try {
       const response = await axios.get(url)
-      return new User(response.body)
+      return new User(response.data)
     } catch (error) {
       axiosError(error)
     }
@@ -81,9 +81,9 @@ export class User {
     if (!user.contactsFetched) {
       axios.get(url).then(
         response => user.setContacts(
-          response.body.map(c => new Contact(c))
+          response.data.map(c => new Contact(c))
         )
-      )
+      ).catch(error => axiosError(error))
       return []
     }
     return user._contacts
@@ -96,7 +96,7 @@ export class User {
         response => user.setNotifications(
           response.body.map(n => new Notification(n))
         )
-      )
+      ).catch(error => axiosError(error))
       return []
     }
     return user._notifications

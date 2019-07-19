@@ -59,6 +59,7 @@ User.info().then((user: ?User) => {
     }).start()
   }
 }).catch(error => {
-  // eslint-disable-next-line no-console
+  if (error.name === 'UserNotAuthenticated') window.location = '/auth/identity'
+  // eslint-disable-next-line
   console.log(error)
 })

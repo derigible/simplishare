@@ -7,6 +7,10 @@ export type Metadata = {
 
 }
 
+interface Indexable {
+  [key: string]: string
+}
+
 class Action  {
   type: "always" | "not_set" | "never"
 
@@ -39,9 +43,12 @@ type PreferenceParams = {
   note?: PreferenceActionParams
 }
 
-export class Preference  {
+export class Preference implements Indexable  {
   todo: PreferenceAction
   note: PreferenceAction
+
+  $key: any;
+  $value: any;
 
   constructor(p: PreferenceParams) {
     if (p.todo) {
@@ -57,8 +64,10 @@ type PreferencesParams = {
   email: PreferenceParams
 }
 
-export class Preferences {
+export class Preferences implements Indexable {
   email: Preference
+  $key: any;
+  $value: any;
 
   constructor(preferences: PreferencesParams) {
     this.email = new Preference(preferences.email)
@@ -177,7 +186,7 @@ export class VirtualEntity {
 
   }
 
-  snooze () {
+  snooze (datetime: string) {
 
   }
 

@@ -9,7 +9,7 @@ import { Alert } from '@instructure/ui-alerts'
 export interface Option {
   id: string,
   label: string,
-  disabled?: boolean
+  disabled: boolean
 }
 
 type expectedProps = {

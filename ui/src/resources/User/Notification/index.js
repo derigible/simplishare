@@ -13,7 +13,7 @@ export default function Notification ({notification} : {notification: Notificati
   return (
     <ToggleGroup
       toggleLabel="Toggle to edit details"
-      summary={notification.type}
+      summary={notification.data.type || 'Alert'}
       iconExpanded={IconXSolid}
       icon={IconPlusSolid}
       expanded={expanded}
@@ -23,7 +23,7 @@ export default function Notification ({notification} : {notification: Notificati
         as="div"
         padding="small"
       >
-        {notification.type}
+        {notification.data.details}
       </View>
     </ToggleGroup>
   )

@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :notes, through: :virtual_entities
   has_many :logins, inverse_of: :user, dependent: :destroy
   has_many :password_logins, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   validates :email, presence: true
 

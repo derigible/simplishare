@@ -10,10 +10,6 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :show] do
     get 'info', on: :collection
-    get 'contacts', on: :collection
-    get 'contacts', on: :member
-    get 'notifications', on: :collection
-    get 'notifications', on: :member
     get 'authorize_contact', on: :collection
     get 'unlock', on: :collection
   end
@@ -44,6 +40,7 @@ Rails.application.routes.draw do
 
   concern :api_routes do
     resources :contacts, only: [:index, :create, :show, :destroy]
+    resources :notifications, only: [:index, :create, :show, :destroy]
     resources :notes do
       concerns :virtual_entity
     end

@@ -3,6 +3,7 @@
 import axios from 'axios'
 
 import { axiosError } from '../../errors'
+import { BaseRecord } from '../baseRecords'
 
 export class Contact {
   email: string
@@ -45,13 +46,24 @@ export class ShareableContact extends Contact {
   }
 }
 
+type NotificationData = {
+  type?: string,
+  details: string
+}
+
 export class Notification {
-  type: string
+  data: NotificationData
   id: string
+  read: boolean
+  created_at: string
+  updated_at: string
 
   constructor(notification: Notification) {
-    this.type = notification.type
+    this.data = notification.data
     this.id = notification.id
+    this.read = notification.read
+    this.created_at = notification.created_at
+    this.updated_at = notification.updated_at
   }
 }
 
@@ -61,11 +73,11 @@ type UserParamsType = {
   username: string,
   _notifications?: Array<Notification>,
   _contacts?: Array<Contact>,
-  notificationsFetched: boolean,
-  contactsFetched: boolean
+  notificationsFetchedStatus?: string,
+  contactsFetched?: string
 }
 
-export class User {
+export class User extends BaseRecord {
   static async info (userId: ?string) {
     const url = userId ? `/users/${userId}` : '/users/info'
     try {
@@ -76,27 +88,46 @@ export class User {
     }
   }
 
-  static getContacts(user: User, userId: ?string) : Array<Contact> {
-    const url = userId ? `/users/${userId}/contacts` : '/users/contacts'
-    if (!user.contactsFetched) {
+  static getContacts (
+    {user, userId} : { user: User, userId?: string}
+  ) : Array<Contact> {
+    const url = userId ? `/contacts?user_id=${userId}` : '/contacts'
+    if (user.contactsFetched === 'pending') {
+       // eslint-disable-next-line
+      user.contactsFetched = 'fetching'
       axios.get(url).then(
         response => user.setContacts(
           response.data.map(c => new Contact(c))
         )
-      ).catch(error => axiosError(error))
+      ).catch(error => {
+        axiosError(error)
+        // eslint-disable-next-line
+        user.contactsFetched = 'error'
+      })
       return []
     }
     return user._contacts
   }
 
-  static getNotifications(user: User, userId: ?string) : Array<Notification> {
-    const url = userId ? `/users/${userId}/notification` : '/users/notifications'
-    if (!user.notificationsFetched) {
+  static getNotifications (
+    {user, userId} : { user: User, userId?: string}
+  ) : Array<Notification> {
+    const url = userId ? `/notifications?user_id=${userId}` : '/notifications'
+    if (user.notificationsFetchedStatus === 'pending') {
+      // eslint-disable-next-line
+      user.notificationsFetchedStatus = 'fetching'
       axios.get(url).then(
-        response => user.setNotifications(
-          response.body.map(n => new Notification(n))
-        )
-      ).catch(error => axiosError(error))
+        response => {
+          user.setNotifications(
+            response.data.map(n => new Notification(n))
+          )
+          User.prototype.callRender()
+        }
+      ).catch(error => {
+        axiosError(error);
+        // eslint-disable-next-line
+        user.notificationsFetchedStatus = 'error'
+      })
       return []
     }
     return user._notifications
@@ -106,37 +137,40 @@ export class User {
   email: string
   username: string
   _notifications: Array<Notification>
-  notificationsFetched: boolean
-  contactsFetched: boolean
+  notificationsFetchedStatus: string
+  contactsFetched: string
   _contacts: Array<Contact>
   addContact: any
   addEntity: any
   updateWith: any
 
   constructor(user: UserParamsType) {
+    super()
     this.display_name = user.display_name
     this.email = user.email
     this.username = user.username
     this._notifications = user._notifications || []
     this._contacts = user._contacts || []
-    this.notificationsFetched = !!user.notificationsFetched
-    this.contactsFetched = !!user.contactsFetched
+    this.notificationsFetchedStatus = user.notificationsFetchedStatus || 'pending'
+    this.contactsFetched = user.contactsFetched || 'pending'
   }
 
   get contacts () : Array<Contact>{
-    return User.getContacts(this)
+    return User.getContacts({user: this})
   }
 
-  get notifications ()  : Array<Notification> {
-    return User.getNotifications(this)
+  get notifications () : Array<Notification> {
+    return User.getNotifications({user: this})
   }
 
-  setContacts(contacts: Array<Contact>) {
+  setContacts (contacts: Array<Contact>) {
     this._contacts = contacts
+    this.contactsFetched = 'success'
   }
 
-  setNotifications(items: Array<Notification>) {
+  setNotifications (items: Array<Notification>) {
     this._notifications = items
+    this.notificationsFetchedStatus = 'success'
   }
 
   addContact () {

@@ -21,7 +21,7 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
         uid: email,
         email: email,
         user: user,
-        name: "#{params[:first_name]} - #{params[:last_name]}",
+        name: preferred_name(params),
         confirmation_token: SecureRandom.uuid
       )
       if params[:nickname].present?
@@ -39,13 +39,26 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
       return params[:user] if params[:user].present?
       email = params[:email]
       user = User.find_by(email: email)
-      user = User.create(email: email) if user.blank?
+      user = User.create(email: email, preferred_name: preferred_name(params)) if user.blank?
       user
     end
 
     def create_username_login(create_attrs)
       new_login = create_attrs.except(:nickname)
       create(new_login.merge(identifier: create_attrs[:nickname]))
+    end
+
+    def preferred_name(params)
+      if params[:first_name].present?
+        "#{params[:first_name]} - #{params[:last_name]}" if params[:last_name].present?
+        params[:first_name]
+      elsif params[:last_name].present?
+        params[:last_name]
+      elsif params[:nickname].present?
+        params[:nickname]
+      else
+        params[:email]
+      end
     end
   end
 

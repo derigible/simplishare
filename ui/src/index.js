@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import ReactDOM from 'react-dom'
 import theme from '@instructure/canvas-theme'
 import axios from 'axios'
@@ -12,6 +12,7 @@ import type { Note as NoteType } from './resources/Note/record'
 import type { Todo as TodoType } from './resources/Todo/record'
 import type { User as UserType } from './resources/User/record'
 import { User } from './resources/User/record'
+import { BaseRecord } from './resources/baseRecords'
 
 import configureRouter from './router'
 
@@ -28,32 +29,36 @@ type PropsType = {
 const router = configureRouter()
 axios.defaults.headers.common['Accept'] = 'application/json'
 
-User.info().then((user: ?User) => {
-  const store = {
-    getProps: function(app) {
-      const props: PropsType = { user }
-      if (app === 'todos') {
-        props.todos = [defaultTodo,]
-      }
-      if (app === 'notes') {
-        props.notes = [defaultNote]
-      }
+function Provider ({View, store}) {
+  const [_, callRender] = React.useState(true)
 
-      return props
+  return <View {...store(callRender)} />
+}
+
+function generateStore (user: User, app: string) {
+  return function (callRender: any) {
+    // eslint-disable-next-line
+    BaseRecord.prototype.callRender = callRender
+    const props: PropsType = { user }
+    if (app === 'todos') {
+      props.todos = [defaultTodo,]
     }
-  }
+    if (app === 'notes') {
+      props.notes = [defaultNote]
+    }
 
-  function renderView(View, app) {
-    const props = store.getProps(app)
-    return <View {...props} />
+    return props
   }
+}
 
+User.info().then((user: User) => {
   if (mountPoint !== null) {
     router.on('route', async (_, routing) => {
       const { view, app } = await routing
+      const s = generateStore(user, app)
 
       ReactDOM.render(
-        renderView(view, app),
+        <Provider View={view} store={s} />,
         mountPoint
       )
     }).start()

@@ -3,6 +3,12 @@
 import type { SharedWithContact, ShareableContact } from './User/record'
 import type { Option } from '../components/Select/StandardAutocomplete'
 
+export class BaseRecord {
+  callRender = () => {}
+}
+
+BaseRecord.prototype.callRender = () => {}
+
 export type Metadata = {
 
 }

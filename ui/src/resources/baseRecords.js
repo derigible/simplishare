@@ -95,15 +95,26 @@ export class Tag {
   name: string
   shared_object_id: string
   ve: VirtualEntity
+  tags: Array<Tag>
 
-  constructor(tag: TagParams | Tag, ve: VirtualEntity) {
+  static tags () : Array<Tag> {
+    return Tag.prototype.tags
+  }
+
+  static setTags (tags: Array<Tag>) {
+    return Tag.prototype.tags = tags
+  }
+
+  constructor(tag: TagParams | Tag, ve?: VirtualEntity) {
     this.id = tag.id
     this.name = tag.name
     this.shared_object_id = tag.shared_object_id
+    // $FlowFixMe
     this.ve = ve
   }
 
   untag = (rerender: any) => {
+    if (!this.ve) throw Error('must have ve set to untag')
     return () => {
       this.ve.untag(this)
       rerender()
@@ -148,7 +159,6 @@ export class VirtualEntity extends BaseRecord{
   id: string
   archived: boolean
   tags: Array<Tag>
-  tagsAsOptions: Array<TagOption>
   shared_on: ?string
   shared: boolean
   metadata: Metadata
@@ -221,6 +231,5 @@ export class VirtualEntity extends BaseRecord{
 
   setTags(tags: Array<Tag>) {
     this.tags = tags.map(t => new Tag(t, this))
-    this.tagsAsOptions = createTagsAsOptions(tags)
   }
 }

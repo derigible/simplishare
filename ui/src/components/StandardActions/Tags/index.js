@@ -16,6 +16,14 @@ import StandardEditModal from '../../StandardEditModal'
 
 import type { VirtualEntity } from '../../../resources/baseRecords'
 
+function createTagsAsOptions(tags: Array<Tag>) {
+  return tags.map(t => ({id: t.id, label: t.name, disabled: false}))
+}
+
+function filterUnusedTags(tags: Array<Tag>, usedTags: Array<Tag>) {
+  return []
+}
+
 function AddPopover ({entity} : {entity: VirtualEntity}) {
   const [popoverOpen: boolean, setPopoverOpen] = React.useState(false)
   const [tagId: ?string, setTagId: any] = React.useState('')
@@ -49,7 +57,7 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
       <Popover.Content>
         <View as="div" padding="small">
           <StandardAutocomplete
-            options={entity.tagsAsOptions}
+            options={createTagsAsOptions(filterUnusedTags(entity.tags, Tag.tags))}
             setSelected={setTagId}
             iconBefore={IconTagLine}
             label="Tag"
@@ -104,7 +112,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
                   submitDisabled={tagId === null}
                 >
                   <StandardAutocomplete
-                    options={entity.tagsAsOptions}
+                    options={createTagsAsOptions(filterUnusedTags(entity.tags, Tag.tags))}
                     setSelected={setTagId}
                     label="tag"
                   />

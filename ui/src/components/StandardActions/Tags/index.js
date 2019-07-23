@@ -54,7 +54,7 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
             iconBefore={IconTagLine}
             label="Tag"
           />
-          <Button variant="primary" onClick={() => {entity.tag(tagId); togglePopover()}} margin="small">
+          <Button variant="primary" onClick={() => {entity.tag({tagId}); togglePopover()}} margin="small">
             Tag
           </Button>
         </View>
@@ -66,11 +66,12 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
 export default function Tags({entity} : {entity: VirtualEntity}) {
   const [modalOpen, setModalOpen] = React.useState(false)
   const [tagId, setTagId] = React.useState('')
+  const [_, rerenderer] = React.useState(false)
 
   const toggleModal = () => setModalOpen(!modalOpen)
 
   return (
-    <View as="div" margin="small none" maxWidth="10rem">
+    <View as="div" margin="small none">
       {
         entity.tags.map(t => (
           <Tag
@@ -78,7 +79,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
             text={t.name}
             dismissible
             margin="0 xx-small 0 0"
-            onClick={t.untag}
+            onClick={t.untag(rerenderer)}
           />
         ))
       }
@@ -98,7 +99,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
                 <StandardEditModal
                   closeModal={toggleModal}
                   modalOpen={modalOpen}
-                  onSave={() => {entity.tag(tagId); toggleModal()}}
+                  onSave={() => {entity.tag({tagId}); toggleModal()}}
                   modalTitle={`Tag ${entity.displayName}`}
                   submitDisabled={tagId === null}
                 >

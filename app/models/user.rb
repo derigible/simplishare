@@ -7,12 +7,14 @@ class User < ApplicationRecord
 
   has_one_attached :csv_uploads
   has_many :virtual_entities, class_name: 'VirtualEntity', inverse_of: :user, dependent: :destroy
+  has_many :virtual_tags, dependent: :delete_all
   has_many :entities, through: :virtual_entities
   has_many :todos, through: :virtual_entities
   has_many :notes, through: :virtual_entities
   has_many :logins, inverse_of: :user, dependent: :destroy
   has_many :password_logins, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :tags, through: :virtual_tags
 
   validates :email, presence: true
 

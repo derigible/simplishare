@@ -32,8 +32,10 @@ axios.defaults.headers.common['Accept'] = 'application/json'
 function Provider ({View, store}) {
   const [toggle, callRender] = React.useState(true)
 
-  const props = store(() => { callRender(!toggle) })
-  return <View {...props} />
+  const props = store(() => {
+    callRender(!toggle)
+  })
+  return <View {...props} toggle={toggle}/>
 }
 
 const store = {}

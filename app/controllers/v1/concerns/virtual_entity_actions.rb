@@ -31,7 +31,7 @@ module V1
       end
 
       def ve
-        @ve = virtual_model.find(params[:id])
+        @ve = virtual_model.where(id: params[:id]).eager_load(virtual_tags: :tag).take!
       end
 
       # params

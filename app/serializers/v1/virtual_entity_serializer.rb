@@ -9,7 +9,7 @@ module V1
       object.entity.archived || object.archived
     end
     attribute :tags do
-      object.virtual_tag_ids.map(&:to_s)
+      object.virtual_tags.map { |t| TagSerializer.new(t) }
     end
     attribute :shared_on
     attribute :shared do

@@ -1,5 +1,9 @@
 // @flow
 
+import axios from 'axios'
+
+import { axiosError } from '../errors'
+
 import type { SharedWithContact, ShareableContact } from './User/record'
 import type { Option } from '../components/Select/StandardAutocomplete'
 
@@ -83,28 +87,34 @@ export class Preferences implements Indexable {
 type TagParams = {
   id: string,
   name: string,
-  shared_object_id: string,
-  tag: any,
-  untag: any
+  shared_object_id: string
 }
 
 export class Tag {
   id: string
   name: string
   shared_object_id: string
+  ve: VirtualEntity
 
-  constructor(tag: TagParams) {
+  constructor(tag: TagParams | Tag, ve: VirtualEntity) {
     this.id = tag.id
     this.name = tag.name
     this.shared_object_id = tag.shared_object_id
+    this.ve = ve
   }
 
-  tag () {
-
-  }
-
-  untag () {
-
+  untag = (rerender: any) => {
+    return () => {
+      this.ve.untag(this)
+      rerender()
+      axios
+        .delete(`/${this.ve.pluralizedType}/${this.ve.id}/tag`, { data: {tag_ids: [this.id]} })
+        .then(({data}) => {
+          this.ve.setTags(data.tags.map(t => new Tag(t, this.ve)))
+          rerender()
+        })
+        .catch(error => {this.ve.tag({tag: this}); axiosError(error)})
+    }
   }
 }
 
@@ -117,8 +127,7 @@ type TagOption = {
 export type VirtualEntityParams = {
   id: string,
   archived: boolean,
-  tags: ?Array<Tag>,
-  tagsAsOptions?: Array<TagOption>,
+  tags: Array<Tag>,
   shared_on: ?string,
   shared: boolean,
   metadata: Metadata,
@@ -155,8 +164,7 @@ export class VirtualEntity extends BaseRecord{
     super()
     this.id = ve.id
     this.archived = ve.archived
-    this.tags = ve.tags || []
-    this.tagsAsOptions = ve.tagsAsOptions || createTagsAsOptions(ve.tags || [])
+    this.setTags(ve.tags)
     this.shared_on = ve.shared_on
     this.shared = ve.shared
     this.metadata = ve.metadata
@@ -175,6 +183,10 @@ export class VirtualEntity extends BaseRecord{
 
   get type () : string {
     return 've'
+  }
+
+  get pluralizedType () : string {
+    return 'ves'
   }
 
   get sharedWith () : Array<SharedWithContact> {
@@ -197,11 +209,18 @@ export class VirtualEntity extends BaseRecord{
 
   }
 
-  tag (tagId: string) {
-
+  tag = ({tag, tagId} : {tagId?: string, tag?: Tag}) => {
+    if (tag) {
+      this.setTags(this.tags.concat([tag]))
+    }
   }
 
-  untag () {
+  untag = (tag: Tag) => {
+    this.setTags(this.tags.filter(t => t.id !== tag.id))
+  }
 
+  setTags(tags: Array<Tag>) {
+    this.tags = tags.map(t => new Tag(t, this))
+    this.tagsAsOptions = createTagsAsOptions(tags)
   }
 }

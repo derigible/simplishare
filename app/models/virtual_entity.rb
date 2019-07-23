@@ -9,7 +9,7 @@ class VirtualEntity < ApplicationRecord
   belongs_to :todo, foreign_key: :entity_id, optional: true
   belongs_to :note, foreign_key: :entity_id, optional: true
 
-  has_many :virtual_entities_tags, dependent: :delete_all
+  has_many :virtual_entities_tags, dependent: :destroy
   has_many :virtual_tags, through: :virtual_entities_tags
   has_many :tags, through: :virtual_tags
 

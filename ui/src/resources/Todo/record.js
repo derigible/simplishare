@@ -59,6 +59,10 @@ export class Todo extends VirtualEntity {
     return 'todo'
   }
 
+  get pluralizedType () : string {
+    return 'todos'
+  }
+
   updateWith (changes: any) {
 
   }

@@ -6,7 +6,7 @@ module V1
       extend ActiveSupport::Concern
 
       def index
-        virtual_entities = paginate index_scope.eager_load(:virtual_tags).select("virtual_tags.id")
+        virtual_entities = paginate index_scope.eager_load(virtual_tags: :tag)
         respond_with virtual_entities, each_serializer: serializer
       end
 

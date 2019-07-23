@@ -59,6 +59,10 @@ export class Note extends VirtualEntity {
     return 'note'
   }
 
+  get pluralizedType () : string {
+    return 'notes'
+  }
+
   updateWith (changes: any) {
 
   }

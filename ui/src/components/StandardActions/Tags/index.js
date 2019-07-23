@@ -8,7 +8,7 @@ import {Popover} from '@instructure/ui-overlays'
 import { Button } from '@instructure/ui-buttons'
 import { Tooltip } from '@instructure/ui-overlays'
 import {ScreenReaderContent} from '@instructure/ui-a11y'
-import { IconAddLine } from '@instructure/ui-icons'
+import { IconAddLine, IconTagLine } from '@instructure/ui-icons'
 
 
 import StandardAutocomplete from '../../Select/StandardAutocomplete'
@@ -51,6 +51,8 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
           <StandardAutocomplete
             options={entity.tagsAsOptions}
             setSelected={setTagId}
+            iconBefore={IconTagLine}
+            label="Tag"
           />
           <Button variant="primary" onClick={() => {entity.tag(tagId); togglePopover()}} margin="small">
             Tag
@@ -103,6 +105,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
                   <StandardAutocomplete
                     options={entity.tagsAsOptions}
                     setSelected={setTagId}
+                    label="tag"
                   />
                 </StandardEditModal>
                 <Button

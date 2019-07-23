@@ -122,6 +122,8 @@ export class User extends BaseRecord {
             response.data.map(n => new Notification(n))
           )
           User.prototype.callRender()
+          // eslint-disable-next-line
+          user.notificationsFetchedStatus = 'success'
         }
       ).catch(error => {
         axiosError(error);

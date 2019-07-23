@@ -108,6 +108,7 @@ function PageTwo ({entity, back}, {entity: VirtualEntity, back: any}) {
       <StandardAutocomplete
         options={entity.shareableWith}
         setSelected={setUserId}
+        label="Share"
       />
       <View as="div" textAlign="end">
         <Button onClick={back} margin="small">Cancel</Button>

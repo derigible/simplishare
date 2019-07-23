@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 import { IconUserLine, IconSearchLine, IconUserSolid } from '@instructure/ui-icons'
 import { Select } from '@instructure/ui-select'
@@ -14,7 +14,9 @@ export interface Option {
 
 type expectedProps = {
   options: Array<Option>,
-  setSelected: any
+  setSelected: any,
+  iconBefore?: React.ComponentType<*>,
+  label: string
 }
 
 type State = {
@@ -172,10 +174,12 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
       announcement
     } = this.state
 
+    const IconBefore = this.props.iconBefore || IconUserSolid
+
     return (
       <div>
         <Select
-          renderLabel="Autocomplete"
+          renderLabel={this.props.label}
           assistiveText="Type or use arrow keys to navigate options."
           placeholder="Start typing to search..."
           inputValue={inputValue}
@@ -186,7 +190,7 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
           onRequestHideOptions={this.handleHideOptions}
           onRequestHighlightOption={this.handleHighlightOption}
           onRequestSelectOption={this.handleSelectOption}
-          renderBeforeInput={<IconUserSolid inline={false} />}
+          renderBeforeInput={<IconBefore inline={false} />}
           renderAfterInput={<IconSearchLine inline={false} />}
         >
           {filteredOptions.length > 0 ? filteredOptions.map((option) => {

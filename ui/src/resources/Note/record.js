@@ -1,4 +1,8 @@
 // @flow
+
+import axios from 'axios'
+
+import { axiosError } from '../../errors'
 import { VirtualEntity } from '../baseRecords'
 
 import { Preferences } from '../baseRecords'
@@ -11,6 +15,31 @@ type NoteParams = VirtualEntityParams & {
 }
 
 export class Note extends VirtualEntity {
+  static fetching = false
+  static list(
+    {userId, store} :
+    {userId?: string, store: any}
+  ) : Array<Note> {
+    if (store.notes) {
+      return store.notes
+    } else {
+      if (!Note.fetching) {
+        Note.fetching = true
+        const url = userId ? `/notes?user_id=${userId}` : '/notes'
+        axios.get(url).then(
+          response => {
+            // eslint-disable-next-line
+            store.notes = response.data.map(n => new Note(n))
+            Note.prototype.callRender()
+          }
+        ).catch(error => {
+          axiosError(error);
+        }).finally(() => Note.fetching = false)
+      }
+    }
+    return []
+  }
+
   body: string
   title: string
   expanded: ?boolean

@@ -4,7 +4,7 @@ import type { SharedWithContact, ShareableContact } from './User/record'
 import type { Option } from '../components/Select/StandardAutocomplete'
 
 export class BaseRecord {
-  callRender = () => {}
+  callRender = () => { throw Error('Did not set callRender!')}
 }
 
 BaseRecord.prototype.callRender = () => {}
@@ -18,9 +18,9 @@ interface Indexable {
 }
 
 class Action  {
-  type: "always" | "not_set" | "never"
+  type: "always" | "not_set" | "never" | Action
 
-  constructor(type: "always" | "not_set" | "never") {
+  constructor(type: "always" | "not_set" | "never" | Action) {
     this.type = type
   }
 
@@ -38,7 +38,7 @@ export class PreferenceAction {
   archive: Action
   update: Action
 
-  constructor(a: PreferenceActionParams) {
+  constructor(a: PreferenceActionParams | PreferenceAction) {
     this.archive = new Action(a.archive)
     this.update = new Action(a.update)
   }
@@ -56,7 +56,7 @@ export class Preference implements Indexable  {
   $key: any;
   $value: any;
 
-  constructor(p: PreferenceParams) {
+  constructor(p: PreferenceParams | Preference) {
     if (p.todo) {
       this.todo = new PreferenceAction(p.todo)
     }
@@ -75,7 +75,7 @@ export class Preferences implements Indexable {
   $key: any;
   $value: any;
 
-  constructor(preferences: PreferencesParams) {
+  constructor(preferences: PreferencesParams | Preferences) {
     this.email = new Preference(preferences.email)
   }
 }
@@ -135,7 +135,7 @@ function createTagsAsOptions(tags: Array<Tag>) {
   return tags.map(t => ({id: t.id, label: t.name, disabled: false}))
 }
 
-export class VirtualEntity {
+export class VirtualEntity extends BaseRecord{
   id: string
   archived: boolean
   tags: Array<Tag>
@@ -152,6 +152,7 @@ export class VirtualEntity {
   _shareableWith: ?Array<ShareableContact>
 
   constructor(ve: VirtualEntityParams) {
+    super()
     this.id = ve.id
     this.archived = ve.archived
     this.tags = ve.tags || []
@@ -159,7 +160,7 @@ export class VirtualEntity {
     this.shared_on = ve.shared_on
     this.shared = ve.shared
     this.metadata = ve.metadata
-    this.preferences = ve.preferences
+    this.preferences = new Preferences(ve.preferences)
     this.shared_object_id = ve.shared_object_id
     this.updated_at = ve.updated_at
     this.created_at = ve.created_at

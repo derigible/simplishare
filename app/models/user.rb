@@ -5,10 +5,6 @@ class User < ApplicationRecord
   include HtmlSanitizer
   include Preferences
 
-  # # Include default devise modules. Others available are:
-  # # :lockable, :timeoutable
-  # devise :rememberable
-
   has_one_attached :csv_uploads
   has_many :virtual_entities, class_name: 'VirtualEntity', inverse_of: :user, dependent: :destroy
   has_many :entities, through: :virtual_entities

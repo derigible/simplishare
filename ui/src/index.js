@@ -30,35 +30,38 @@ const router = configureRouter()
 axios.defaults.headers.common['Accept'] = 'application/json'
 
 function Provider ({View, store}) {
-  const [_, callRender] = React.useState(true)
+  const [toggle, callRender] = React.useState(true)
 
-  return <View {...store(callRender)} />
+  const props = store(() => { callRender(!toggle) })
+  return <View {...props} />
 }
 
-function generateStore (user: User, app: string) {
-  return function (callRender: any) {
-    // eslint-disable-next-line
-    BaseRecord.prototype.callRender = callRender
-    const props: PropsType = { user }
-    if (app === 'todos') {
-      props.todos = [defaultTodo,]
-    }
-    if (app === 'notes') {
-      props.notes = [defaultNote]
-    }
-
-    return props
-  }
-}
+const store = {}
 
 User.info().then((user: User) => {
+  store.user = user
+  function makeStore (app: string, records: any) {
+    return function (callRender: any) {
+      // eslint-disable-next-line
+      BaseRecord.prototype.callRender = callRender
+      const props: PropsType = { user }
+      if (app === 'todos') {
+        props.todos = store.todos || records.todo.list({store})
+      }
+      if (app === 'notes') {
+        props.notes = store.notes || records.note.list({store})
+      }
+
+      return props
+    }
+  }
+
   if (mountPoint !== null) {
     router.on('route', async (_, routing) => {
-      const { view, app } = await routing
-      const s = generateStore(user, app)
+      const { view, app, records } = await routing
 
       ReactDOM.render(
-        <Provider View={view} store={s} />,
+        <Provider View={view} store={makeStore(app, records)} />,
         mountPoint
       )
     }).start()

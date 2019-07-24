@@ -13,6 +13,7 @@ import { IconAddLine, IconTagLine } from '@instructure/ui-icons'
 
 import StandardAutocomplete from '../../Select/StandardAutocomplete'
 import StandardEditModal from '../../StandardEditModal'
+import { Tag as TagRecord } from '../../../resources/baseRecords'
 
 import type { VirtualEntity } from '../../../resources/baseRecords'
 
@@ -20,11 +21,15 @@ function createTagsAsOptions(tags: Array<Tag>) {
   return tags.map(t => ({id: t.id, label: t.name, disabled: false}))
 }
 
-function filterUnusedTags(tags: Array<Tag>, usedTags: Array<Tag>) {
-  return []
+function filterUsedTags(tags: any, usedTags: Array<Tag>) {
+  const allTagsMap = {...tags}
+  // eslint-disable-next-line
+  usedTags.forEach(t => allTagsMap[t.id] && delete allTagsMap[t.id])
+
+  return Object.values(allTagsMap)
 }
 
-function AddPopover ({entity} : {entity: VirtualEntity}) {
+function AddPopover ({entity, rerender} : {entity: VirtualEntity, rerender: any}) {
   const [popoverOpen: boolean, setPopoverOpen] = React.useState(false)
   const [tagId: ?string, setTagId: any] = React.useState('')
 
@@ -57,12 +62,12 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
       <Popover.Content>
         <View as="div" padding="small">
           <StandardAutocomplete
-            options={createTagsAsOptions(filterUnusedTags(entity.tags, Tag.tags))}
+            options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
             setSelected={setTagId}
             iconBefore={IconTagLine}
             label="Tag"
           />
-          <Button variant="primary" onClick={() => {entity.tag({tagId}); togglePopover()}} margin="small">
+          <Button variant="primary" onClick={() => {entity.tag({tagId, rerender}); togglePopover()}} margin="small">
             Tag
           </Button>
         </View>
@@ -74,7 +79,8 @@ function AddPopover ({entity} : {entity: VirtualEntity}) {
 export default function Tags({entity} : {entity: VirtualEntity}) {
   const [modalOpen, setModalOpen] = React.useState(false)
   const [tagId, setTagId] = React.useState('')
-  const [_, rerenderer] = React.useState(false)
+  const [toggle, setRerender] = React.useState(false)
+  const rerender = () => setRerender(!toggle)
 
   const toggleModal = () => setModalOpen(!modalOpen)
 
@@ -87,7 +93,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
             text={t.name}
             dismissible
             margin="0 xx-small 0 0"
-            onClick={t.untag(rerenderer)}
+            onClick={t.untag(rerender)}
           />
         ))
       }
@@ -100,19 +106,19 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
       >
         {(props, matches) => {
           if (matches.includes('large')) {
-            return <AddPopover entity={entity} />
+            return <AddPopover entity={entity} rerender={rerender} />
           } else {
             return (
               <>
                 <StandardEditModal
                   closeModal={toggleModal}
                   modalOpen={modalOpen}
-                  onSave={() => {entity.tag({tagId}); toggleModal()}}
+                  onSave={() => {entity.tag({tagId, rerender}); toggleModal()}}
                   modalTitle={`Tag ${entity.displayName}`}
                   submitDisabled={tagId === null}
                 >
                   <StandardAutocomplete
-                    options={createTagsAsOptions(filterUnusedTags(entity.tags, Tag.tags))}
+                    options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
                     setSelected={setTagId}
                     label="tag"
                   />

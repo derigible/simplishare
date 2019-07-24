@@ -15,7 +15,7 @@ describe V1::TagsController do
       3.times.each { factory.entity overrides: { virtual_object: { user: user } } }
     end
 
-    it_behaves_like 'a virtual_objects index action'
+    it_behaves_like 'a virtual_objects index action', true
   end
 
   describe '#create' do

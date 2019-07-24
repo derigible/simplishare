@@ -12,7 +12,7 @@ import type { Note as NoteType } from './resources/Note/record'
 import type { Todo as TodoType } from './resources/Todo/record'
 import type { User as UserType } from './resources/User/record'
 import { User } from './resources/User/record'
-import { BaseRecord } from './resources/baseRecords'
+import { BaseRecord, Tag } from './resources/baseRecords'
 
 import configureRouter from './router'
 
@@ -39,6 +39,14 @@ function Provider ({View, store}) {
 }
 
 const store = {}
+
+Tag.getTags()
+  .then((tags: Array<Tag>) => Tag.setTags(tags))
+  .catch(error => {
+    // eslint-disable-next-line
+    if (error.name === 'UserNotAuthenticated') console.log(error)
+    else throw error
+  })
 
 User.info().then((user: User) => {
   store.user = user

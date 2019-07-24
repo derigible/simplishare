@@ -12,7 +12,7 @@ module V1
 
       def untag
         authorize(ve)
-        VirtualTag.where(id: vtags(params.fetch(:tag_ids, []))).destroy_all
+        VirtualEntitiesTag.where(virtual_tag_id: vtags(params.fetch(:tag_ids, []))).destroy_all
         respond_with ve.reload, serializer: serializer
       end
 
@@ -31,7 +31,7 @@ module V1
       def vtags(tag_ids)
         VirtualTag.where(id: tag_ids).map do |tag|
           authorize tag
-          tag.id
+          tag
         end
       end
     end

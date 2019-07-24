@@ -91,19 +91,30 @@ type TagParams = {
 }
 
 export class Tag {
-  id: string
-  name: string
-  shared_object_id: string
-  ve: VirtualEntity
-  tags: Array<Tag>
+  static async getTags () {
+    try {
+      const response = await axios.get('/tags')
+      return response.data.map(t => new Tag(t))
+    } catch (error) {
+      axiosError(error)
+    }
+  }
 
-  static tags () : Array<Tag> {
+  static tags () : any {
     return Tag.prototype.tags
   }
 
   static setTags (tags: Array<Tag>) {
-    return Tag.prototype.tags = tags
+    const allTagsMap = {}
+    tags.forEach(t => (allTagsMap[t.id] = t))
+    return Tag.prototype.tags = allTagsMap
   }
+
+  id: string
+  name: string
+  shared_object_id: string
+  ve: VirtualEntity
+  tags: any
 
   constructor(tag: TagParams | Tag, ve?: VirtualEntity) {
     this.id = tag.id
@@ -124,7 +135,7 @@ export class Tag {
           this.ve.setTags(data.tags.map(t => new Tag(t, this.ve)))
           rerender()
         })
-        .catch(error => {this.ve.tag({tag: this}); axiosError(error)})
+        .catch(error => {this.ve.tag({tag: this, rerender}); axiosError(error)})
     }
   }
 }
@@ -219,9 +230,20 @@ export class VirtualEntity extends BaseRecord{
 
   }
 
-  tag = ({tag, tagId} : {tagId?: string, tag?: Tag}) => {
+  tag = ({tag, tagId, rerender} : {tagId?: string, tag?: Tag, rerender: any}) => {
     if (tag) {
       this.setTags(this.tags.concat([tag]))
+    } else {
+      const newTag = new Tag(Tag.tags()[tagId], this)
+      this.setTags(this.tags.concat([newTag]))
+      rerender()
+      axios
+        .post(`/${this.pluralizedType}/${this.id}/tag`, {tag_ids: [tagId]})
+        .then(({data}) => {
+          this.setTags(data.tags.map(t => new Tag(t, this)))
+          rerender()
+        })
+        .catch(error => {this.untag(newTag); axiosError(error)})
     }
   }
 

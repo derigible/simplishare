@@ -4,7 +4,7 @@ require 'spec_helper'
 
 # make sure that json_schema, params, and factory are all
 # within scope of this shared_examples in order for it to work
-shared_examples_for 'a virtual_objects index action' do
+shared_examples_for 'a virtual_objects index action' do |skip_paginate = false|
   subject { get :index, params: params }
 
   it { is_expected.to have_http_status :ok }
@@ -34,9 +34,11 @@ shared_examples_for 'a virtual_objects index action' do
     end
   end
 
-  it_behaves_like 'a paginated resource' do
-    let(:create_entity_list) do
-      ->(number) { number.times.each { factory.entity overrides: { virtual_object: { user: user } } } }
+  unless skip_paginate
+    it_behaves_like 'a paginated resource' do
+      let(:create_entity_list) do
+        ->(number) { number.times.each { factory.entity overrides: { virtual_object: { user: user } } } }
+      end
     end
   end
 end

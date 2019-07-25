@@ -17,28 +17,30 @@ import type { User as UserType } from '../../resources/User/record'
 import { Note as NoteRecord } from '../../resources/Note/record'
 import type { Note as NoteRecordType } from '../../resources/Note/record'
 import type { ComponentActionType } from '../../constants/actionTypes'
-import { defaultNote } from '../../resources/Note/record'
 
-
-
-function reducer(state: NoteRecordType, action: ComponentActionType) {
+function reducer(state: any, action: ComponentActionType) {
   switch (action.type) {
     case 'body':
-      return new NoteRecord(recordParams(state, {body: action.payload}));
+      return {...state, body: action.payload};
     case 'title':
-      return new NoteRecord(recordParams(state, {body: action.payload}))
+      return {...state, title: action.payload}
     default:
       throw new Error();
   }
 }
 
 export default function Notes (
-  {user, notes} : {user: UserType, notes: Array<NoteRecordType>}
+  {user, notes, createNote} : {user: UserType, notes: Array<NoteRecordType>, createNote: any}
 ) {
   const [modalOpen: boolean, setModalOpen] = React.useState(false)
-  const [noteObj: NoteRecordType, setNoteChanges] = React.useReducer(reducer, defaultNote)
+  const [notesList: Array<NoteRecordType>, setNotesList] = React.useState(notes)
+  const [noteObj: any, setNoteChanges] = React.useReducer(reducer, {})
 
   const toggleModal = () => setModalOpen(!modalOpen)
+
+  if (notes.length > 1 && notesList.length === 0) {
+    setNotesList(notes)
+  }
 
   return (
     <Page
@@ -51,8 +53,10 @@ export default function Notes (
       <StandardEditModal
         onSave={
           () => {
-            user.addEntity('note', noteObj)
+            createNote(noteObj, (note: NoteRecordType) => setNotesList(notesList.concat(note)))
             toggleModal()
+            setNoteChanges({type: 'body', payload: ''})
+            setNoteChanges({type: 'title', payload: ''})
           }
         }
         closeModal={toggleModal}
@@ -64,13 +68,13 @@ export default function Notes (
         <TextArea
           label="Body"
           value={noteObj.body}
-          onChange={(_, value) => setNoteChanges({type: 'body', payload: value})}
+          onChange={(e) => setNoteChanges({type: 'body', payload: e.target.value})}
           autogrow
           resize="both"
         />
       </StandardEditModal>
       <List variant="unstyled" delimiter="dashed" >
-        {notes.map(t => <List.Item key={t.id} margin="small none"><Note note={t} /></List.Item>)}
+        {notesList.map(t => <List.Item key={t.id} margin="small none"><Note note={t} /></List.Item>)}
       </List>
     </Page>
   )

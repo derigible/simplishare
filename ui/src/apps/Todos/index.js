@@ -16,26 +16,31 @@ import { Todo as TodoRecord } from '../../resources/Todo/record'
 import type { User as UserType } from '../../resources/User/record'
 import type { Todo as TodoType } from '../../resources/Todo/record'
 import type { ComponentActionType } from '../../constants/actionTypes'
-import { defaultTodo, recordParams } from '../../resources/Todo/record'
+import { recordParams } from '../../resources/Todo/record'
 
-function reducer(state: TodoType, action: ComponentActionType) {
+function reducer(state: any, action: ComponentActionType) {
   switch (action.type) {
     case 'description':
-      return new TodoRecord(recordParams(state, {description: action.payload}))
+      return {...state, description: action.payload}
     case 'title':
-      return new TodoRecord(recordParams(state, {description: action.payload}))
+      return {...state, title: action.payload}
     default:
       throw new Error();
   }
 }
 
 export default function Todos (
-  {user, todos} : {user: UserType, todos: Array<TodoType>}
+  {user, todos, createTodo} : {user: UserType, todos: Array<TodoType>, createTodo: any}
 ) {
   const [modalOpen: boolean, setModalOpen] = React.useState(false)
-  const [todoObj: TodoType, setTodoChanges] = React.useReducer(reducer, defaultTodo)
+  const [todosList: Array<TodoType>, setTodosList] = React.useState(todos)
+  const [todoObj: TodoType, setTodoChanges] = React.useReducer(reducer, {})
 
   const toggleModal = () => setModalOpen(!modalOpen)
+
+  if (todos.length > 1 && todosList.length === 0) {
+    setTodosList(todos)
+  }
 
   return (
     <Page
@@ -48,8 +53,10 @@ export default function Todos (
       <StandardEditModal
         onSave={
           () => {
-            user.addEntity('todo', todoObj)
+            createTodo(todoObj, (todo: TodoType) => setTodosList(todosList.concat(todo)))
             toggleModal()
+            setTodoChanges({type: 'description', payload: ''})
+            setTodoChanges({type: 'title', payload: ''})
           }
         }
         closeModal={toggleModal}
@@ -66,7 +73,7 @@ export default function Todos (
         />
       </StandardEditModal>
       <List variant="unstyled">
-        {todos.map(t => <List.Item key={t.id}  margin="x-small none"><Todo todo={t} /></List.Item>)}
+        {todosList.map(t => <List.Item key={t.id}  margin="x-small none"><Todo todo={t} /></List.Item>)}
       </List>
     </Page>
   )

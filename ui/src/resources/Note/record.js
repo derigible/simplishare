@@ -40,6 +40,14 @@ export class Note extends VirtualEntity {
     return []
   }
 
+  static pluralizedType () : string {
+    return 'notes'
+  }
+
+  static type () : string {
+    return 'note'
+  }
+
   body: string
   title: string
   expanded: ?boolean
@@ -56,11 +64,11 @@ export class Note extends VirtualEntity {
   }
 
   get type () : string {
-    return 'note'
+    return Note.type()
   }
 
   get pluralizedType () : string {
-    return 'notes'
+    return Note.pluralizedType()
   }
 
   updateWith (changes: any) {

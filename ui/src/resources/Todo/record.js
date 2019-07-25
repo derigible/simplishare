@@ -40,6 +40,14 @@ export class Todo extends VirtualEntity {
     return []
   }
 
+  static pluralizedType () : string {
+    return 'todos'
+  }
+
+  static type () : string {
+    return 'todo'
+  }
+
   description: string
   title: string
   expanded: ?boolean
@@ -56,11 +64,11 @@ export class Todo extends VirtualEntity {
   }
 
   get type () : string {
-    return 'todo'
+    return Todo.type()
   }
 
   get pluralizedType () : string {
-    return 'todos'
+    return Todo.pluralizedType()
   }
 
   updateWith (changes: any) {

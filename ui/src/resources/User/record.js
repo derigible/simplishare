@@ -5,6 +5,8 @@ import axios from 'axios'
 import { axiosError } from '../../errors'
 import { BaseRecord } from '../baseRecords'
 
+import type { VirtualEntity } from '../baseRecords'
+
 export class Contact {
   email: string
   username: ?string
@@ -142,9 +144,6 @@ export class User extends BaseRecord {
   notificationsFetchedStatus: string
   contactsFetched: string
   _contacts: Array<Contact>
-  addContact: any
-  addEntity: any
-  updateWith: any
 
   constructor(user: UserParamsType) {
     super()
@@ -179,11 +178,12 @@ export class User extends BaseRecord {
 
   }
 
-  addEntity () {
+  addEntity (type: string, ve: VirtualEntity) {
 
   }
 
-  updateWith () {
-
+  async updateWith (user: User) {
+    // TODO: update
+    await axios.put('/users')
   }
 }

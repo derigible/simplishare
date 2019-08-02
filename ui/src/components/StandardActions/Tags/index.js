@@ -67,7 +67,7 @@ function AddPopover ({entity, rerender} : {entity: VirtualEntity, rerender: any}
               options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
               setSelected={setTagId}
               iconBefore={IconTagLine}
-              label="Tag"
+              label={<ScreenReaderContent>Tag</ScreenReaderContent>}
             />
             <Button variant="primary" onClick={() => {entity.tag({tagId, rerender}); togglePopover()}} margin="small">
               Tag
@@ -124,7 +124,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
                   <StandardAutocomplete
                     options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
                     setSelected={setTagId}
-                    label="tag"
+                    label={<ScreenReaderContent>Tag</ScreenReaderContent>}
                   />
                 </StandardEditModal>
                 <Button

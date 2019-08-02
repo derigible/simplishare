@@ -16,7 +16,7 @@ type expectedProps = {
   options: Array<Option>,
   setSelected: any,
   iconBefore?: React.ComponentType<*>,
-  label: string
+  label: React.Node
 }
 
 type State = {

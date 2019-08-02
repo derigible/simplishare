@@ -17,7 +17,7 @@ import ClickableDiv from '../../ClickableDiv'
 
 import type { VirtualEntity, Preference } from '../../../resources/baseRecords'
 
-function renderPreference(type: string, preference: Preference, entityType: string) {
+function renderPreference(type: string, preference: Preference, entityType: string, rerender: any) {
   const entityActionPreferences = preference[entityType]
 
   return (
@@ -47,7 +47,7 @@ function renderPreference(type: string, preference: Preference, entityType: stri
                       variant="toggle"
                       name={p}
                       value={pref.type}
-                      onChange={(_,  value) => {pref.setPreference('value')}}
+                      onChange={(_,  value) => {pref.setPreference(value, rerender)}}
                       description={<ScreenReaderContent>Set {type} Preference for {entityType} on {p}</ScreenReaderContent>}
                     >
                       <RadioInput
@@ -80,9 +80,11 @@ function renderPreference(type: string, preference: Preference, entityType: stri
 export default function Preferences(
   {entity} : {entity: VirtualEntity}
 ) {
-  const [modalOpen: boolean, setModalOpen] = React.useState(false)
+  const [modalOpen: boolean, setModalOpen: any] = React.useState(false)
+  const [toggle: boolean, setRerender: any] = React.useState(false)
 
   const toggleModal = () => setModalOpen(!modalOpen)
+  const rerender = () => setRerender(!toggle)
 
   return (
     <>
@@ -91,7 +93,7 @@ export default function Preferences(
         modalOpen={modalOpen}
         modalTitle={`Manage ${entity.displayName} Preferences`}
       >
-        {Object.keys(entity.preferences).map(notficationType => renderPreference(notficationType, entity.preferences[notficationType], entity.type))}
+        {Object.keys(entity.preferences).map(notficationType => renderPreference(notficationType, entity.preferences[notficationType], entity.type, rerender))}
       </StandardEditModal>
       <Tooltip
         tip={`Preferences for ${entity.displayName}`}

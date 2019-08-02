@@ -7,9 +7,6 @@ import axios from 'axios'
 
 import { axiosError } from './errors'
 
-import { defaultTodo } from './resources/Todo/record'
-import { defaultNote } from './resources/Note/record'
-
 import type { Note as NoteType } from './resources/Note/record'
 import type { Todo as TodoType } from './resources/Todo/record'
 import type { User as UserType } from './resources/User/record'

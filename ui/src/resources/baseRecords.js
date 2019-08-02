@@ -23,28 +23,50 @@ interface Indexable {
 
 class Action  {
   type: "always" | "not_set" | "never" | Action
+  ve: VirtualEntity
+  notificationType: string
+  recordType: string
+  action: string
 
-  constructor(type: "always" | "not_set" | "never" | Action) {
+  constructor(
+    type: "always" | "not_set" | "never" | Action,
+    ve: VirtualEntity,
+    notificationType: string,
+    recordType: string,
+    action: string
+  ) {
     this.type = type
+    this.ve = ve
+    this.notificationType = notificationType
+    this.recordType = recordType
+    this.action = action
   }
 
-  setPreference () {
-
+  setPreference = (value: string, rerender: any) => {
+    this.ve.setPreference(this, value, rerender)
   }
 }
 
 type PreferenceActionParams = {
   archive: "always" | "not_set" | "never",
-  update: "always" | "not_set" | "never"
+  update: "always" | "not_set" | "never",
+  $key: any,
+  $value: any
 }
 
 export class PreferenceAction {
-  archive: Action
-  update: Action
+  $key: any;
+  $value: any;
 
-  constructor(a: PreferenceActionParams | PreferenceAction) {
-    this.archive = new Action(a.archive)
-    this.update = new Action(a.update)
+  constructor(
+    a: PreferenceActionParams | PreferenceAction,
+    ve: VirtualEntity,
+    notificationType: string,
+    recordType: string
+  ) {
+    Object.keys(a).forEach(
+      k => this[k] = new Action(a[k], ve, notificationType, recordType, k)
+    )
   }
 }
 
@@ -54,33 +76,47 @@ type PreferenceParams = {
 }
 
 export class Preference implements Indexable  {
-  todo: PreferenceAction
-  note: PreferenceAction
-
   $key: any;
   $value: any;
 
-  constructor(p: PreferenceParams | Preference) {
-    if (p.todo) {
-      this.todo = new PreferenceAction(p.todo)
-    }
-    if (p.note) {
-      this.note = new PreferenceAction(p.note)
-    }
+  constructor(
+    p: PreferenceParams | Preference,
+    ve: VirtualEntity,
+    notificationType: string
+  ) {
+    Object.keys(p).forEach(
+      // $FlowFixMe
+      k => this[k] = new PreferenceAction(p[k], ve, notificationType, k)
+    )
   }
 }
 
-type PreferencesParams = {
-  email: PreferenceParams
-}
-
 export class Preferences implements Indexable {
-  email: Preference
   $key: any;
   $value: any;
 
-  constructor(preferences: PreferencesParams | Preferences) {
-    this.email = new Preference(preferences.email)
+  constructor(preferences: any | Preferences, ve: VirtualEntity) {
+    Object.keys(preferences).forEach(k => this[k] = new Preference(preferences[k], ve, k))
+  }
+
+  get data () {
+    const preferences = {}
+    Object.keys(this).forEach(
+      k => {
+        preferences[k] || (preferences[k] = {})
+        Object.keys(this[k]).forEach(
+          j => {
+            preferences[k][j] || (preferences[k][j] = {})
+            Object.keys(this[k][j]).forEach(
+              a => {
+                preferences[k][j][a] = this[k][j][a].type
+              }
+            )
+          }
+        )
+      }
+    )
+    return preferences
   }
 }
 
@@ -189,7 +225,7 @@ export class VirtualEntity extends BaseRecord{
     this.shared_on = ve.shared_on
     this.shared = ve.shared
     this.metadata = ve.metadata
-    this.preferences = new Preferences(ve.preferences)
+    this.preferences = new Preferences(ve.preferences, this)
     this.shared_object_id = ve.shared_object_id
     this.updated_at = ve.updated_at
     this.created_at = ve.created_at
@@ -231,7 +267,7 @@ export class VirtualEntity extends BaseRecord{
   }
 
   tag = ({tag, tagId, rerender} : {tagId?: string, tag?: Tag, rerender: any}) => {
-    if (tag) {
+    if (tag) { // used for untag failure
       this.setTags(this.tags.concat([tag]))
     } else {
       const newTag = new Tag(Tag.tags()[tagId], this)
@@ -253,5 +289,29 @@ export class VirtualEntity extends BaseRecord{
 
   setTags(tags: Array<Tag>) {
     this.tags = tags.map(t => new Tag(t, this))
+  }
+
+  setPreference = (action: Action, value: string, rerender: any) => {
+    const oldPrefs = this.preferences
+    const newPrefs = Object.assign({}, this.preferences.data)
+    newPrefs[action.notificationType][action.recordType][action.action] = value
+    this.preferences = new Preferences(newPrefs, this)
+    rerender()
+    axios
+      .put(`/${this.pluralizedType}/${this.id}/preferences`,
+        {
+          preference: {
+            preference_type: action.notificationType,
+            record_type: action.recordType,
+            action: action.action,
+            preference: value
+          }
+        }
+      )
+      .then(({data}) => {
+        this.preferences = new Preferences(data.preferences, this)
+        rerender()
+      })
+      .catch(error => {this.preferences = oldPrefs; rerender(); axiosError(error)})
   }
 }

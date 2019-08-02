@@ -19,7 +19,7 @@ class AuthenticationsController < AdministrationController
     else
       reset_session
       session['current_user_id'] = login.user.id
-      redirect_to '/'
+      redirect_to '/#!home'
     end
   end
 

@@ -76,28 +76,28 @@ export class Note extends VirtualEntity {
   }
 }
 
-export const defaultNote = new Note({
-  body: 'This is a default body',
-  title: 'My Title',
-  id: '1',
-  archived: false,
-  tags: [],
-  shared_on: null,
-  shared: false,
-  metadata: {},
-  preferences: new Preferences({
-    email: {
-      note: {
-        archive:'not_set',
-        update: 'not_set'
-      }
-    }
-  }),
-  shared_object_id: '1',
-  updated_at: '2019-07-08T12:12:12.001Z',
-  created_at: '2019-07-08T12:12:12.001Z',
-  priority: 'medium'
-})
+// export const defaultNote = new Note({
+//   body: 'This is a default body',
+//   title: 'My Title',
+//   id: '1',
+//   archived: false,
+//   tags: [],
+//   shared_on: null,
+//   shared: false,
+//   metadata: {},
+//   preferences: new Preferences({
+//     email: {
+//       note: {
+//         archive:'not_set',
+//         update: 'not_set'
+//       }
+//     }
+//   }, this),
+//   shared_object_id: '1',
+//   updated_at: '2019-07-08T12:12:12.001Z',
+//   created_at: '2019-07-08T12:12:12.001Z',
+//   priority: 'medium'
+// })
 
 export function recordParams (state: Note, newParam: any) {
   return Object.assign(

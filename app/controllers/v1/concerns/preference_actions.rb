@@ -12,7 +12,7 @@ module V1
       private
 
       def preferences_params
-        params.require(:preferences).permit(:record_type, :action, :preference_type, :preference)
+        params.require(:preference).permit(:record_type, :action, :preference_type, :preference)
       end
     end
   end

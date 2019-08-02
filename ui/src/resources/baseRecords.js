@@ -216,6 +216,7 @@ export class VirtualEntity extends BaseRecord {
   priority: string
   _sharedWith: ?Array<SharedWithContact>
   _shareableWith: ?Array<ShareableContact>
+  hide: boolean
 
   constructor(ve: VirtualEntityParams) {
     super()
@@ -232,6 +233,7 @@ export class VirtualEntity extends BaseRecord {
     this.priority = ve.priority
     this._shareableWith = ve._shareableWith
     this._sharedWith = ve._sharedWith
+    this.hide = false
   }
 
   get displayName () : string {
@@ -255,7 +257,7 @@ export class VirtualEntity extends BaseRecord {
   }
 
   archive (update_shared: boolean = false) {
-    this.archived = true
+    this.hide = true
     VirtualEntity.prototype.callRender()
     axios
       .put(
@@ -267,7 +269,7 @@ export class VirtualEntity extends BaseRecord {
         }
       )
       .catch(error => {
-        this.archived = false
+        this.hide = false
         VirtualEntity.prototype.callRender()
         axiosError(error)
       })
@@ -277,8 +279,23 @@ export class VirtualEntity extends BaseRecord {
 
   }
 
-  snooze (datetime: string) {
-
+  snooze (snooze_until: string) {
+    this.hide = true
+    VirtualEntity.prototype.callRender()
+    axios
+      .put(
+        `/${this.pluralizedType}/${this.id}/snooze`,
+        {
+          snooze: {
+            snooze_until
+          }
+        }
+      )
+      .catch(error => {
+        this.hide = false
+        VirtualEntity.prototype.callRender()
+        axiosError(error)
+      })
   }
 
   tag = ({tag, tagId, rerender} : {tagId?: string, tag?: Tag, rerender: any}) => {

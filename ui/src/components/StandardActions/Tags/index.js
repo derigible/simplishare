@@ -36,43 +36,46 @@ function AddPopover ({entity, rerender} : {entity: VirtualEntity, rerender: any}
   const togglePopover = () => setPopoverOpen(!popoverOpen)
 
   return (
-    <Popover
-      on="click"
-      show={popoverOpen}
-      onDismiss={togglePopover}
-      shouldContainFocus
-      shouldReturnFocus
-      shouldCloseOnDocumentClick
-      placement="top"
-    >
-      <Popover.Trigger>
-        <Tooltip
-          tip={`Add Tag to ${entity.displayName}`}
-          placement="top"
-        >
-          <Button
-            onClick={togglePopover}
-            icon={IconAddLine}
-            variant="icon"
+    // eslint-disable-next-line
+    <div onKeyDown={e => { e.stopPropagation() }} style={{display: 'inline-block'}}>
+      <Popover
+        on="click"
+        show={popoverOpen}
+        onDismiss={togglePopover}
+        shouldContainFocus
+        shouldReturnFocus
+        shouldCloseOnDocumentClick
+        placement="top"
+      >
+        <Popover.Trigger>
+          <Tooltip
+            tip={`Add Tag to ${entity.displayName}`}
+            placement="top"
           >
-            <ScreenReaderContent>{`Tag ${entity.displayName}`}</ScreenReaderContent>
-          </Button>
-        </Tooltip>
-      </Popover.Trigger>
-      <Popover.Content>
-        <View as="div" padding="small">
-          <StandardAutocomplete
-            options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
-            setSelected={setTagId}
-            iconBefore={IconTagLine}
-            label="Tag"
-          />
-          <Button variant="primary" onClick={() => {entity.tag({tagId, rerender}); togglePopover()}} margin="small">
-            Tag
-          </Button>
-        </View>
-      </Popover.Content>
-    </Popover>
+            <Button
+              onClick={togglePopover}
+              icon={IconAddLine}
+              variant="icon"
+            >
+              <ScreenReaderContent>{`Tag ${entity.displayName}`}</ScreenReaderContent>
+            </Button>
+          </Tooltip>
+        </Popover.Trigger>
+        <Popover.Content>
+          <View as="div" padding="small">
+            <StandardAutocomplete
+              options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
+              setSelected={setTagId}
+              iconBefore={IconTagLine}
+              label="Tag"
+            />
+            <Button variant="primary" onClick={() => {entity.tag({tagId, rerender}); togglePopover()}} margin="small">
+              Tag
+            </Button>
+          </View>
+        </Popover.Content>
+      </Popover>
+    </div>
   )
 }
 
@@ -109,7 +112,8 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
             return <AddPopover entity={entity} rerender={rerender} />
           } else {
             return (
-              <>
+              // eslint-disable-next-line
+              <div onKeyDown={e => {e.stopPropagation()}} style={{display: 'inline-block'}}>
                 <StandardEditModal
                   closeModal={toggleModal}
                   modalOpen={modalOpen}
@@ -130,7 +134,7 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
                 >
                   <ScreenReaderContent>{`Tag ${entity.displayName}`}</ScreenReaderContent>
                 </Button>
-              </>
+              </div>
             )
           }
         }}

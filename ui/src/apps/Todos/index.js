@@ -73,7 +73,7 @@ export default function Todos (
         />
       </StandardEditModal>
       <List variant="unstyled">
-        {todosList.map(t => <List.Item key={t.id}  margin="x-small none"><Todo todo={t} /></List.Item>)}
+        {todosList.filter(t => !t.archived).map(t => <List.Item key={t.id}  margin="x-small none"><Todo todo={t} /></List.Item>)}
       </List>
     </Page>
   )

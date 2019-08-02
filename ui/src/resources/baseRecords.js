@@ -202,7 +202,7 @@ function createTagsAsOptions(tags: Array<Tag>) {
   return tags.map(t => ({id: t.id, label: t.name, disabled: false}))
 }
 
-export class VirtualEntity extends BaseRecord{
+export class VirtualEntity extends BaseRecord {
   id: string
   archived: boolean
   tags: Array<Tag>
@@ -254,8 +254,23 @@ export class VirtualEntity extends BaseRecord{
     return []
   }
 
-  archive () {
-
+  archive (update_shared: boolean = false) {
+    this.archived = true
+    VirtualEntity.prototype.callRender()
+    axios
+      .put(
+        `/${this.pluralizedType}/${this.id}/archive`,
+        {
+          [this.type]: {
+            update_shared
+          }
+        }
+      )
+      .catch(error => {
+        this.archived = false
+        VirtualEntity.prototype.callRender()
+        axiosError(error)
+      })
   }
 
   shareWith (userId: string, perms: Array<string>) {

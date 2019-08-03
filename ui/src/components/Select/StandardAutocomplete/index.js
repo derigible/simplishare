@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react'
+import keycode from 'keycode'
 
 import { IconUserLine, IconSearchLine, IconUserSolid } from '@instructure/ui-icons'
 import { Select } from '@instructure/ui-select'
@@ -16,7 +17,9 @@ type expectedProps = {
   options: Array<Option>,
   setSelected: any,
   iconBefore?: React.ComponentType<*>,
-  label: React.Node
+  label: React.Node,
+  onOptionCreate?: any,
+  ignoreOptionCreateValues? : Array<string>
 }
 
 type State = {
@@ -164,6 +167,21 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
     }))
   }
 
+  handleOptionCreate = (e: any) => {
+    if(keycode.isEventKey(e, 'enter')) {
+      const ignoreValues = this.props.ignoreOptionCreateValues ? this.props.ignoreOptionCreateValues : []
+      if (
+        e.target.value.length > 0
+        && !ignoreValues.includes(e.target.value)
+        && !this.state.highlightedOptionId
+      ) {
+        const cb = this.props.onOptionCreate ? this.props.onOptionCreate : (_) => {}
+        cb(e.target.value)
+        this.handleHideOptions(e)
+      }
+    }
+  }
+
   render () {
     const {
       inputValue,
@@ -192,6 +210,7 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
           onRequestSelectOption={this.handleSelectOption}
           renderBeforeInput={<IconBefore inline={false} />}
           renderAfterInput={<IconSearchLine inline={false} />}
+          onKeyDown={this.handleOptionCreate}
         >
           {filteredOptions.length > 0 ? filteredOptions.map((option) => {
             return (
@@ -201,7 +220,7 @@ export default class StandardAutocomplete extends React.Component<expectedProps,
                 isHighlighted={option.id === highlightedOptionId}
                 isSelected={option.id === selectedOptionId}
                 isDisabled={option.disabled}
-                renderBeforeLabel={!option.disabled ? IconUserSolid : IconUserLine}
+                renderBeforeLabel={IconBefore}
               >
                 {!option.disabled
                   ? option.label

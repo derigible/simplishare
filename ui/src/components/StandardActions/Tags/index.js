@@ -29,7 +29,14 @@ function filterUsedTags(tags: any, usedTags: Array<Tag>) {
   return Object.values(allTagsMap)
 }
 
-function AddPopover ({entity, rerender} : {entity: VirtualEntity, rerender: any}) {
+function createOption(rerender: any, setTagId: any) {
+  return function (name: string) {
+    TagRecord.createTag(name, rerender)
+      .then(data => setTagId(data.id))
+  }
+}
+
+function LargeTagAdd ({entity, rerender} : {entity: VirtualEntity, rerender: any}) {
   const [popoverOpen: boolean, setPopoverOpen] = React.useState(false)
   const [tagId: ?string, setTagId: any] = React.useState('')
 
@@ -62,14 +69,20 @@ function AddPopover ({entity, rerender} : {entity: VirtualEntity, rerender: any}
           </Tooltip>
         </Popover.Trigger>
         <Popover.Content>
-          <View as="div" padding="small">
+          <View as="div" padding="medium">
             <StandardAutocomplete
               options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
               setSelected={setTagId}
               iconBefore={IconTagLine}
               label={<ScreenReaderContent>Tag</ScreenReaderContent>}
+              onOptionCreate={createOption(rerender, setTagId)}
+              ignoreOptionCreateValues={entity.tags.map(t => t.name)}
             />
-            <Button variant="primary" onClick={() => {entity.tag({tagId, rerender}); togglePopover()}} margin="small">
+            <Button
+              variant="primary"
+              onClick={() => {entity.tag({tagId, rerender}); togglePopover()}}
+              margin="small none none none"
+            >
               Tag
             </Button>
           </View>
@@ -79,13 +92,45 @@ function AddPopover ({entity, rerender} : {entity: VirtualEntity, rerender: any}
   )
 }
 
-export default function Tags({entity} : {entity: VirtualEntity}) {
+function SmallTagAdd({entity, rerender} : {entity: VirtualEntity, rerender: any}) {
   const [modalOpen, setModalOpen] = React.useState(false)
   const [tagId, setTagId] = React.useState('')
-  const [toggle, setRerender] = React.useState(false)
-  const rerender = () => setRerender(!toggle)
 
   const toggleModal = () => setModalOpen(!modalOpen)
+
+  return (
+    // eslint-disable-next-line
+    <div onKeyDown={e => {e.stopPropagation()}} style={{display: 'inline-block'}}>
+      <StandardEditModal
+        closeModal={toggleModal}
+        modalOpen={modalOpen}
+        onSave={() => {entity.tag({tagId, rerender}); toggleModal()}}
+        modalTitle={`Tag ${entity.displayName}`}
+        submitDisabled={tagId === null}
+      >
+        <StandardAutocomplete
+          options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
+          setSelected={setTagId}
+          label={<ScreenReaderContent>Tag</ScreenReaderContent>}
+          iconBefore={IconTagLine}
+          onOptionCreate={createOption(rerender, setTagId)}
+          ignoreOptionCreateValues={entity.tags.map(t => t.name)}
+        />
+      </StandardEditModal>
+      <Button
+        onClick={toggleModal}
+        icon={IconAddLine}
+        variant="icon"
+      >
+        <ScreenReaderContent>{`Tag ${entity.displayName}`}</ScreenReaderContent>
+      </Button>
+    </div>
+  )
+}
+
+export default function Tags({entity} : {entity: VirtualEntity}) {
+  const [toggle, setRerender] = React.useState(false)
+  const rerender = () => setRerender(!toggle)
 
   return (
     <View as="div" margin="small none">
@@ -104,38 +149,14 @@ export default function Tags({entity} : {entity: VirtualEntity}) {
         match="media"
         query={{
           small: { maxWidth: 600 },
-          large: { minWidth: 600}
+          large: { minWidth: 600 }
         }}
       >
         {(props, matches) => {
           if (matches.includes('large')) {
-            return <AddPopover entity={entity} rerender={rerender} />
+            return <LargeTagAdd entity={entity} rerender={rerender} />
           } else {
-            return (
-              // eslint-disable-next-line
-              <div onKeyDown={e => {e.stopPropagation()}} style={{display: 'inline-block'}}>
-                <StandardEditModal
-                  closeModal={toggleModal}
-                  modalOpen={modalOpen}
-                  onSave={() => {entity.tag({tagId, rerender}); toggleModal()}}
-                  modalTitle={`Tag ${entity.displayName}`}
-                  submitDisabled={tagId === null}
-                >
-                  <StandardAutocomplete
-                    options={createTagsAsOptions(filterUsedTags(TagRecord.tags(), entity.tags))}
-                    setSelected={setTagId}
-                    label={<ScreenReaderContent>Tag</ScreenReaderContent>}
-                  />
-                </StandardEditModal>
-                <Button
-                  onClick={toggleModal}
-                  icon={IconAddLine}
-                  variant="icon"
-                >
-                  <ScreenReaderContent>{`Tag ${entity.displayName}`}</ScreenReaderContent>
-                </Button>
-              </div>
-            )
+            return <SmallTagAdd entity={entity} rerender={rerender} />
           }
         }}
       </Responsive>

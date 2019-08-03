@@ -146,6 +146,17 @@ export class Tag {
     return Tag.prototype.tags = allTagsMap
   }
 
+  static createTag(name: string, rerender: any) {
+    return axios
+      .post('/tags', { tag: { name } })
+      .then(({data}) => {
+        Tag.prototype.tags[data.id] = new Tag(data)
+        rerender()
+        return data
+      })
+      .catch(error => axiosError(error))
+  }
+
   id: string
   name: string
   shared_object_id: string
@@ -299,9 +310,11 @@ export class VirtualEntity extends BaseRecord {
   }
 
   tag = ({tag, tagId, rerender} : {tagId?: string, tag?: Tag, rerender: any}) => {
-    if (tag) { // used for untag failure
+    if (tag) { // used for untag failure or optimistic rendering
       this.setTags(this.tags.concat([tag]))
     } else {
+      if (!tagId || this.tags.map(t => t.id).includes(tagId)) return
+
       const newTag = new Tag(Tag.tags()[tagId], this)
       this.setTags(this.tags.concat([newTag]))
       rerender()

@@ -155,8 +155,13 @@ export class User extends BaseRecord {
     this.notificationsFetchedStatus = 'success'
   }
 
-  addContact () {
-
+  addContact = (email: string, rerender: any) => {
+    return axios.post('/contacts', {contact: {email}})
+      .then(response => {
+        this.setContacts(this._contacts.concat([new Contact(response.data)]))
+        rerender()
+      })
+      .catch((error) => axiosError(error))
   }
 
   addEntity (type: string, ve: VirtualEntity) {

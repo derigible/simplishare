@@ -57,13 +57,7 @@ function ContactTable ({type, contacts} : {type: string, contacts: Array<Contact
   )
 }
 
-export default function Contacts ({contacts, addContact} : {contacts: Array<ContactType>, addContact: any}) {
-  const [modalOpen: boolean, setModalOpen] = React.useState(false)
-  const [email: string, setEmail: any] = React.useState('')
-
-  const toggleModal = () => setModalOpen(!modalOpen)
-
-  const renderContacts = () => {
+const renderContacts = (contacts) => {
     if (contacts.length > 0) {
       const pending = contacts.filter(c => !c.username)
       const not_pending = contacts.filter(c => c.username)
@@ -94,6 +88,12 @@ export default function Contacts ({contacts, addContact} : {contacts: Array<Cont
     }
   }
 
+export default function Contacts ({contacts, addContact} : {contacts: Array<ContactType>, addContact: any}) {
+  const [modalOpen: boolean, setModalOpen] = React.useState(false)
+  const [email: string, setEmail: any] = React.useState('')
+
+  const toggleModal = () => setModalOpen(!modalOpen)
+
   return (
     <>
       <AddButton openModal={toggleModal} />
@@ -111,7 +111,7 @@ export default function Contacts ({contacts, addContact} : {contacts: Array<Cont
       >
         <TextInput renderLabel="Email" value={email} onChange={(_, value) => setEmail(value)} />
       </StandardEditModal>
-      {renderContacts()}
+      {renderContacts(contacts)}
     </>
   )
 }

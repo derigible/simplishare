@@ -44,7 +44,7 @@ module V1
         UserMailer.with(
           invitation_email: contact_params[:email],
           invitee_email: contact.user.email,
-          invitation_code: contact.authorization_code
+          register_url: register_via_invite_url(contact.authorization_code)
         ).join_invitation.deliver_now
       end
       c = Contact.new(
@@ -74,6 +74,10 @@ module V1
 
     def invitiation_confirm_url(contact)
       "#{authorize_contact_users_url}?authorization_code=#{contact.authorization_code}"
+    end
+
+    def register_via_invite_url(auth_code)
+      "#{request.base_url}?authorization_code=#{auth_code}"
     end
   end
 end

@@ -65,7 +65,7 @@ export default function Profile (
           renderTitle="Contacts"
         >
           <View as="div">
-            <Contacts contacts={user.contacts(rerender)} addContact={user.addContact} />
+            <Contacts contacts={user.contacts(rerender)} addContact={(email) => user.addContact(email, rerender)} />
           </View>
         </Tabs.Panel>
       </Tabs>

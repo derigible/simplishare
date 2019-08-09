@@ -25,7 +25,7 @@ class UserMailer < ApplicationMailer
 
   def join_invitation
     @invitee_email = params[:invitee_email]
-    @url = "#{PINKAIRSHIP_ADDRESS}/?registering=true&invitation_code=#{params[:invitation_code]}#!auth"
+    @url = params[:register_url]
     mail(to: params[:invitation_email], subject: 'You have been invited to join PinkAirship.com!')
   end
 

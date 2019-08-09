@@ -67,6 +67,10 @@ function Access({contact} : {contact: SharedWithContact}) {
 }
 
 function PageOne ({entity, nextPage}, {entity: VirtualEntity, nextPage: any}) {
+  const [toggle, setRerender] = React.useState(false)
+
+  const rerender = () => setRerender(!toggle)
+
   return (
     <>
       <Table
@@ -82,7 +86,7 @@ function PageOne ({entity, nextPage}, {entity: VirtualEntity, nextPage: any}) {
         </Table.Head>
         <Table.Body>
           {
-            entity.sharedWith.map(sw => (
+            entity.sharedWith(rerender).map(sw => (
               <Table.Row key={sw.id}>
                 <Table.Cell>{sw.username || 'Pending'}</Table.Cell>
                 <Table.Cell>{sw.email}</Table.Cell>
@@ -102,11 +106,14 @@ function PageOne ({entity, nextPage}, {entity: VirtualEntity, nextPage: any}) {
 function PageTwo ({entity, back}, {entity: VirtualEntity, back: any}) {
   const [userId: string, setUserId: any] = React.useState('')
   const [perms: Array<string>, setPerms: any] = React.useState([])
+  const [toggle, setRerender] = React.useState(false)
+
+  const rerender = () => setRerender(!toggle)
 
   return (
     <>
       <StandardAutocomplete
-        options={entity.shareableWith}
+        options={entity.shareableWith(rerender)}
         setSelected={setUserId}
         label="Share"
       />

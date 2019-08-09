@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 import { axiosError } from '../../errors'
-import { BaseRecord } from '../baseRecords'
+import { BaseRecord, retrieve } from '../baseRecords'
 
 import type { VirtualEntity } from '../baseRecords'
 
@@ -91,50 +91,31 @@ export class User extends BaseRecord {
   }
 
   static getContacts (
-    {user, userId} : { user: User, userId?: string}
+    {user, userId, rerender} : { user: User, userId?: string, rerender: any}
   ) : Array<Contact> {
     const url = userId ? `/contacts?user_id=${userId}` : '/contacts'
-    if (user.contactsFetched === 'pending') {
-       // eslint-disable-next-line
-      user.contactsFetched = 'fetching'
-      axios.get(url).then(
-        response => user.setContacts(
-          response.data.map(c => new Contact(c))
-        )
-      ).catch(error => {
-        axiosError(error)
-        // eslint-disable-next-line
-        user.contactsFetched = 'error'
-      })
-      return []
+    const setStatus = (s) => user.contactsFetched = s // eslint-disable-line no-param-reassign
+    const success = (response) => {
+      user.setContacts(
+        response.data.map(c => new Contact(c))
+      )
+      rerender()
     }
-    return user._contacts
+    return retrieve(url, user.contactsFetched, setStatus, success, user._contacts)
   }
 
   static getNotifications (
-    {user, userId} : { user: User, userId?: string}
+    {user, userId, rerender} : { user: User, userId?: string, rerender: any}
   ) : Array<Notification> {
     const url = userId ? `/notifications?user_id=${userId}` : '/notifications'
-    if (user.notificationsFetchedStatus === 'pending') {
-      // eslint-disable-next-line
-      user.notificationsFetchedStatus = 'fetching'
-      axios.get(url).then(
-        response => {
-          user.setNotifications(
-            response.data.map(n => new Notification(n))
-          )
-          User.prototype.callRender()
-          // eslint-disable-next-line
-          user.notificationsFetchedStatus = 'success'
-        }
-      ).catch(error => {
-        axiosError(error);
-        // eslint-disable-next-line
-        user.notificationsFetchedStatus = 'error'
-      })
-      return []
+    const setStatus = (s) => user.notificationsFetchedStatus = s // eslint-disable-line no-param-reassign
+    const success = (response) => {
+      user.setNotifications(
+        response.data.map(n => new Notification(n))
+      )
+      rerender()
     }
-    return user._notifications
+    return retrieve(url, user.notificationsFetchedStatus, setStatus, success, user._notifications)
   }
 
   display_name: string
@@ -156,12 +137,12 @@ export class User extends BaseRecord {
     this.contactsFetched = user.contactsFetched || 'pending'
   }
 
-  get contacts () : Array<Contact>{
-    return User.getContacts({user: this})
+  contacts (rerender: any) : Array<Contact>{
+    return User.getContacts({user: this, rerender})
   }
 
   get notifications () : Array<Notification> {
-    return User.getNotifications({user: this})
+    return User.getNotifications({user: this, rerender: User.prototype.callRender})
   }
 
   setContacts (contacts: Array<Contact>) {

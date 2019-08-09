@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { axiosError } from '../errors'
 
-import type { SharedWithContact, ShareableContact } from './User/record'
+import { SharedWithContact, ShareableContact } from './User/record'
 import type { Option } from '../components/Select/StandardAutocomplete'
 
 export class BaseRecord {
@@ -213,7 +213,34 @@ function createTagsAsOptions(tags: Array<Tag>) {
   return tags.map(t => ({id: t.id, label: t.name, disabled: false}))
 }
 
+export function retrieve(url: string, status: string, setStatus: any, success: any, passthrough: Array<any>) : Array<any>{
+  if (status === 'pending') {
+    setStatus('fetching')
+    axios.get(url).then((response) => {success(response); setStatus('success')})
+      .catch(error => {
+        axiosError(error)
+        setStatus('error')
+      })
+    return []
+  }
+  return passthrough
+}
+
 export class VirtualEntity extends BaseRecord {
+  static getSharedWith (
+    {ve, rerender} : { ve: VirtualEntity, rerender: any}
+  ) : Array<SharedWithContact> {
+    const url = `/${ve.pluralizedType}/${ve.id}/shared_with`
+    const setStatus = (s) => ve.getSharedWithStatus = s // eslint-disable-line no-param-reassign
+    const success = (response) => {
+      ve.setSharedWith(
+        response.data.map(c => new SharedWithContact(c))
+      )
+      rerender()
+    }
+    return retrieve(url, ve.getSharedWithStatus, setStatus, success, ve._sharedWith)
+  }
+
   id: string
   archived: boolean
   tags: Array<Tag>
@@ -225,9 +252,11 @@ export class VirtualEntity extends BaseRecord {
   updated_at: string
   created_at: string
   priority: string
-  _sharedWith: ?Array<SharedWithContact>
-  _shareableWith: ?Array<ShareableContact>
+  _sharedWith: Array<SharedWithContact>
+  _shareableWith: Array<ShareableContact>
   hide: boolean
+  getSharedWithStatus: string
+  getShareableWithStatus: string
 
   constructor(ve: VirtualEntityParams) {
     super()
@@ -242,9 +271,11 @@ export class VirtualEntity extends BaseRecord {
     this.updated_at = ve.updated_at
     this.created_at = ve.created_at
     this.priority = ve.priority
-    this._shareableWith = ve._shareableWith
-    this._sharedWith = ve._sharedWith
+    this._shareableWith = ve._shareableWith || []
+    this._sharedWith = ve._sharedWith || []
     this.hide = false
+    this.getShareableWithStatus = 'pending'
+    this.getSharedWithStatus = 'pending'
   }
 
   get displayName () : string {
@@ -259,11 +290,11 @@ export class VirtualEntity extends BaseRecord {
     return 'ves'
   }
 
-  get sharedWith () : Array<SharedWithContact> {
-    return []
+  sharedWith (rerender: any) : Array<SharedWithContact> {
+    return VirtualEntity.getSharedWith({ve: this, rerender})
   }
 
-  get shareableWith () : Array<Option> {
+  shareableWith (rerender: any) : Array<Option> {
     return []
   }
 
@@ -334,6 +365,10 @@ export class VirtualEntity extends BaseRecord {
 
   setTags(tags: Array<Tag>) {
     this.tags = tags.map(t => new Tag(t, this))
+  }
+
+  setSharedWith(contacts: Array<SharedWithContact>) {
+    this._sharedWith = contacts
   }
 
   setPreference = (action: Action, value: string, rerender: any) => {

@@ -35,6 +35,9 @@ export default function Profile (
   {user, tab = 'user_info'} : {user: UserType, tab?: TabTypes}
 ) {
   const [selected: string, setSelected] = React.useState(tabs[tab])
+  const [toggle, setRerender] = React.useState(false)
+
+  const rerender = () => setRerender(!toggle)
 
   return (
     <Page
@@ -62,7 +65,7 @@ export default function Profile (
           renderTitle="Contacts"
         >
           <View as="div">
-            <Contacts contacts={user.contacts} addContact={user.addContact} />
+            <Contacts contacts={user.contacts(rerender)} addContact={user.addContact} />
           </View>
         </Tabs.Panel>
       </Tabs>

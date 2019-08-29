@@ -1,6 +1,7 @@
 <%= form_tag('/auth/identity/register', {:class => 'form-horizontal vert-center-form'}) do %>
   <h1>Welcome to SimpliShare</h1>
   <p>Please enter your information below to register.</p>
+  <%= hidden_field_tag(:invitation_code, @authorization_code) %>
   <div class="form-group">
     <div class="col-4">
       <label class="form-label" for="input-name">Name</label>

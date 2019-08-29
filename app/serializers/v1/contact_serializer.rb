@@ -7,7 +7,7 @@ module V1
     end
     attribute :created_at
     attribute :contact_id do
-      object.contact_id&.zero? ? 'pending' : object.contact_id.to_s
+      object.contact_id.nil? ? 'pending' : object.contact_id.to_s
     end
     attribute :email do
       object.invitation_sent_to

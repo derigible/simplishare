@@ -5,7 +5,7 @@ module V1
     before_action :load_virtual_tag, except: %i[index create]
 
     def index
-      tags = policy_scope(Tag)
+      tags = policy_scope(Tag).all
       respond_with tags, each_serializer: TagSerializer
     end
 

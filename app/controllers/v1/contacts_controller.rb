@@ -77,7 +77,7 @@ module V1
     end
 
     def register_via_invite_url(auth_code)
-      "#{request.base_url}?authorization_code=#{auth_code}"
+      "#{request.base_url}/auth/identity/register?authorization_code=#{auth_code}"
     end
   end
 end

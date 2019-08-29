@@ -59,8 +59,8 @@ function ContactTable ({type, contacts} : {type: string, contacts: Array<Contact
 
 const renderContacts = (contacts) => {
     if (contacts.length > 0) {
-      const pending = contacts.filter(c => !c.username)
-      const not_pending = contacts.filter(c => c.username)
+      const pending = contacts.filter(c => c.contact_id === 'pending')
+      const not_pending = contacts.filter(c => c.contact_id !== 'pending')
 
       return (
         <Grid>

@@ -39,7 +39,13 @@ class PasswordLogin < OmniAuth::Identity::Models::ActiveRecord
       return params[:user] if params[:user].present?
       email = params[:email]
       user = User.find_by(email: email)
-      user = User.create(email: email, preferred_name: preferred_name(params)) if user.blank?
+
+      if user.blank?
+        user = User.create(email: email, preferred_name: preferred_name(params))
+        if params[:invitation_code].present?
+          Contact.find_by(authorization_code: params[:invitation_code])&.update!(contact: @user)
+        end
+      end
       user
     end
 

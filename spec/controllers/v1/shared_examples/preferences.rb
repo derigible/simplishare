@@ -13,7 +13,7 @@ shared_examples_for 'an entity with preferences' do
   let(:params) do
     {
       id: id_to_use,
-      preferences: {
+      preference: {
         record_type: record_type,
         action: action,
         preference_type: preference_type,

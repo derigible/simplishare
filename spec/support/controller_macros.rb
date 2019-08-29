@@ -20,7 +20,7 @@ module ControllerMacros
       request.headers['Accept'] =
         "#{Mime[:json]}, application/vnd.pinkairship.v1"
       request.headers['Content-Type'] = Mime[:json].to_s
-      request.headers['Authorization'] = "Bearer #{jws}"
+      allow(controller).to receive(:session).and_return('current_user_id' => current_user.id)
     end
   end
 

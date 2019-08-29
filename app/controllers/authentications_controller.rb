@@ -5,7 +5,9 @@ class AuthenticationsController < AdministrationController
     redirect_to '/' if User.find_by(id: session['current_user_id']) && !params[:reauth]
   end
 
-  def registration() end
+  def registration
+    @authorization_code = params[:authorization_code]
+  end
 
   def logout
     raise 'Action not supported'

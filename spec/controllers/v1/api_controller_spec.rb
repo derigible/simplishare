@@ -6,12 +6,10 @@ describe V1::ApiController do
   it { is_expected.to rescue_from(ActionController::ParameterMissing) }
   it { is_expected.to rescue_from(ActiveRecord::RecordInvalid) }
   it { is_expected.to rescue_from(ActiveRecord::RecordNotFound) }
-  it { is_expected.to rescue_from(described_class::AuthTokenMissingException) }
   it { is_expected.to rescue_from(ActionController::BadRequest) }
   it { is_expected.to rescue_from(Pundit::NotAuthorizedError) }
   it { is_expected.to rescue_from(BaseFilter::InvalidLookupTermError) }
   it { is_expected.to rescue_from(BaseFilter::InvalidLookupParamError) }
-  it { is_expected.to rescue_from(JSON::JWT::Exception) }
 
   describe '#error_render' do
     let(:error) { instance_double(ActiveRecord::RecordNotFound, message: 'This is a test') }
@@ -34,12 +32,6 @@ describe V1::ApiController do
 
     subject { get :index, format: :json }
 
-    before do
-      allow(controller).to receive(:decoded_jwt).and_return('sub' => current_user.id)
-      allow(controller).to receive(:jwt_verifier).and_return(double(verify_jwt: true, errors: ['I have errors']))
-      allow(controller).to receive(:authenticated?).and_return true
-    end
-
     it 'uses the correct user' do
       subject
       expect(json['id']).to eq current_user.id
@@ -47,7 +39,7 @@ describe V1::ApiController do
 
     context 'with unauthenticated user' do
       before do
-        allow(controller).to receive(:authenticated?).and_return false
+        allow(controller).to receive(:session).and_return('current_user_id' => -1)
       end
 
       it { is_expected.to have_http_status :unauthorized }

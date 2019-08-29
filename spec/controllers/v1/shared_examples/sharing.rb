@@ -13,7 +13,7 @@ shared_examples_for 'a virtual_entity share action' do
     }
   end
   let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user, entity_owner: true }.merge(overrides) }) }
-  let_once(:other_user) { create :user }
+  let(:other_user) { create :user }
   let(:factory) { raise 'Override in spec' }
 
   before do
@@ -57,36 +57,80 @@ shared_examples_for 'a virtual_entity share action' do
     subject { get :shared_with, params: params }
 
     let(:json_schema) { Schemas::SharedWith }
+    let(:shared_contact) do
+      u = create :user
+      Contact.create! user: u, contact: current_user
+      Contact.create! user: u, contact: user
+      u
+    end
+    let(:unshared_contact) do
+      u = create :user
+      Contact.create! user: u, contact: user
+      u
+    end
+    let(:other_ve) { factory.add_user(entity: ve.entity, user: other_user, overrides: add_overrides) }
 
-    before do
-      factory.add_user(entity: ve.entity, user: other_user)
+    context do
+      before { factory.add_user(entity: ve.entity, user: other_user) }
+
+      it_behaves_like 'a shared get request'
     end
 
-    it_behaves_like 'a shared get request'
+    context 'when not owner' do
+      let(:current_user) { other_user }
+      let(:id_to_use) { other_ve.id }
 
-    context 'when not owner and no share privileges' do
-      let(:current_user) { create :user }
-      let(:overrides) do
-        {
-          metadata: {
-            permissions: %w[edit]
+      context 'and no share privileges' do
+        let(:add_overrides) do
+          {
+            metadata: {
+              permissions: %w[edit]
+            }
           }
-        }
+        end
+
+        it { is_expected.to have_http_status :ok }
+
+        it 'renders expected json' do
+          subject
+          expect(json_schema.simple_validation_errors(json.first)).to be_blank
+        end
+
+        it 'contains current_user and owner' do
+          subject
+          expect(json.size).to eq 2
+          expect(json.detect { |ve| ve['permissions'].include?('owner') }).to be_present
+        end
       end
-      let(:current_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
-      let(:id_to_use) { current_ve.id }
 
-      it { is_expected.to have_http_status :ok }
+      context 'and with share privileges' do
+        let(:add_overrides) do
+          {
+            metadata: {
+              permissions: %w[share edit]
+            }
+          }
+        end
 
-      it 'renders expected json' do
-        subject
-        expect(json_schema.simple_validation_errors(json.first)).to be_blank
-      end
+        before do
+          factory.add_user(entity: ve.entity, user: shared_contact, overrides: overrides)
+          factory.add_user(entity: ve.entity, user: unshared_contact, overrides: overrides)
+        end
 
-      it 'contains current_user and owner' do
-        subject
-        expect(json.size).to eq 2
-        expect(json.detect { |ve| ve['permissions'].include?('owner') }).to be_present
+        it { is_expected.to have_http_status :ok }
+
+        it 'renders expected json' do
+          subject
+          expect(json_schema.simple_validation_errors(json.first)).to be_blank
+        end
+
+        it 'contains correct users' do
+          subject
+          expect(json.size).to eq 2
+          expect(json.detect { |ve| ve['permissions'].include?('owner') }).to be_present
+          expect(json.detect { |ve| ve['id'] == shared_contact.id.to_s }).to be_present
+          expect(json.detect { |ve| ve['id'] == unshared_contact.id.to_s }).to be_blank
+        end
       end
     end
   end

@@ -62,9 +62,9 @@ module V1::Handlers
       )
     end
 
-    def filtered_by_shared_contacts(virtual_share, except_id)
-      contact_ids = current_user.contacts.pluck(:user_id, :contact_id).flatten
-      virtual_share.each_with_object([]) do |v, memo|
+    def filtered_by_shared_contacts(shared_with, except_id)
+      contact_ids = current_user.contacts.pluck(:user_id, :contact_id).flatten.uniq
+      shared_with.each_with_object([]) do |v, memo|
         memo << v if v.user_id == except_id || contact_ids.include?(v.user_id)
       end
     end

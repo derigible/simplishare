@@ -11,7 +11,7 @@ module V1::Handlers
     end
 
     def cannot_view_shared_with?
-      !@ve.owner_ve? && @ve.permissions.exclude?('share')
+      !@ve.entity_owner? && @ve.permissions.exclude?('share')
     end
 
     def mark_as_shared
@@ -19,7 +19,7 @@ module V1::Handlers
     end
 
     def retrieve_shared_with
-      if !@ve.owner_ve?
+      if !@ve.entity_owner?
         shared_with = retrieve_shared_with_except_current_user_and_owner
         owner_ve.permissions = ['owner']
         shared_with << owner_ve

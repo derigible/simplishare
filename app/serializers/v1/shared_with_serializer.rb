@@ -12,7 +12,7 @@ module V1
       object.metadata.fetch('permissions', [])
     end
     attribute :owner do
-      object.owner_ve?
+      object.entity_owner?
     end
   end
 end

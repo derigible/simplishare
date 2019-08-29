@@ -12,7 +12,7 @@ shared_examples_for 'a virtual_entity share action' do
       }
     }
   end
-  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user }.merge(overrides) }) }
+  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user, entity_owner: true }.merge(overrides) }) }
   let_once(:other_user) { create :user }
   let(:factory) { raise 'Override in spec' }
 
@@ -51,10 +51,6 @@ shared_examples_for 'a virtual_entity share action' do
 
       it { is_expected.to have_http_status 403 }
     end
-
-    context 'when not owner and no share privileges' do
-
-    end
   end
 
   describe 'shared_with' do
@@ -67,6 +63,32 @@ shared_examples_for 'a virtual_entity share action' do
     end
 
     it_behaves_like 'a shared get request'
+
+    context 'when not owner and no share privileges' do
+      let(:current_user) { create :user }
+      let(:overrides) do
+        {
+          metadata: {
+            permissions: %w[edit]
+          }
+        }
+      end
+      let(:current_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
+      let(:id_to_use) { current_ve.id }
+
+      it { is_expected.to have_http_status :ok }
+
+      it 'renders expected json' do
+        subject
+        expect(json_schema.simple_validation_errors(json.first)).to be_blank
+      end
+
+      it 'contains current_user and owner' do
+        subject
+        expect(json.size).to eq 2
+        expect(json.detect { |ve| ve['permissions'].include?('owner') }).to be_present
+      end
+    end
   end
 
   describe 'shareable_with' do

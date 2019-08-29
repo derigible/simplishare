@@ -25,7 +25,7 @@ module V1::Concerns
 
     def shareable_with
       authorize(ve)
-      if ve.owner_ve?
+      if ve.entity_owner?
         respond_with current_user.contacts_for_serialization, each_serializer: V1::ContactSerializer
       elsif ve.permission?('share')
         respond_with current_user.shared_contacts(owner), each_serializer: V1::ContactSerializer

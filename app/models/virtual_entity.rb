@@ -24,15 +24,12 @@ class VirtualEntity < ApplicationRecord
   scope :archived, -> { where(archived: true) }
   scope :unarchived, -> { where(archived: [false, nil]) }
 
-  def owner_ve?
-    shared_on.nil?
-  end
-
   Entity.subclasses.map do |entity|
     scope_name = entity.name.downcase.pluralize.to_sym
-    scope scope_name, ->(user_id) do
+    func = lambda do |user_id|
       includes(:entity).where(entities: { type: entity.name }, virtual_entities: { user_id: user_id })
     end
+    scope(scope_name, func)
   end
 
   def permissions

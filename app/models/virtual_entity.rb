@@ -6,8 +6,8 @@ class VirtualEntity < ApplicationRecord
   PERMISSIONS = %w[archive read edit destroy share owner].freeze
   belongs_to :user
   belongs_to :entity
-  belongs_to :todo, foreign_key: :entity_id, optional: true
-  belongs_to :note, foreign_key: :entity_id, optional: true
+  belongs_to :todo, foreign_key: :entity_id, optional: true, inverse_of: :virtual_entity
+  belongs_to :note, foreign_key: :entity_id, optional: true, inverse_of: :virtual_entity
 
   has_many :virtual_entities_tags, dependent: :destroy
   has_many :virtual_tags, through: :virtual_entities_tags

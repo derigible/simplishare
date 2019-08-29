@@ -12,9 +12,22 @@ shared_examples_for 'a virtual_entity share action' do
       }
     }
   end
-  let(:ve) { factory.virtual_object(overrides: { virtual_object: { user: user, entity_owner: true }.merge(overrides) }) }
+  let(:ve) do
+    factory.virtual_object(overrides: { virtual_object: { user: user, entity_owner: true }.merge(overrides) })
+  end
   let(:other_user) { create :user }
   let(:factory) { raise 'Override in spec' }
+  let(:shared_contact) do
+    u = create :user
+    Contact.create! user: u, contact: current_user, authorized_on: Time.zone.now
+    Contact.create! user: u, contact: user, authorized_on: Time.zone.now
+    u
+  end
+  let(:unshared_contact) do
+    u = create :user
+    Contact.create! user: u, contact: user
+    u
+  end
 
   before do
     Contact.create!(
@@ -57,17 +70,6 @@ shared_examples_for 'a virtual_entity share action' do
     subject { get :shared_with, params: params }
 
     let(:json_schema) { Schemas::SharedWith }
-    let(:shared_contact) do
-      u = create :user
-      Contact.create! user: u, contact: current_user
-      Contact.create! user: u, contact: user
-      u
-    end
-    let(:unshared_contact) do
-      u = create :user
-      Contact.create! user: u, contact: user
-      u
-    end
     let(:other_ve) { factory.add_user(entity: ve.entity, user: other_user, overrides: add_overrides) }
 
     context do
@@ -141,6 +143,48 @@ shared_examples_for 'a virtual_entity share action' do
     let(:json_schema) { Schemas::Contact }
 
     it_behaves_like 'a shared get request'
+
+    context do
+      let(:other_ve) { factory.add_user(entity: ve.entity, user: other_user, overrides: add_overrides) }
+      let(:current_user) { other_user }
+      let(:id_to_use) { other_ve.id }
+
+      before do
+        factory.add_user(entity: ve.entity, user: shared_contact, overrides: overrides)
+        factory.add_user(entity: ve.entity, user: unshared_contact, overrides: overrides)
+      end
+
+      context 'when owner and share permissions exist' do
+        let(:add_overrides) do
+          {
+            metadata: {
+              permissions: %w[edit share]
+            }
+          }
+        end
+
+        it 'returns an array of shared contacts' do
+          subject
+          expect(json.size).to eq 1
+          expect(json.first['contact_id']).to eq shared_contact.id.to_s
+        end
+      end
+
+      context 'when not owner and no share permissions' do
+        let(:add_overrides) do
+          {
+            metadata: {
+              permissions: %w[edit]
+            }
+          }
+        end
+
+        it 'returns an empty array' do
+          subject
+          expect(json).to be_empty
+        end
+      end
+    end
   end
 
   describe 'share entity' do
@@ -168,19 +212,39 @@ shared_examples_for 'a virtual_entity share action' do
       expect(json.first['id']).to eq other_user.id.to_s
     end
 
+    context 'with invalid permissions' do
+      let(:permissions) { %w[read falsey] }
+
+      it { is_expected.to have_http_status(:unprocessable_entity) }
+    end
+
     context 'already shared users' do
       before do
-        factory.add_user(entity: ve.entity, user: other_user, overrides: {metadata: {permissions: permissions}})
+        factory.add_user(entity: ve.entity, user: other_user, overrides: { metadata: { permissions: permissions } })
       end
 
       it 'updates permissions' do
-        new_share_params = { share: { users: [{id: other_user.id, permissions: other_permissions}] } }
-        post :share, params: {id: ve.id}.merge(new_share_params), as: :json
+        new_share_params = { share: { users: [{ id: other_user.id, permissions: other_permissions }] } }
+        post :share, params: { id: ve.id }.merge(new_share_params), as: :json
         expect(response).to have_http_status(:ok)
         get :shared_with, params: { id: ve.id }
         expect(json.size).to eq 1
         expect(json.first['permissions']).to match_array(other_permissions)
         expect(json.first['id']).to eq other_user.id.to_s
+      end
+
+      context 'with invalid permissions' do
+        let(:params) do
+          super().merge(
+            share: {
+              users: [
+                { id: other_user.id, permissions: %w[read falsey] }
+              ]
+            }
+          )
+        end
+
+        it { is_expected.to have_http_status(:unprocessable_entity) }
       end
     end
   end
@@ -206,7 +270,7 @@ shared_examples_for 'a virtual_entity share action' do
     end
 
     before do
-      factory.add_user(entity: ve.entity, user: other_user, overrides: {metadata: {permissions: ['read']}})
+      factory.add_user(entity: ve.entity, user: other_user, overrides: { metadata: { permissions: ['read'] } })
     end
 
     it { is_expected.to have_http_status(:no_content) }

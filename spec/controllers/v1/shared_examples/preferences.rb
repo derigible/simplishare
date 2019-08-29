@@ -28,6 +28,24 @@ shared_examples_for 'an entity with preferences' do
 
   it { is_expected.to have_http_status :ok }
 
+  context 'when invalid record_type' do
+    let(:record_type) { 'invalid' }
+
+    it { is_expected.to have_http_status :unprocessable_entity }
+  end
+
+  context 'when invalid preference_type' do
+    let(:preference_type) { 'invalid' }
+
+    it { is_expected.to have_http_status :unprocessable_entity }
+  end
+
+  context 'when invalid action' do
+    let(:action) { 'invalid' }
+
+    it { is_expected.to have_http_status :unprocessable_entity }
+  end
+
   it 'renders expected json' do
     subject
     expect(json.dig('preferences', 'email', record_type, 'update')).to eq 'always'

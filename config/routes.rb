@@ -31,9 +31,9 @@ Rails.application.routes.draw do
     get 'shareable_with', on: :member
     put 'preferences', on: :member
     put 'snooze', on: :member
-    delete 'snooze', on: :member, action: 'unsnooze'
+    delete 'snooze', on: :member
     put 'archive', on: :member
-    delete 'archive', on: :member, action: 'unarchive'
+    delete 'archive', on: :member
     post 'tag', on: :member
     delete 'tag', on: :member, action: 'untag'
   end

@@ -7,14 +7,7 @@ module V1
 
       def snooze
         authorize(ve)
-        ve.update(snooze_params)
-        ve.save
-        respond_with ve, serializer: serializer
-      end
-
-      def unsnooze
-        authorize(ve)
-        ve.update(snooze_until: nil)
+        ve.update(post? ? snooze_params : nil)
         ve.save
         respond_with ve, serializer: serializer
       end
@@ -23,6 +16,10 @@ module V1
 
       def snooze_params
         params.require(:snooze).permit(:snooze_until)
+      end
+
+      def post?
+        request.method == 'POST'
       end
     end
   end

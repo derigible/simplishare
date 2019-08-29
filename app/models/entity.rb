@@ -25,14 +25,6 @@ class Entity < ApplicationRecord
     @owner_ve ||= virtual_entities.find_by(shared_on: nil)
   end
 
-  def archive!
-    update!(archived: true)
-  end
-
-  def unarchive!
-    update!(archived: false)
-  end
-
   # TODO: add validations
 
   private

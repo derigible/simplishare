@@ -47,10 +47,6 @@ class VirtualEntity < ApplicationRecord
     permissions.include? perm
   end
 
-  def archive!
-    update!(archived: true)
-  end
-
   private
 
   def ensure_permissions_exist

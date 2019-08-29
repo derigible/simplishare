@@ -15,6 +15,12 @@ shared_examples_for 'a snoozable entity' do
 
   it { is_expected.to have_http_status :ok }
 
+  context 'with missing entity body' do
+    subject { post :snooze, params: { id: id_to_use }, as: :json }
+
+    it { is_expected.to have_http_status :bad_request }
+  end
+
   context 'when not virtual owner' do
     let(:current_user) { create :user}
 

@@ -12,13 +12,13 @@ describe V1::ApiController do
   it { is_expected.to rescue_from(BaseFilter::InvalidLookupParamError) }
 
   describe '#error_render' do
-    let(:error) { instance_double(ActiveRecord::RecordNotFound, message: 'This is a test') }
+    let(:error) { instance_double(ActionController::BadRequest, message: 'This is a test') }
 
     it 'renders error' do
       expect_any_instance_of(ActionController::Rendering)
-        .to receive(:render).with(json: { error: 'This is a test' }, status: 404)
+        .to receive(:render).with(json: { error: 'This is a test' }, status: 400)
 
-      controller.send('error_render', error, 404)
+      controller.send('error_render', error, 400)
     end
   end
 
@@ -44,5 +44,17 @@ describe V1::ApiController do
 
       it { is_expected.to have_http_status :unauthorized }
     end
+  end
+
+  describe 'captures bad request errors' do
+    controller(described_class) do
+      def index
+        raise ActionController::BadRequest
+      end
+    end
+
+    subject { get :index, format: :json }
+
+    it { is_expected.to have_http_status :bad_request }
   end
 end

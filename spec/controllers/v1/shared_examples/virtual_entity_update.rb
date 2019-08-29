@@ -13,6 +13,12 @@ shared_examples_for 'a virtual_entity update action' do
   let(:json_schema) { raise 'Override in spec' }
   let(:factory) { raise 'Override in spec' }
 
+  context 'with missing entity body' do
+    subject { put :update, params: { id: id_to_use }, as: :json }
+
+    it { is_expected.to have_http_status :bad_request }
+  end
+
   context 'with valid id' do
     it { is_expected.to have_http_status :ok }
 
@@ -60,5 +66,37 @@ shared_examples_for 'a virtual_entity update action' do
     let(:current_user) { create(:user) }
 
     it { is_expected.to have_http_status 403 }
+  end
+
+  context 'when shared' do
+    shared_examples_for 'can edit' do
+      it { is_expected.to have_http_status :ok }
+
+      it 'renders expected json' do
+        subject
+        expect(json_schema.simple_validation_errors(json)).to be_blank
+      end
+
+      it 'sends an email to all users'
+    end
+
+    context 'when owner' do
+      it_behaves_like 'can edit'
+    end
+
+    context 'when edit privileges granted' do
+      let(:current_user) { create :user }
+      let(:overrides) do
+        {
+          metadata: {
+            permissions: %w[edit]
+          }
+        }
+      end
+      let(:current_ve) { factory.add_user(entity: ve.entity, user: current_user, overrides: overrides) }
+      let(:id_to_use) { current_ve.id }
+
+      it_behaves_like 'can edit'
+    end
   end
 end

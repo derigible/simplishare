@@ -29,6 +29,12 @@ shared_examples_for 'a virtual_objects create action' do
     expect(virtual_object_model.where(user: other_user).count).to eq 0
   end
 
+  context 'with missing entity body' do
+    subject { post :create, params: {}, as: :json }
+
+    it { is_expected.to have_http_status :bad_request }
+  end
+
   context 'with bad create_params' do
     let(:create_params) do
       p = super()

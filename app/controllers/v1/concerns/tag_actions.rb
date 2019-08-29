@@ -24,13 +24,9 @@ module V1
         end
       end
 
-      def load_tags_destroy
-        vtags(params.fetch(:tag_ids, []))
-      end
-
       def vtags(tag_ids)
         VirtualTag.where(id: tag_ids).map do |tag|
-          authorize tag
+          authorize(tag)
           tag
         end
       end

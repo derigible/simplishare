@@ -28,7 +28,7 @@ module V1
     rescue_from Pundit::NotAuthorizedError do |e|
       # Override the error message to something we can return to the client
       policy_name = e.policy.class.to_s.underscore
-      error = Exception.new message: "Unauthorized access for #{policy_name}.#{e.query}"
+      error = Exception.new message: "Unauthorized access for #{policy_name}.#{e.query}. on entity id #{e.record.id}"
       error_render(error, :forbidden)
     end
 

@@ -72,4 +72,10 @@ shared_examples_for 'a basic entity' do
       let(:record_type) { entity_record_type }
     end
   end
+
+  describe '#tagging' do
+    it_behaves_like 'a virtual_entity tag action' do
+      let(:factory) { entity_factory }
+    end
+  end
 end

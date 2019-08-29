@@ -14,6 +14,7 @@ if ENV['COVERAGE'] == "1"
     require 'simplecov'
     SimpleCov.start 'rails' do
       add_group 'Serializers', 'app/serializers'
+      add_group 'Policies', 'app/policies'
     end
 
     unless ENV.key?('TEST_ENV_NUMBER') || ENV['DISABLE_MINIMUM_COVERAGE']

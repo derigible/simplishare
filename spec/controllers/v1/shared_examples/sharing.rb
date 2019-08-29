@@ -51,6 +51,10 @@ shared_examples_for 'a virtual_entity share action' do
 
       it { is_expected.to have_http_status 403 }
     end
+
+    context 'when not owner and no share privileges' do
+
+    end
   end
 
   describe 'shared_with' do

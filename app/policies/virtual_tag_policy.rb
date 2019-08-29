@@ -2,11 +2,7 @@
 
 class VirtualTagPolicy < ApplicationPolicy
   def update?
-    record_owner? && record.metadata.fetch(:permissions, []).include?('edit')
-  end
-
-  def destroy?
-    record_owner?
+    super && record.metadata.fetch(:permissions, []).include?('edit')
   end
 
   def tag?

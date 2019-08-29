@@ -8,10 +8,6 @@ class ApplicationPolicy
     @record = record
   end
 
-  def index?
-    false
-  end
-
   def show?
     record_owner?
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class LoginsController < AdministrationController
+class LoginsController < ApplicationController
   def begin_resend_confirmation() end
 
   def resend_confirmation

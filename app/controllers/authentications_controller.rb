@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AuthenticationsController < AdministrationController
+class AuthenticationsController < ApplicationController
   def start
     redirect_to '/' if User.find_by(id: session['current_user_id']) && !params[:reauth]
   end

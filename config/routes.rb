@@ -48,7 +48,6 @@ Rails.application.routes.draw do
       concerns :virtual_entity
     end
     resources :tags
-    resource :preferences, only: [:update, :show]
   end
 
   api_version(

@@ -2,11 +2,11 @@
 
 class VirtualEntityPolicy < ApplicationPolicy
   def show?
-    record_owner? && entity_owner_or_has_permission?('read')
+    super && entity_owner_or_has_permission?('read')
   end
 
   def update?
-    record_owner? && entity_owner_or_has_permission?('edit')
+    super && entity_owner_or_has_permission?('edit')
   end
 
   def archive?
@@ -15,10 +15,6 @@ class VirtualEntityPolicy < ApplicationPolicy
 
   def archive_entity?
     record_owner? && entity_owner_or_has_permission?('archive')
-  end
-
-  def destroy?
-    record_owner?
   end
 
   def destroy_entity?

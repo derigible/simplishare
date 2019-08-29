@@ -40,8 +40,10 @@ module V1
       error_render(e, :bad_request)
     end
 
+    # rubocop:disable Rails/LexicallyScopedActionFilter
     after_action :verify_authorized, except: :index
     after_action :verify_policy_scoped, only: :index
+    # rubocop:enable Rails/LexicallyScopedActionFilter
 
     before_action :authenticate_user!
 

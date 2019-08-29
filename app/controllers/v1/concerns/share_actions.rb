@@ -36,30 +36,6 @@ module V1::Concerns
 
     private
 
-    def serialize_shared_with
-      entity_shared_with.map do |e|
-        ActiveModelSerializers::SerializableResource.new(
-          e, serializer: V1::SharedWithSerializer
-        ).as_json
-      end
-    end
-
-    def serialize_shareable_with
-      entity_shared_with.map do |e|
-        ActiveModelSerializers::SerializableResource.new(
-          e, serializer: V1::ContactSerializer
-        ).as_json
-      end
-    end
-
-    def entity_shared_with
-      if handler.cannot_view_shared_with?
-        owner_ve.permissions = ['owner']
-        [owner_ve, ve]
-      end
-      handler.retrieve_shared_with
-    end
-
     def handler
       @handler ||= begin
         authorize(ve)

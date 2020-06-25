@@ -46,4 +46,4 @@ group :doc do
 end
 
 # Added at 2018-06-27 23:32:06 -0600 by mphillips:
-gem "json-jwt", "~> 1.9"
+gem "json-jwt", "~> 1.11"

@@ -17,7 +17,7 @@ gem 'pundit'
 gem 'rack-cors', require: 'rack/cors'
 gem 'rails', '~> 5.2.0'
 gem 'responders' # Dry up controller responses
-gem 'sanitize', '~> 4.0.1'
+gem 'sanitize', '~> 5.2.1'
 gem 'versionist', '~> 1.4.1'
 
 group :development, :test do
@@ -46,4 +46,4 @@ group :doc do
 end
 
 # Added at 2018-06-27 23:32:06 -0600 by mphillips:
-gem "json-jwt", "~> 1.9"
+gem "json-jwt", "~> 1.11"

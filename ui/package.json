@@ -74,7 +74,7 @@
     "@instructure/ui-toggle-details": "^6.6.0",
     "@instructure/ui-utils": "^6.6.0",
     "@instructure/ui-webpack-config": "^6.6.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "classnames": "^2",
     "date-fns": "^1.30.1",
     "isomorphic-fetch": "^2.2.1",
